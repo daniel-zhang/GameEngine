@@ -1,0 +1,73 @@
+External Libs Manifest
+########################################
+#           boost 1.55.0               #
+########################################
+- include
+    $(boost_root)/
+- lib 
+    $(boost_root)/stage/lib/
+
+Note:
+    - Boost.Serialization is linked to this program
+
+    - Most boost libs are header-only, with some exceptions
+
+    - You may want to use the following command to list the boost libs require building:
+        >>> b2 --show-libraries
+
+    - You may build separately the required lib to save time. e.g. to build boost.serialization:
+        >>> b2 --with-serialization
+
+    - Seperately built libs are by default installed at $(boost_root)/stage/lib rather than $(boost_root)/lib
+
+    - The only Boost libraries that must be built separately are:
+        Boost.Chrono
+        Boost.Context
+        Boost.Filesystem
+        Boost.GraphParallel
+        Boost.IOStreams
+        Boost.Locale
+        Boost.MPI
+        Boost.ProgramOptions
+        Boost.Python (see the Boost.Python build documentation before building and installing it)
+        Boost.Regex
+        Boost.Serialization
+        Boost.Signals
+        Boost.System
+        Boost.Thread
+        Boost.Timer
+        Boost.Wave
+    
+########################################
+#       d3d11, dx11, and xna           #
+########################################
+- include
+    $(dxsdk_dir)/include
+- lib
+    $(DXSDK_DIR)/lib/x86
+    - debug 
+        Effects11d.lib
+        d3d11.lib
+        d3dcompiler.lib
+        d3dx11d.lib
+        d3dx9d.lib
+        dxerr.lib
+        dxguid.lib
+        winmm.lib
+        comctl32.lib
+        dxgi.lib
+        gdiplus.lib
+
+   - release 
+        Effects11.lib
+        d3d11.lib
+        d3dcompiler.lib
+        d3dx11.lib
+        d3dx9.lib
+        dxerr.lib
+        dxguid.lib
+        winmm.lib
+        comctl32.lib
+        dxgi.lib
+        gdiplus.lib
+
