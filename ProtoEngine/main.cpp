@@ -1,13 +1,5 @@
-#include "RenderCore.h"
-#include <iostream>
-#include <windows.h>
+#include "WinLauncher.h"
 
-/*
-int main(int argc, char** argv)
-{
-    RenderCore rc;
-}
-*/
 int WINAPI wWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstance, __in LPWSTR lpCmdLine, __in int nShowCmd )
 {
     // Enable run-time memory check for debug builds.
@@ -15,9 +7,8 @@ int WINAPI wWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstance,
     _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 #endif
 
-    RenderCore rc;
-    rc.init();
-    rc.run();
+	WinLauncher win32Launcher;
 
-    return 0;
+	return win32Launcher.run();
+
 }

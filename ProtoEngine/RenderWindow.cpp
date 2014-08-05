@@ -84,6 +84,7 @@ LRESULT CALLBACK RenderWindow::winProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPA
         case WM_DESTROY:
             PostQuitMessage(0);//Post a WM_QUIT, which makes GetMessage() to return 0.
             return 0;
+
         default:
             return DefWindowProc(pThis->getReference(), uMsg, wParam, lParam);
         }

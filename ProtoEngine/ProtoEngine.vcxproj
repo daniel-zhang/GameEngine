@@ -66,18 +66,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="RenderInterface.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="RTWindow.cpp" />
+    <ClCompile Include="SingletonInitDestory.cpp" />
+    <ClCompile Include="Ticker.cpp" />
+    <ClCompile Include="WinLauncher.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="reference_manifest.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ForwardDecls.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Launcher.h" />
+    <ClInclude Include="Profiler.h" />
     <ClInclude Include="reference.h" />
     <ClInclude Include="RenderConfig.h" />
     <ClInclude Include="RenderCore.h" />
@@ -86,6 +94,9 @@
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="D3DUtilities.h" />
     <ClInclude Include="RTWindow.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Ticker.h" />
+    <ClInclude Include="typedefs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

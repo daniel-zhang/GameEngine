@@ -15,8 +15,8 @@ public:
     ~RenderCore();
 
     bool init();
-
-    int run();
+	bool exit();
+	int draw();
 
 public:
     RenderInterface* mRI;

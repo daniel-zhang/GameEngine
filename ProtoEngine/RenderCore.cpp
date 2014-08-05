@@ -2,6 +2,7 @@
 #include "RenderInterface.h"
 #include "RTWindow.h"
 #include <windows.h>
+#include "Singleton.h"
 
 RenderCore::RenderCore()
 {
@@ -28,21 +29,14 @@ bool RenderCore::init()
     return true;
 }
 
-int RenderCore::run()
+int RenderCore::draw()
 {
-    MSG msg = {0};
-    while (msg.message != WM_QUIT)
-    {
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-        else
-        {
-            Sleep(100);
-        }
-    }
-    // release 
-    return (int)msg.wParam;
+	// place holder 
+	return 0;
 }
+
+bool RenderCore::exit()
+{
+	return true;
+}
+
