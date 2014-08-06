@@ -14,14 +14,20 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="RenderCore\RenderResource">
-      <UniqueIdentifier>{7a27042a-93f5-48bd-a2e2-e90ae528ee2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{abdc6b91-7966-4cd6-88bc-d1f229477ffc}</UniqueIdentifier>
     </Filter>
     <Filter Include="RenderCore\Shader">
       <UniqueIdentifier>{f236e55c-0e32-4c9e-bc88-c708a1d5fe02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReadMe">
+      <UniqueIdentifier>{b755bab3-d01f-4e86-b4f2-6ba951c01558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderCore\Graphics">
+      <UniqueIdentifier>{7a27042a-93f5-48bd-a2e2-e90ae528ee2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderCore\RenderState">
+      <UniqueIdentifier>{a4209531-c68f-45bb-95a9-1b55ef353cc8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -59,19 +65,14 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
-      <Filter>RenderCore\RenderResource</Filter>
+      <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="DepthBuffer.cpp">
-      <Filter>RenderCore\RenderResource</Filter>
+      <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
-      <Filter>RenderCore\RenderResource</Filter>
+      <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="reference_manifest.txt">
-      <Filter>Launcher</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderTarget.h">
@@ -120,7 +121,7 @@
       <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>RenderCore\RenderResource</Filter>
+      <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
@@ -129,13 +130,27 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="VertexBuffer.h">
-      <Filter>RenderCore\RenderResource</Filter>
+      <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="DepthBuffer.h">
-      <Filter>RenderCore\RenderResource</Filter>
+      <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>RenderCore\RenderResource</Filter>
+      <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="VertexDeclaration.h">
+      <Filter>RenderCore\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderStateMgr.h">
+      <Filter>RenderCore\Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dependency_manifest.txt">
+      <Filter>ReadMe</Filter>
+    </None>
+    <None Include="Design.txt">
+      <Filter>ReadMe</Filter>
+    </None>
   </ItemGroup>
 </Project>

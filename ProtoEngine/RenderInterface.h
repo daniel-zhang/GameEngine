@@ -22,8 +22,8 @@ public:
 
     // Operations
     void attachRenderTarget(RenderTarget* rt);
-	void setIndexBuffer(IndexBuffer* pIB){}
-	void setVertexBuffer(VertexBuffer* pVB){}
+    void setIndexBuffer(IndexBuffer* pIB){}
+    void setVertexBuffer(VertexBuffer* pVB){}
 
 public:
     ID3D11Device*				mDevice;

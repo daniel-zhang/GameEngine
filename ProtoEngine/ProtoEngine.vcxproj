@@ -82,7 +82,8 @@
     <ClCompile Include="WinLauncher.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="reference_manifest.txt" />
+    <None Include="dependency_manifest.txt" />
+    <None Include="Design.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DepthBuffer.h" />
@@ -96,6 +97,7 @@
     <ClInclude Include="RenderConfig.h" />
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="RenderInterface.h" />
+    <ClInclude Include="RenderStateMgr.h" />
     <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="D3DUtilities.h" />
@@ -106,6 +108,7 @@
     <ClInclude Include="Ticker.h" />
     <ClInclude Include="typedefs.h" />
     <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="VertexDeclaration.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

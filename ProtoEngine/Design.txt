@@ -1,0 +1,43 @@
+Goal
+----------------------------------------------------------------------------------------
+# A prototype engine for fast demo dev and algo verification
+# Extensible to later usage(hopefully)
+
+Sub Goals / Design
+----------------------------------------------------------------------------------------
+# Scene organization
+    - flattend scene objects 
+    - bounding box hierachy to support frustum culling 
+    - no fancy spatial structures like k-d/bsp/octree, as occlusion query is not needed
+
+# In-game GUI that supports:
+    - level/demo navigation(all demos are available as separate scene files that get loaded at runtime)
+    - debug display
+
+# Debug interface:
+    - picking
+    - stats(fps, function level profiling, mem stats)
+    - draw line, bounding box/sphere, floating text on screen
+    - extra viewport for texture/buffer display
+    - a game console and related command interface 
+
+# A thin wrapper around d3d API and xna math
+    - this is not needed for now
+
+# Mesh format: 
+    - obj
+    - fbx
+
+# Game logic and rendering separation
+    - allow for making it multithreaded
+    
+
+# Rendering 
+    - use dx effects for fast dev(maybe later a serious material system?)
+    - render queue sorting is not needed
+    - dir, point light with dynamic shadow casting
+    - post effect(ssao, hdr)
+ 
+# Input interface 
+    - regular stuff: keyboard, mouse
+    - Occulus Rift SDK!

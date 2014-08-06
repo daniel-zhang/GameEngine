@@ -39,8 +39,8 @@ bool Game::exit()
 
 int32 Game::runWin32()
 {
-	Timer* logicTimer = Singleton<Profiler>::instance->createTimer(L"LogicStats", L"Logic Stats");
-	Timer* renderTimer = Singleton<Profiler>::instance->createTimer(L"RenderStats", L"Render Stats");
+	Timer* logicTimer = Singleton<Profiler>::getInstance().createTimer(L"LogicStats", L"Logic Stats");
+	Timer* renderTimer = Singleton<Profiler>::getInstance().createTimer(L"RenderStats", L"Render Stats");
 
 	MSG msg = {0};
 	while (msg.message != WM_QUIT)
@@ -54,13 +54,13 @@ int32 Game::runWin32()
 		{
 			mTicker.tick();
 
-			Singleton<Profiler>::instance->startTimer(logicTimer);
+			Singleton<Profiler>::getInstance().startTimer(logicTimer);
 			step(mTicker.deltaTime());
-			Singleton<Profiler>::instance->endTimer(logicTimer);
+			Singleton<Profiler>::getInstance().endTimer(logicTimer);
 
-			Singleton<Profiler>::instance->startTimer(renderTimer);
+			Singleton<Profiler>::getInstance().startTimer(renderTimer);
 			driveRenderCore();
-			Singleton<Profiler>::instance->endTimer(renderTimer);
+			Singleton<Profiler>::getInstance().endTimer(renderTimer);
 		}
 	}
 	return (int)msg.wParam;

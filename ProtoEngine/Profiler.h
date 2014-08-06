@@ -47,18 +47,19 @@ protected:
 	std::vector<Timer*> mChildren;
 };
 
-class Profiler 
+class Profiler : public Singleton<Profiler>
 {
-	// Make singleton
-	friend class Singleton<Profiler>;
+	// Make singleton -- start
 protected:
 	Profiler();
 	~Profiler();
-
 public:
+	friend class Singleton<Profiler>;
 	bool init();
 	bool destroy();
+	// Make singleton -- end 
 
+public:
 	Timer* createTimer(std::wstring name, std::wstring desc, std::wstring parentName = L"root", bool enabled = true);
 	void enableTimer(Timer* timer);
 	void disableTimer(Timer* timer);

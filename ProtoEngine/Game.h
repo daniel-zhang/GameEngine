@@ -24,8 +24,6 @@ protected:
 	void step(float delta);
 	void driveRenderCore();
 
-	int win32MsgPump();
-
 protected:
 	Ticker mTicker;
 

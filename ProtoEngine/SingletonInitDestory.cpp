@@ -2,8 +2,6 @@
 
 #include "Profiler.h"
 
-template<class T> T* Singleton<T>::instance = 0;
-
 void singletonCreateDestroy( bool isInit);
 
 void initAllSingletons()
@@ -21,13 +19,13 @@ void singletonCreateDestroy( bool isInit)
 	{ 
 		if (isInit)
 		{
-			Singleton<Profiler>::CreateSingleton();
-			Singleton<Profiler>::instance->init();
+			Singleton<Profiler>::getInstance().init();
+            // Put any additional init code here
 		}
 		else
 		{
-			Singleton<Profiler>::instance->destroy();
-			Singleton<Profiler>::DestroySingleton();
+            // Put any additional destroy code here
+			Singleton<Profiler>::getInstance().destroy();
 		}
 	} 
 
@@ -37,7 +35,6 @@ void singletonCreateDestroy( bool isInit)
 		}
 		else
 		{
-
 		}
 	}  
 }
