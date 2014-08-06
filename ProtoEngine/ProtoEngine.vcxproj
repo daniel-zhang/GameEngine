@@ -66,7 +66,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="RenderCore.cpp" />
@@ -76,15 +78,19 @@
     <ClCompile Include="RTWindow.cpp" />
     <ClCompile Include="SingletonInitDestory.cpp" />
     <ClCompile Include="Ticker.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="WinLauncher.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="reference_manifest.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="ForwardDecls.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Launcher.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="reference.h" />
     <ClInclude Include="RenderConfig.h" />
@@ -94,9 +100,12 @@
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="D3DUtilities.h" />
     <ClInclude Include="RTWindow.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Ticker.h" />
     <ClInclude Include="typedefs.h" />
+    <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
