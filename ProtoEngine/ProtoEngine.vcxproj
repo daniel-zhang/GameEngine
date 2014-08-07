@@ -70,11 +70,14 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OperatingSystemInterface.cpp" />
     <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="RenderCore.cpp" />
     <ClCompile Include="RenderInterface.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
+    <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceMgr.cpp" />
     <ClCompile Include="RTWindow.cpp" />
     <ClCompile Include="SingletonInitDestory.cpp" />
     <ClCompile Include="Ticker.cpp" />
@@ -84,14 +87,17 @@
   <ItemGroup>
     <None Include="dependency_manifest.txt" />
     <None Include="Design.txt" />
+    <None Include="Shader\base.fx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Config.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="ForwardDecls.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="OperatingSystemInterface.h" />
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="reference.h" />
     <ClInclude Include="RenderConfig.h" />
@@ -101,6 +107,8 @@
     <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="D3DUtilities.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceMgr.h" />
     <ClInclude Include="RTWindow.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneNode.h" />
@@ -109,6 +117,7 @@
     <ClInclude Include="typedefs.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexDeclaration.h" />
+    <ClInclude Include="VirtualFileSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

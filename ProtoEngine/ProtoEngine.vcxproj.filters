@@ -26,7 +26,7 @@
     <Filter Include="RenderCore\Graphics">
       <UniqueIdentifier>{7a27042a-93f5-48bd-a2e2-e90ae528ee2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="RenderCore\RenderState">
+    <Filter Include="RenderCore\Resource">
       <UniqueIdentifier>{a4209531-c68f-45bb-95a9-1b55ef353cc8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -72,6 +72,15 @@
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
       <Filter>RenderCore\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMgr.cpp">
+      <Filter>RenderCore\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>RenderCore\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="OperatingSystemInterface.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -141,8 +150,23 @@
     <ClInclude Include="VertexDeclaration.h">
       <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceMgr.h">
+      <Filter>RenderCore\Resource</Filter>
+    </ClInclude>
     <ClInclude Include="RenderStateMgr.h">
-      <Filter>RenderCore\Graphics</Filter>
+      <Filter>RenderCore\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>RenderCore\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>RenderCore\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="VirtualFileSystem.h">
+      <Filter>RenderCore\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="OperatingSystemInterface.h">
+      <Filter>Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +175,9 @@
     </None>
     <None Include="Design.txt">
       <Filter>ReadMe</Filter>
+    </None>
+    <None Include="Shader\base.fx">
+      <Filter>RenderCore\Shader</Filter>
     </None>
   </ItemGroup>
 </Project>
