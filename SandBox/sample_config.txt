@@ -1,0 +1,35 @@
+AI
+{
+	_str123 = "false true bal 123"
+	strong_ai = true
+	path = "/uri/artificial_intelligence/agent"
+	effect_model
+	{
+		minimal = 1.32
+		maximal = 10
+	}
+	AI
+	{
+	_str123 = "false true bal 123"
+	strong_ai = true
+	path = "/uri/artificial_intelligence/agent"
+		effect_model
+		{
+			minimal = 1.32
+			maximal = 10
+			_str123 = "false true bal 123"
+			strong_ai = true
+			path = "/uri/artificial_intelligence/agent"
+		}
+		effect_model
+		{
+			minimal = 1.32
+			maximal = 10
+			_str123 = "false true bal 123"
+			strong_ai = true
+			path = "/uri/artificial_intelligence/agent"
+		}
+	}
+}
+  
+ 

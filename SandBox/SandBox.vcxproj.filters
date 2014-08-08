@@ -13,15 +13,19 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ConfigParser\Parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigParser\PropertyTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="config_parser_test.h">
-      <Filter>TestSuites</Filter>
-    </ClInclude>
+    <ClInclude Include="ConfigParser\Parser.h" />
+    <ClInclude Include="ConfigParser\PropertyTree.h" />
+    <ClInclude Include="ConfigParser\parser_test.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="config.txt">
-      <Filter>TestSuites</Filter>
-    </None>
+    <None Include="sample_config.txt" />
   </ItemGroup>
 </Project>
