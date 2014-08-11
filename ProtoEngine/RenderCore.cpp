@@ -1,27 +1,46 @@
 #include "RenderCore.h"
 #include "RenderInterface.h"
-#include "RTWindow.h"
+#include "SwapChain.h"
+#include "RenderWindow.h"
 #include <windows.h>
-#include "Singleton.h"
+#include "Configuration.h"
 
 RenderCore::RenderCore()
 {
     mRI = new RenderInterface;
-    mDefaultTarget = new RTWindow;
+    mDefaultTarget = new SwapChain;
+    mMainWindow = new RenderWindow;
 }
 
 RenderCore::~RenderCore()
 {
-    delete mRI;
+    delete mMainWindow;
     delete mDefaultTarget;
+    delete mRI;
 }
 
+/*
+init order
+. config reading
+. create device and context
+. render window
+. render target
+*/
 bool RenderCore::init()
 {
-    if( mRI->init(mConfig) == false)
+    // Extract config obj
+    RenderConfig& rc = Singleton<Configuration>::getInstance().root.render_config;
+
+    // Create device/context
+    if( mRI->init() == false)
         return false;
 
-    if ( mDefaultTarget->init(mRI, mConfig) == false)
+    // Init render window
+    if( mMainWindow->init(L"Test Main Window", 0, 0, rc.screen_width, rc.screen_height))
+        return false;
+
+    // Init default render target
+    if ( mDefaultTarget->init(mRI, mMainWindow) == false)
         return false;
 
     mRI->attachRenderTarget(mDefaultTarget);

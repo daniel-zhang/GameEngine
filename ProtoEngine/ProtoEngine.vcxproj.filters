@@ -29,6 +29,9 @@
     <Filter Include="RenderCore\Resource">
       <UniqueIdentifier>{a4209531-c68f-45bb-95a9-1b55ef353cc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="deprecated">
+      <UniqueIdentifier>{7406c223-84ab-4c4b-9f47-4c00e9321222}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderCore.cpp">
@@ -43,14 +46,8 @@
     <ClCompile Include="Profiler.cpp">
       <Filter>Misc</Filter>
     </ClCompile>
-    <ClCompile Include="RTWindow.cpp">
-      <Filter>RenderCore</Filter>
-    </ClCompile>
     <ClCompile Include="RenderWindow.cpp">
       <Filter>RenderCore</Filter>
-    </ClCompile>
-    <ClCompile Include="SingletonInitDestory.cpp">
-      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Game</Filter>
@@ -82,6 +79,15 @@
     <ClCompile Include="OperatingSystemInterface.cpp">
       <Filter>Misc</Filter>
     </ClCompile>
+    <ClCompile Include="Configuration.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Singleton.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="SwapChain.cpp">
+      <Filter>RenderCore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderTarget.h">
@@ -101,12 +107,6 @@
     </ClInclude>
     <ClInclude Include="D3DUtilities.h">
       <Filter>Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderConfig.h">
-      <Filter>RenderCore</Filter>
-    </ClInclude>
-    <ClInclude Include="RTWindow.h">
-      <Filter>RenderCore</Filter>
     </ClInclude>
     <ClInclude Include="Profiler.h">
       <Filter>Misc</Filter>
@@ -156,9 +156,6 @@
     <ClInclude Include="RenderStateMgr.h">
       <Filter>RenderCore\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Config.h">
-      <Filter>RenderCore\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>RenderCore\Resource</Filter>
     </ClInclude>
@@ -167,6 +164,15 @@
     </ClInclude>
     <ClInclude Include="OperatingSystemInterface.h">
       <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Configuration.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="SwapChain.h">
+      <Filter>RenderCore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -179,5 +185,6 @@
     <None Include="Shader\base.fx">
       <Filter>RenderCore\Shader</Filter>
     </None>
+    <None Include="config.txt" />
   </ItemGroup>
 </Project>

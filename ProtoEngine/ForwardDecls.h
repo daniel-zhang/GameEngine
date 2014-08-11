@@ -4,7 +4,7 @@
 class RenderCore;
 class RenderInterface;
 class RenderTarget;
-class RTWindow;
+class SwapChain;
 class RenderWindow;
 
 #endif

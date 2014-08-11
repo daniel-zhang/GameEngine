@@ -1,32 +1,35 @@
-#include "RTWindow.h"
-#include "RenderWindow.h"
-#include "RenderConfig.h"
+#include "SwapChain.h"
 #include "RenderInterface.h"
+#include "RenderWindow.h"
 #include "D3DUtilities.h"
+#include "Configuration.h"
 
-RTWindow::RTWindow()
+SwapChain::SwapChain()
 {
-    mRenderWindow = new RenderWindow();
 }
 
-RTWindow::~RTWindow()
+SwapChain::~SwapChain()
 {
-    if (mRenderWindow)
-        delete mRenderWindow;
 }
 
-bool RTWindow::init( RenderInterface* ri, RenderConfig& config )
+bool SwapChain::init( RenderInterface* ri, RenderWindow* rw)
 {
+    /*
     if (mRenderWindow->init(L"test window", 0, 0, 400, 400) == false)
     {
         return false;
     }
     mWidth = mRenderWindow->mWidth;
     mHeight = mRenderWindow->mHeight;
+    */
 
-    UINT msaaQuality;
+    RenderConfig& rc = Singleton<Configuration>::getInstance().root.render_config;
+    this->mWidth = rc.screen_width;
+    this->mHeight = rc.screen_height;
+
+    uint32 msaaQuality;
     d3d_check(ri->mDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &msaaQuality));
-    bool useMSAA = msaaQuality > 0 && config.EnableMSAAx4;
+    bool useMSAA = msaaQuality > 0 && rc.enable_msaa;
 
     DXGI_SWAP_CHAIN_DESC sd;
     sd.BufferDesc.Width  = mWidth;
@@ -39,7 +42,7 @@ bool RTWindow::init( RenderInterface* ri, RenderConfig& config )
     // Use 4X MSAA? 
     if(useMSAA)
     {
-        sd.SampleDesc.Count   = 4;
+        sd.SampleDesc.Count   = rc.msaa_quality;
         sd.SampleDesc.Quality = msaaQuality-1;
     }
     // No MSAA
@@ -50,7 +53,7 @@ bool RTWindow::init( RenderInterface* ri, RenderConfig& config )
     }
     sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     sd.BufferCount  = 1;
-    sd.OutputWindow = mRenderWindow->getReference();
+    sd.OutputWindow = rw->getReference();
     sd.Windowed     = true;
     sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
     sd.Flags        = 0;
@@ -102,7 +105,7 @@ bool RTWindow::init( RenderInterface* ri, RenderConfig& config )
     // Use 4X MSAA? --must match swap chain MSAA values.
     if( useMSAA )
     {
-        depthStencilDesc.SampleDesc.Count   = 4;
+        depthStencilDesc.SampleDesc.Count   = rc.msaa_quality;
         depthStencilDesc.SampleDesc.Quality = msaaQuality - 1;
     }
     // No MSAA

@@ -3,7 +3,6 @@
 
 #include "reference.h"
 #include "RenderTarget.h"
-#include "RenderConfig.h"
 
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
@@ -15,7 +14,7 @@ public:
     RenderInterface();
     ~RenderInterface();
 
-    bool init(RenderConfig& config);
+    bool init();
 
     // State query
     bool isInitialized();

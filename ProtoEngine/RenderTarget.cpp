@@ -10,6 +10,16 @@ RenderTarget::RenderTarget()
     mDepthStencilBuffer = NULL;
 }
 
+RenderTarget::RenderTarget( uint32 width, uint32 height )
+{
+    mWidth = width;
+    mHeight = height;
+
+    mDepthStencilBuffer = NULL;
+    mDepthStencilView = NULL;
+    mRenderTargetView = NULL;
+}
+
 RenderTarget::~RenderTarget()
 {
     safe_release(&mDepthStencilView);

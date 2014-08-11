@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProtoEngine", "ProtoEngine\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SandBox", "SandBox\SandBox.vcxproj", "{296D7579-A495-4171-AA03-B61CD471F9F1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConfigParser", "ConfigParser\ConfigParser.vcxproj", "{56CAABE5-6927-4F1A-B573-9F63CE701028}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{296D7579-A495-4171-AA03-B61CD471F9F1}.Debug|Win32.Build.0 = Debug|Win32
 		{296D7579-A495-4171-AA03-B61CD471F9F1}.Release|Win32.ActiveCfg = Release|Win32
 		{296D7579-A495-4171-AA03-B61CD471F9F1}.Release|Win32.Build.0 = Release|Win32
+		{56CAABE5-6927-4F1A-B573-9F63CE701028}.Debug|Win32.ActiveCfg = Debug|Win32
+		{56CAABE5-6927-4F1A-B573-9F63CE701028}.Debug|Win32.Build.0 = Debug|Win32
+		{56CAABE5-6927-4F1A-B573-9F63CE701028}.Release|Win32.ActiveCfg = Release|Win32
+		{56CAABE5-6927-4F1A-B573-9F63CE701028}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,11 +15,16 @@ bool Game::init()
 {
 	initAllSingletons();
 
+    Timer* initTimer = Singleton<Profiler>::getInstance().createTimer(L"InitTimer", L"Init Timer");
+
+    Singleton<Profiler>::getInstance().startTimer(initTimer);
 	if (!mRenderCore)
 	{
 		mRenderCore = new RenderCore();
 		mRenderCore->init();
 	}
+    Singleton<Profiler>::getInstance().endTimer(initTimer);
+    float time = initTimer->totalTime();
 
 	return true;
 }

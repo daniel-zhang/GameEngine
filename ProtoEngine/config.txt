@@ -1,0 +1,11 @@
+root
+{
+	render_config
+	{
+		screen_width = 1600
+		screen_height = 600
+		enable_msaa = true 
+		msaa_quality = 4
+		force_singlethread = true
+	}
+}

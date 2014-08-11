@@ -5,36 +5,29 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="TestSuites">
-      <UniqueIdentifier>{27951bb3-d4cb-4ed1-aed3-1bbe9ddfcc80}</UniqueIdentifier>
+    <Filter Include="Testcases">
+      <UniqueIdentifier>{55b0860b-b675-4716-a31a-3e98a0cd6f69}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ConfigParser">
-      <UniqueIdentifier>{07a10696-d343-466a-ba6b-60e14f74ab80}</UniqueIdentifier>
+    <Filter Include="Testcases\ConfigParser">
+      <UniqueIdentifier>{88201f44-a195-4775-9d73-e605bfba9bb1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ConfigParser\PropertyTree.cpp">
-      <Filter>ConfigParser</Filter>
-    </ClCompile>
-    <ClCompile Include="ConfigParser\Parser.cpp">
-      <Filter>ConfigParser</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConfigParser\Parser.h">
-      <Filter>ConfigParser</Filter>
+    <ClInclude Include="parser_test.h">
+      <Filter>Testcases\ConfigParser</Filter>
     </ClInclude>
-    <ClInclude Include="ConfigParser\parser_test.h">
-      <Filter>ConfigParser</Filter>
-    </ClInclude>
-    <ClInclude Include="ConfigParser\PropertyTree.h">
-      <Filter>ConfigParser</Filter>
+    <ClInclude Include="parser_test2.h">
+      <Filter>Testcases\ConfigParser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sample_config.txt" />
+    <None Include="sample_config.txt">
+      <Filter>Testcases\ConfigParser</Filter>
+    </None>
   </ItemGroup>
 </Project>

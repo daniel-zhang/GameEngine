@@ -41,12 +41,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(dxsdk_dir)/include;$(boost_root);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../ConfigParser/include;$(dxsdk_dir)/include;$(boost_root);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(dxsdk_dir)/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;dxerr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(targetdir);$(dxsdk_dir)/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxerr.lib;ConfigParser.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -55,17 +55,18 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(dxsdk_dir)/include;$(boost_root);</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../ConfigParser/include;$(dxsdk_dir)/include;$(boost_root);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(dxsdk_dir)/include/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;dxerr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(targetdir);$(dxsdk_dir)/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxerr.lib;ConfigParser.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
@@ -78,19 +79,21 @@
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceMgr.cpp" />
-    <ClCompile Include="RTWindow.cpp" />
-    <ClCompile Include="SingletonInitDestory.cpp" />
+    <ClCompile Include="SwapChain.cpp" />
+    <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="Ticker.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="WinLauncher.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="config.txt" />
     <None Include="dependency_manifest.txt" />
     <None Include="Design.txt" />
     <None Include="Shader\base.fx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Configuration.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="ForwardDecls.h" />
     <ClInclude Include="Game.h" />
@@ -100,7 +103,6 @@
     <ClInclude Include="OperatingSystemInterface.h" />
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="reference.h" />
-    <ClInclude Include="RenderConfig.h" />
     <ClInclude Include="RenderCore.h" />
     <ClInclude Include="RenderInterface.h" />
     <ClInclude Include="RenderStateMgr.h" />
@@ -109,7 +111,7 @@
     <ClInclude Include="D3DUtilities.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceMgr.h" />
-    <ClInclude Include="RTWindow.h" />
+    <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Singleton.h" />

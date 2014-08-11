@@ -36,25 +36,9 @@ public:
 
 void parser_test()
 {
-    PropertyPath pp;
-    pp.fromString(string("/some/cool and good/stuff/is/here"));
-    pp.dump();
-
-    pp.reset();
-    pp.fromString(string("some/cool and good/stuff/is/here"));
-    pp.dump();
-
-    pp.reset();
-    pp.fromString(string("some///cool and good/stuff/is/here"));
-    pp.dump();
-
-    pp.reset();
-    pp.fromString(string("some///cool and good/stuff/is/here/"));
-    pp.dump();
-
-    pp.reset();
-    pp.fromString(string("some///cool and good/stuff/is////here//////"));
-    pp.dump();
+    cout << "--------------------------------------" << endl;
+    cout << "void parser_test()" << endl;
+    cout << "--------------------------------------" << endl;
 
     string config_file_name = "../SandBox/sample_config.txt";
     IO io;
@@ -76,32 +60,6 @@ void parser_test()
     }
     Dumper dumper;
     dumper.bang(node);
-
-
-    stringstream t;
-    t << "1s.2s.2";
-    float res;
-    if (t>>res)
-    {
-        cout << "good";
-    }
-    else
-    {
-        cout << "bad";
-    }
-
-    /* t.clear(); t.str("");*/
-    t << ' ' << "123451";
-    int res2;
-    if (t>>res2)
-    {
-        cout << "good";
-    }
-    else
-    {
-        cout << "bad";
-    }
-
 }
 
 #endif

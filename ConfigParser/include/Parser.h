@@ -39,6 +39,8 @@ void parse(Node* root)
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "PropertyTree.h"
+
 #include <vector>
 #include <string>
 #include <fstream>
@@ -46,7 +48,6 @@ void parse(Node* root)
 #include <sstream>
 #include <exception>
 
-#include "PropertyTree.h"
 using std::stringstream;
 using std::runtime_error;
 
@@ -89,6 +90,7 @@ public:
     stringstream error_info;
 
     Parser(){reset();}
+
     PropertyNode* parse(vector<Token>& input);
 
 protected:

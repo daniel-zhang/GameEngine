@@ -35,7 +35,6 @@ public:
 class Config : public Resource
 {
 public:
-    uint32 mConfigSectionNum;
 };
 
 class ConfigLoader : public ResourceLoader

@@ -15,11 +15,12 @@ RenderInterface::~RenderInterface()
     safe_release(&mDevice);
 }
 
-bool RenderInterface::init(RenderConfig& config)
+bool RenderInterface::init()
 {
     D3D_FEATURE_LEVEL featureLevel;
     UINT createDeviceFlags = 0;
-    if(config.ForceSingleThreaded) createDeviceFlags |= D3D11_CREATE_DEVICE_SINGLETHREADED;
+    //if(config.ForceSingleThreaded) createDeviceFlags |= D3D11_CREATE_DEVICE_SINGLETHREADED;
+    if(1) createDeviceFlags |= D3D11_CREATE_DEVICE_SINGLETHREADED;
 #if 1
 #if defined(DEBUG) || defined(_DEBUG)  
     createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;

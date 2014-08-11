@@ -2,11 +2,10 @@
 #define RENDER_CORE_H
 
 #include "ForwardDecls.h"
-
-#include "RenderConfig.h"
 #include <vector>
 
-class RTWindow;
+class SwapChain;
+class RenderWindow;
 
 class RenderCore
 {
@@ -20,11 +19,11 @@ public:
 
 public:
     RenderInterface* mRI;
-    RenderConfig mConfig;
 
 private:
-    RTWindow* mDefaultTarget;
     std::vector<RenderTarget*> mTargets;
+    SwapChain* mDefaultTarget;
+    RenderWindow* mMainWindow;
 };
 
 #endif
