@@ -5,107 +5,38 @@
 #include <vector>
 #include <iostream>
 
-using namespace std;
+using std::string;
+using std::vector;
+using std::cout;
+using std::endl;
 
-class Node 
+class PropertyNode 
 {
 public:
-    Node()
-    {
-        parent = NULL;
-        key = "__default_key__";
-        val = "__default_val__";
-        isLeaf = false;
-    }
-    ~Node()
-    {
-        for (unsigned int i = 0; i < children.size(); ++i)
-        {
-            delete children[i];
-            children[i] = NULL;
-        }
-    }
+    PropertyNode();
+    ~PropertyNode();
+    void addChild(PropertyNode* other);
 
-    Node* parent;
-    vector<Node*> children;
+    PropertyNode* parent;
+    vector<PropertyNode*> children;
 
     string key;
     string val;
     bool isLeaf;
 
-    void addChild(Node* other)
-    {
-        other->parent = this;
-        children.push_back(other);
-    }
+public:
+    // Explicitly convert values, no template!
+    bool asInt(const int& output);
+    bool asFloat(float& output);
+    bool asString(string& output);
 };
 
-/*
-A general structure
-*/
 class PropertyPath
 {
 public:
-    PropertyPath()
-    {
-        reset();
-    }
-    void fromString(string& path)
-    {
-        if (path.empty())
-            return ;
-        // split the string into substrings
-        string curr_item = "";
-        unsigned int i = 0;
-        unsigned int size = path.size();
-        while(i < size)
-        {
-            char c = path[i];
-
-            // Skip the beginning '/' 
-            // Handles this pattern: 'xxx/'
-            if (c == '/' && !curr_item.empty())
-            {
-                mPath.push_back(curr_item);
-                curr_item.clear();
-            }
-            // We are at the last char 
-            // Either 'xxx/xxx'
-            // Or 'xxx/xxx/'
-            else if (i == size -1)
-            {
-                // the path is ended with '/'
-                if (c == '/')
-                {
-                    if (!curr_item.empty())
-                    {
-                        mPath.push_back(curr_item);
-                        curr_item.clear();
-                    }
-                }
-                // the path does not have a trailing '/'
-                else
-                {
-                    curr_item += c;
-                    mPath.push_back(curr_item);
-                }
-            }
-            else if (c != '/')
-            {
-                curr_item += c;
-            }
-            else
-            {
-                // something like 'aaa/bbb//ccc' is encountered
-                // just skip the extra '//'
-            }
-            i++;
-        }
-    }
-    void reset()
-    {
-        mPath.clear();
-    }
+    PropertyPath();
+    void fromString(string& path);
+    void reset();
 
     void dump()
     {
@@ -133,21 +64,21 @@ public:
 
     }
 
-    Node* mRoot;
+    PropertyNode* mRoot;
 };
 
 class Dumper
 {
 public:
     Dumper():indent_step(2){}
-    void bang(Node* node)
+    void bang(PropertyNode* node)
     {
         _bang(node, 0);
     }
 
 protected:
     int indent_step;
-    void _bang(Node* pNode, int indent)
+    void _bang(PropertyNode* pNode, int indent)
     {
         string local_indent_string;
         for (int i = 0; i < indent; ++i)

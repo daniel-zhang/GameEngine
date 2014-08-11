@@ -47,6 +47,8 @@ void parse(Node* root)
 #include <exception>
 
 #include "PropertyTree.h"
+using std::stringstream;
+using std::runtime_error;
 
 class Token
 {
@@ -87,11 +89,11 @@ public:
     stringstream error_info;
 
     Parser(){reset();}
-    Node* parse(vector<Token>& input);
+    PropertyNode* parse(vector<Token>& input);
 
 protected:
     void reset();
-    void _parse(Node* root);
+    void _parse(PropertyNode* root);
 
     bool atEnd();
     bool beyondEnd();

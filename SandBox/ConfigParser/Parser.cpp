@@ -165,14 +165,14 @@ void Tokenizer::reset()
     tokens.clear();
 }
 
-Node* Parser::parse( vector<Token>& input )
+PropertyNode* Parser::parse( vector<Token>& input )
 {
     for (size_t i = 0; i < input.size(); ++i)
     {
         _tokens.push_back(input[i]);
     }
 
-    Node* root = new Node();
+    PropertyNode* root = new PropertyNode();
 
     _parse(root);
 
@@ -184,7 +184,7 @@ void Parser::reset()
     pos = 0;
 }
 
-void Parser::_parse( Node* root )
+void Parser::_parse( PropertyNode* root )
 {
     if( curr().is("{") )
     {
@@ -205,7 +205,7 @@ void Parser::_parse( Node* root )
     }
     else if (curr().isIdentifier())
     {
-        Node* node = new Node();
+        PropertyNode* node = new PropertyNode();
         node->key = curr().str;
         if (peek(1).is("{"))
         {

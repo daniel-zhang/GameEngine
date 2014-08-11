@@ -65,7 +65,7 @@ void parser_test()
     tokenizer.process(buffer, config_file_name);
 
     Parser parser;
-    Node* node = NULL;
+    PropertyNode* node = NULL;
     try
     {
         node = parser.parse(tokenizer.tokens);
@@ -76,6 +76,32 @@ void parser_test()
     }
     Dumper dumper;
     dumper.bang(node);
+
+
+    stringstream t;
+    t << "1s.2s.2";
+    float res;
+    if (t>>res)
+    {
+        cout << "good";
+    }
+    else
+    {
+        cout << "bad";
+    }
+
+    /* t.clear(); t.str("");*/
+    t << ' ' << "123451";
+    int res2;
+    if (t>>res2)
+    {
+        cout << "good";
+    }
+    else
+    {
+        cout << "bad";
+    }
+
 }
 
 #endif

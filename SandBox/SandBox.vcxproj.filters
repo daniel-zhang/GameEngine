@@ -8,22 +8,31 @@
     <Filter Include="TestSuites">
       <UniqueIdentifier>{27951bb3-d4cb-4ed1-aed3-1bbe9ddfcc80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ConfigParser">
+      <UniqueIdentifier>{07a10696-d343-466a-ba6b-60e14f74ab80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ConfigParser\Parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ConfigParser\PropertyTree.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>ConfigParser</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigParser\Parser.cpp">
+      <Filter>ConfigParser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConfigParser\Parser.h" />
-    <ClInclude Include="ConfigParser\PropertyTree.h" />
-    <ClInclude Include="ConfigParser\parser_test.h" />
+    <ClInclude Include="ConfigParser\Parser.h">
+      <Filter>ConfigParser</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigParser\parser_test.h">
+      <Filter>ConfigParser</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigParser\PropertyTree.h">
+      <Filter>ConfigParser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="sample_config.txt" />
