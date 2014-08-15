@@ -41,3 +41,8 @@ Sub Goals / Design
 # Input interface 
     - regular stuff: keyboard, mouse
     - Occulus Rift SDK!
+
+# Extensible config file format
+	- json like config file
+	- a handwritten parser 
+	- data driven?

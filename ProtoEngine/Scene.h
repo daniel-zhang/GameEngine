@@ -2,7 +2,7 @@
 #define SCENE_H
 
 #include "typedefs.h"
-#include "SceneNode.h"
+#include "Entity.h"
 #include <vector>
 
 /*
@@ -15,9 +15,9 @@ public:
 	Scene();
 	~Scene();
 
-	void add(SceneNode* pNode);
-	void remove(SceneNode* pNode);
+	void add(Entity* pNode);
+	void remove(Entity* pNode);
 
-	std::vector<SceneNode*> mNodes;
+	std::vector<Entity*> mNodes;
 };
 #endif

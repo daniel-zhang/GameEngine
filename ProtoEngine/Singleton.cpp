@@ -1,47 +1,65 @@
-
-// Singletons -- begin
-#include "Configuration.h"
-#include "Profiler.h"
-// Singletons -- end
 #include "Singleton.h"
 
-void singletonCreateDestroy( bool isInit);
+// Phase 1 Singletons -- begin
+#include "ConfigMgr.h"
+#include "Profiler.h"
+// Phase 1 Singletons -- end
 
-void initAllSingletons()
+// Phase 2 Singletons -- begin 
+// Phase 2 Singletons -- end 
+
+
+void initOrClearPhaseOneSingletons( bool isInit);
+void initOrClearPhaseTwoSingletons( bool isInit);
+
+void initPhaseOneSingletons()
 {
-	singletonCreateDestroy(true);
+	initOrClearPhaseOneSingletons(true);
 }
 
-void destroyAllSingletons()
+void clearPhaseOneSingletons()
 {
-	singletonCreateDestroy(false);
+	initOrClearPhaseOneSingletons(false);
+}
+
+void initPhaseTwoSingletons()
+{
+    initOrClearPhaseTwoSingletons(true);
+}
+
+void clearPhaseTwoSingletons()
+{
+    initOrClearPhaseTwoSingletons(false);
 }
 
 #define guard(x) {
 #define unguard }
 
-void singletonCreateDestroy( bool isInit)
+void initOrClearPhaseOneSingletons( bool isInit)
 {
-    guard(Configuration)	
+    guard(ConfigMgr)	
 		if (isInit)
-		{
-            Singleton<Configuration>::getInstance().init();
-		}
+            Singleton<ConfigMgr>::getInstance().init();
 		else
-		{
-            Singleton<Configuration>::getInstance().destroy();
-		}
+            Singleton<ConfigMgr>::getInstance().destroy();
     unguard
 	 
 	guard(Profiler) 
 		if (isInit)
-		{
 			Singleton<Profiler>::getInstance().init();
-		}
 		else
-		{
 			Singleton<Profiler>::getInstance().destroy();
-		}
 	unguard 
 }
+
+void initOrClearPhaseTwoSingletons( bool isInit )
+{
+    guard()
+        if (isInit)
+            ;
+        else
+            ;
+    unguard
+}
+
 

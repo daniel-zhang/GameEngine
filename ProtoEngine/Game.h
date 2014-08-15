@@ -18,6 +18,7 @@ public:
 
 	bool init();
 	bool exit();
+    // A windows msg pump
 	int32 runWin32();
 
 protected:
@@ -26,7 +27,6 @@ protected:
 
 protected:
 	Ticker mTicker;
-
 	RenderCore* mRenderCore;
 };
 #endif

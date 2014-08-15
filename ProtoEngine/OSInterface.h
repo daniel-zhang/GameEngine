@@ -1,9 +1,10 @@
-#ifndef OPERATING_SYSTEM_INTERFACE_H
-#define OPERATING_SYSTEM_INTERFACE_H
+#ifndef OS_INTERFACE_H
+#define OS_INTERFACE_H
 
 #include "typedefs.h"
 #include <string>
 #include <vector>
+#include <windows.h>
 
 /*
 A wrapper around OS to unify related OS operations.
@@ -12,7 +13,7 @@ A wrapper around OS to unify related OS operations.
     date time
 */
 
-class UTCTime;
+class BinaryTime;
 class DateTime 
 {
 public:
@@ -20,8 +21,10 @@ public:
     DateTime& operator=(const DateTime& rhs);
     DateTime(const DateTime& rhs);
 
-    void asString(std::wstring& outString);
-    void asUTC(UTCTime& outTime);
+    void setFromWin32SysTime(const SYSTEMTIME& st);
+    void asWin32SysTime(SYSTEMTIME& st) const;
+    void asString(std::wstring& outString) const;
+    void asBinaryTime(BinaryTime& outTime) const;
 
     uint16 year;
     uint16 month;
@@ -31,12 +34,15 @@ public:
     uint16 minute;
     uint16 second;
     uint16 millisecond;
+
 };
 
-class UTCTime
+class BinaryTime
 {
 public:
-    UTCTime();
+    BinaryTime();
+    BinaryTime(const DateTime& inDateTime);
+    void fromeDateTime(const DateTime& inDateTime);
     void asDateTime(DateTime& outDateTime);
 
     uint64 mBinaryTime;
@@ -63,22 +69,26 @@ public:
     std::wstring mFileName;
     std::wstring mExtension;
     uint64 mSize;
-    UTCTime mLastModifiedTime;
+    BinaryTime mLastModifiedTime;
     bool mIsDir;
 };
 
 class OSInterface 
 {
 public:
-    OSInterface();
-    ~OSInterface();
+    static void getGlobalTime(DateTime& datetime); 
+    static void getLocalTime(DateTime& datetime);
 
-    void mount(const FilePath& path);
-    bool ls(std::vector<PhysicalFileInfo>& fileInfoCollection, const FilePath& path);
-    void getCurrentTime(UTCTime* datetime);
+    static bool fileToString(const std::string& path, std::string& output);
+    static bool stringToFile(const std::string& path, std::string& output);
 
-protected:
-    FilePath mMountPoint; 
+    static bool fileToWstring(const std::string& path, std::string& output);
+    static bool wstringToFile(const std::string& path, std::string& output);
+
+    static bool fileToMem(const std::string& path, void* output, uint32& size);
+    static bool memToFile(const std::string& path, std::vector<char>& output);
 };
+
+void debug_test_osi();
 
 #endif

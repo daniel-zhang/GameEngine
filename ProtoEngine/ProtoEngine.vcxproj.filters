@@ -17,20 +17,29 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{abdc6b91-7966-4cd6-88bc-d1f229477ffc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="RenderCore\Shader">
-      <UniqueIdentifier>{f236e55c-0e32-4c9e-bc88-c708a1d5fe02}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ReadMe">
       <UniqueIdentifier>{b755bab3-d01f-4e86-b4f2-6ba951c01558}</UniqueIdentifier>
     </Filter>
     <Filter Include="RenderCore\Graphics">
       <UniqueIdentifier>{7a27042a-93f5-48bd-a2e2-e90ae528ee2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="RenderCore\Resource">
-      <UniqueIdentifier>{a4209531-c68f-45bb-95a9-1b55ef353cc8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="deprecated">
       <UniqueIdentifier>{7406c223-84ab-4c4b-9f47-4c00e9321222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderCore\Material">
+      <UniqueIdentifier>{4f207249-5ad4-498f-a3ea-cff11691aaa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderCore\xxxMgr">
+      <UniqueIdentifier>{a4209531-c68f-45bb-95a9-1b55ef353cc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameResource">
+      <UniqueIdentifier>{858e9d32-7ee7-4fd7-9456-14363e117580}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameResource\Config">
+      <UniqueIdentifier>{36487251-9d9f-441e-bd3a-a09e3ec42c33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameResource\Shader">
+      <UniqueIdentifier>{b2adde42-9df2-4910-9012-9175c69f02e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,12 +48,6 @@
     </ClCompile>
     <ClCompile Include="RenderInterface.cpp">
       <Filter>RenderCore</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderTarget.cpp">
-      <Filter>RenderCore</Filter>
-    </ClCompile>
-    <ClCompile Include="Profiler.cpp">
-      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="RenderWindow.cpp">
       <Filter>RenderCore</Filter>
@@ -70,29 +73,38 @@
     <ClCompile Include="IndexBuffer.cpp">
       <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceMgr.cpp">
-      <Filter>RenderCore\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource.cpp">
-      <Filter>RenderCore\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="OperatingSystemInterface.cpp">
-      <Filter>Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Configuration.cpp">
-      <Filter>Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Singleton.cpp">
-      <Filter>Misc</Filter>
-    </ClCompile>
     <ClCompile Include="SwapChain.cpp">
       <Filter>RenderCore</Filter>
     </ClCompile>
+    <ClCompile Include="RenderTarget.cpp">
+      <Filter>RenderCore\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>RenderCore\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Singleton.cpp">
+      <Filter>RenderCore\xxxMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigMgr.cpp">
+      <Filter>RenderCore\xxxMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Profiler.cpp">
+      <Filter>RenderCore\xxxMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectMgr.cpp">
+      <Filter>RenderCore\xxxMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>RenderCore\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="GameResourcePath.cpp">
+      <Filter>GameResource</Filter>
+    </ClCompile>
+    <ClCompile Include="OSInterface.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RenderTarget.h">
-      <Filter>RenderCore</Filter>
-    </ClInclude>
     <ClInclude Include="RenderCore.h">
       <Filter>RenderCore</Filter>
     </ClInclude>
@@ -108,13 +120,7 @@
     <ClInclude Include="D3DUtilities.h">
       <Filter>Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Profiler.h">
-      <Filter>Misc</Filter>
-    </ClInclude>
     <ClInclude Include="typedefs.h">
-      <Filter>Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
       <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
@@ -135,9 +141,6 @@
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="SceneNode.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="VertexBuffer.h">
       <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
@@ -150,29 +153,44 @@
     <ClInclude Include="VertexDeclaration.h">
       <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceMgr.h">
-      <Filter>RenderCore\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="RenderStateMgr.h">
-      <Filter>RenderCore\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>RenderCore\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="VirtualFileSystem.h">
-      <Filter>RenderCore\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="OperatingSystemInterface.h">
-      <Filter>Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Configuration.h">
-      <Filter>Misc</Filter>
+      <Filter>RenderCore\xxxMgr</Filter>
     </ClInclude>
     <ClInclude Include="Config.h">
       <Filter>deprecated</Filter>
     </ClInclude>
     <ClInclude Include="SwapChain.h">
       <Filter>RenderCore</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTarget.h">
+      <Filter>RenderCore\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>RenderCore\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>RenderCore\xxxMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigMgr.h">
+      <Filter>RenderCore\xxxMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Profiler.h">
+      <Filter>RenderCore\xxxMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectMgr.h">
+      <Filter>RenderCore\xxxMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>RenderCore\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="GameResourcePath.h">
+      <Filter>GameResource</Filter>
+    </ClInclude>
+    <ClInclude Include="OSInterface.h">
+      <Filter>Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +200,11 @@
     <None Include="Design.txt">
       <Filter>ReadMe</Filter>
     </None>
-    <None Include="Shader\base.fx">
-      <Filter>RenderCore\Shader</Filter>
+    <None Include="GameResource\Shader\base.fx">
+      <Filter>GameResource\Shader</Filter>
     </None>
-    <None Include="config.txt" />
+    <None Include="GameResource\Config\config.txt">
+      <Filter>GameResource\Config</Filter>
+    </None>
   </ItemGroup>
 </Project>

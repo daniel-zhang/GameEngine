@@ -10,12 +10,11 @@ Usage:
 Requirements:
 1. SomeMgr must have a default ctor 
 2. SomeMgr can have a init/destroy pair
-3. Though lazy initialization is used, init/destroy order is explicitly specified in:
+3. Lazy-creation + explicit init/destroy
     void initAllSingletons();
     void destroyAllSingletons();
 
 Remarks:
-   If init order becomes a concern, refer to this SO post:
    http://stackoverflow.com/questions/335369/finding-c-static-initialization-order-problems/335746#335746
 */
 
@@ -35,7 +34,16 @@ private:
     Singleton& operator=(const Singleton<T>& rhs);
 };
 
-void initAllSingletons();
-void destroyAllSingletons();
+/*
+Phase 1 singletons - independent of graphics pipeline 
+    e.g. profiler, config mgr, ...
+Phase 2 singletons - dependent of render device and context
+    e.g. effect mgr, texture mgr, ...
+*/
+void initPhaseOneSingletons();
+void clearPhaseOneSingletons();
+
+void initPhaseTwoSingletons();
+void clearPhaseTwoSingletons();
 
 #endif

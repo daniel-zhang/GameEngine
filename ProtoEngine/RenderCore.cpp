@@ -3,7 +3,7 @@
 #include "SwapChain.h"
 #include "RenderWindow.h"
 #include <windows.h>
-#include "Configuration.h"
+#include "ConfigMgr.h"
 
 RenderCore::RenderCore()
 {
@@ -29,7 +29,7 @@ init order
 bool RenderCore::init()
 {
     // Extract config obj
-    RenderConfig& rc = Singleton<Configuration>::getInstance().root.render_config;
+    RenderConfig& rc = Singleton<ConfigMgr>::getInstance().root.render_config;
 
     // Create device/context
     if( mRI->init() == false)

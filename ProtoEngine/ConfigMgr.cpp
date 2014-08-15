@@ -1,4 +1,5 @@
-#include "Configuration.h"
+#include "ConfigMgr.h"
+#include "GameResourcePath.h"
 
 ConfigNode::ConfigNode()
 {
@@ -37,12 +38,12 @@ void RootConfig::sync( PropertyTree* propertyTree, std::string configPath /*= ""
     render_config.sync(propertyTree, std::string("/") + this->section_name);
 }
 
-bool Configuration::init()
+bool ConfigMgr::init()
 {
     PropertyTree properties;
     ConfigParser cParser;
     std::string errorMsg;
-    if ( cParser.process("../ProtoEngine/config.txt", properties, errorMsg) == false)
+    if ( cParser.process(gConfigPath, properties, errorMsg) == false)
     {
         // some error handling here: output<<errorMsg
         return false;
@@ -52,7 +53,7 @@ bool Configuration::init()
     return true;
 }
 
-bool Configuration::destroy()
+bool ConfigMgr::destroy()
 {
     return true;
 }

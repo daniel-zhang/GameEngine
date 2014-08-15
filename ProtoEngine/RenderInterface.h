@@ -20,9 +20,16 @@ public:
     bool isInitialized();
 
     // Operations
+
     void attachRenderTarget(RenderTarget* rt);
+    void setRenderTarget();
+    void setViewport();
+
+    void setShader();
+
     void setIndexBuffer(IndexBuffer* pIB){}
     void setVertexBuffer(VertexBuffer* pVB){}
+    
 
 public:
     ID3D11Device*				mDevice;

@@ -1,5 +1,5 @@
-#ifndef CONFIGURATION_H
-#define CONFIGURATION_H
+#ifndef CONFIG_MGR_H 
+#define CONFIG_MGR_H 
 
 #include "typedefs.h"
 #include <string>
@@ -43,12 +43,11 @@ public:
     RenderConfig render_config;
 };
 
-class Configuration : public Singleton<Configuration>
+class ConfigMgr : public Singleton<ConfigMgr>
 {
 public:
     RootConfig root;
     bool init();
-
     bool destroy();
 };
 

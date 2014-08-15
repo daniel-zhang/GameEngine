@@ -2,7 +2,7 @@
 #include "RenderInterface.h"
 #include "RenderWindow.h"
 #include "D3DUtilities.h"
-#include "Configuration.h"
+#include "ConfigMgr.h"
 
 SwapChain::SwapChain()
 {
@@ -23,7 +23,7 @@ bool SwapChain::init( RenderInterface* ri, RenderWindow* rw)
     mHeight = mRenderWindow->mHeight;
     */
 
-    RenderConfig& rc = Singleton<Configuration>::getInstance().root.render_config;
+    RenderConfig& rc = Singleton<ConfigMgr>::getInstance().root.render_config;
     this->mWidth = rc.screen_width;
     this->mHeight = rc.screen_height;
 

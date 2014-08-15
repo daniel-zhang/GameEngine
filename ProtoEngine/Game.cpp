@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Profiler.h"
+#include "OSInterface.h"
 
 Game::Game()
 {
@@ -13,16 +14,21 @@ Game::~Game()
 
 bool Game::init()
 {
-	initAllSingletons();
+#if defined DEBUG || defined _DEBUG
+    debug_test_osi();
+#endif
+
+	initPhaseOneSingletons();
 
     Timer* initTimer = Singleton<Profiler>::getInstance().createTimer(L"InitTimer", L"Init Timer");
-
     Singleton<Profiler>::getInstance().startTimer(initTimer);
+
 	if (!mRenderCore)
 	{
 		mRenderCore = new RenderCore();
 		mRenderCore->init();
 	}
+
     Singleton<Profiler>::getInstance().endTimer(initTimer);
     float time = initTimer->totalTime();
 
@@ -38,7 +44,7 @@ bool Game::exit()
 		delete mRenderCore;
 	}
 
-	destroyAllSingletons();
+	clearPhaseOneSingletons();
 	return true;
 }
 
