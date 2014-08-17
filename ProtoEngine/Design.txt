@@ -43,6 +43,6 @@ Sub Goals / Design
     - Occulus Rift SDK!
 
 # Extensible config file format
-	- json like config file
-	- a handwritten parser 
-	- data driven?
+    - json like config file
+    - a handwritten parser 
+    - data driven?

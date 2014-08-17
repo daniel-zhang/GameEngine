@@ -73,6 +73,22 @@ public:
     bool mIsDir;
 };
 
+struct MemBlock
+{
+    MemBlock()
+    {
+        mData = NULL;
+        mSize = 0;
+    }
+    MemBlock(char* data, uint32 size):mData(data), mSize(size) { } 
+    ~MemBlock()
+    {
+        if (!mData) delete mData;
+    }
+    char* mData;
+    uint32  mSize;
+};
+
 class OSInterface 
 {
 public:
@@ -80,13 +96,16 @@ public:
     static void getLocalTime(DateTime& datetime);
 
     static bool fileToString(const std::string& path, std::string& output);
-    static bool stringToFile(const std::string& path, std::string& output);
+    static bool stringToFile(const std::string& path, const std::string& input);
 
-    static bool fileToWstring(const std::string& path, std::string& output);
-    static bool wstringToFile(const std::string& path, std::string& output);
+    static bool fileToWstring(const std::wstring& path, std::wstring& output);
+    static bool wstringToFile(const std::wstring& path, const std::wstring& input);
 
-    static bool fileToMem(const std::string& path, void* output, uint32& size);
-    static bool memToFile(const std::string& path, std::vector<char>& output);
+    static bool fileToMem(const std::string& path, MemBlock& output);
+    static bool memToFile(const std::string& path, const MemBlock& input);
+
+    static bool fileToMem(const std::string& path, std::vector<char>& output);
+    static bool memToFile(const std::string& path, const std::vector<char>& input);
 };
 
 void debug_test_osi();

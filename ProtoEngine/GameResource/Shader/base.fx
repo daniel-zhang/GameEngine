@@ -29,7 +29,7 @@ struct VertexOut
 //
 cbuffer PerFrame
 {
-	float3 gEyePosW;
+	float3 gEyePosW : HELLO_SEMANTICS;
 };
 
 cbuffer PerObj

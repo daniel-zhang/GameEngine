@@ -7,6 +7,7 @@
 #include "d3dx11effect.h"
 
 class Effect;
+class RenderInterface;
 
 class EffectMgr : public Singleton<EffectMgr>
 {
@@ -14,8 +15,8 @@ public:
     EffectMgr();
     ~EffectMgr();
         
-    bool init();
-    bool clear();
+    bool init(RenderInterface* ri);
+    bool destroy();
 
     Effect* getByName(const char* effectName);
     Effect* getByIndex();

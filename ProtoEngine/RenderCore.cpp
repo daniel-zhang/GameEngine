@@ -4,6 +4,7 @@
 #include "RenderWindow.h"
 #include <windows.h>
 #include "ConfigMgr.h"
+#include "Singleton.h"
 
 RenderCore::RenderCore()
 {
@@ -35,6 +36,8 @@ bool RenderCore::init()
     if( mRI->init() == false)
         return false;
 
+    initPhaseTwoSingletons(mRI);
+
     // Init render window
     if( mMainWindow->init(L"Test Main Window", 0, 0, rc.screen_width, rc.screen_height))
         return false;
@@ -50,12 +53,13 @@ bool RenderCore::init()
 
 int RenderCore::draw()
 {
-	// place holder 
-	return 0;
+    // place holder 
+    return 0;
 }
 
 bool RenderCore::exit()
 {
-	return true;
+    clearPhaseTwoSingletons(mRI);
+    return true;
 }
 

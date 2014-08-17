@@ -43,7 +43,7 @@ Phase 2 singletons - dependent of render device and context
 void initPhaseOneSingletons();
 void clearPhaseOneSingletons();
 
-void initPhaseTwoSingletons();
-void clearPhaseTwoSingletons();
+void initPhaseTwoSingletons(class RenderInterface* ri);
+void clearPhaseTwoSingletons(class RenderInterface* ri);
 
 #endif

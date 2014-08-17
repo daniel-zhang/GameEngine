@@ -208,6 +208,126 @@ bool OSInterface::fileToString( const std::string& path, std::string& output )
     return false;
 }
 
+bool OSInterface::stringToFile( const std::string& path, const std::string& input)
+{
+    std::ofstream ofs(path.c_str(), std::ios::out);
+    if (ofs.is_open())
+    {
+        ofs << input;
+        ofs.close();
+        return true;
+    }
+    return false;
+}
+
+bool OSInterface::fileToWstring( const std::wstring& path, std::wstring& output )
+{
+    std::wifstream wifs(path.c_str(), std::ios::in);
+    if (wifs.is_open())
+    {
+        std::wstringstream wss;
+        wss << wifs.rdbuf();
+        output = wss.str();
+        wifs.close();
+        return true;
+    }
+    return false;
+}
+
+bool OSInterface::wstringToFile( const std::wstring& path, const std::wstring& input )
+{
+    std::wofstream wofs(path.c_str(), std::ios::out);
+    if (wofs.is_open())
+    {
+        wofs << input;
+        wofs.close();
+        return true;
+    }
+    return false;
+}
+
+bool OSInterface::fileToMem( const std::string& path, MemBlock& output )
+{
+    std::ifstream ifs(path.c_str(), std::ios::binary);
+    if (ifs.is_open())
+    {
+        ifs.seekg(0, ifs.end);
+        output.mSize = static_cast<uint32>(ifs.tellg());
+        ifs.seekg(0, ifs.beg);
+
+        output.mData = new char[output.mSize];
+        ifs.read(output.mData, output.mSize);
+
+        ifs.close();
+        return true;
+    }
+    return false;
+}
+
+bool OSInterface::fileToMem( const std::string& path, std::vector<char>& output )
+{
+    std::ifstream ifs(path.c_str(), std::ios::binary);
+    if (ifs.is_open())
+    {
+        ifs.seekg(0, ifs.end);
+        uint32 size = static_cast<uint32>(ifs.tellg());
+        ifs.seekg(0, ifs.beg);
+
+        output.resize(size, 0);
+        ifs.read(&output[0], size);
+        ifs.close();
+        return true;
+    }
+    return false;
+}
+
+bool OSInterface::memToFile( const std::string& path, const MemBlock& input )
+{
+    std::ofstream ofs(path.c_str(), std::ios::binary);
+    if (ofs.is_open() && input.mData != NULL && input.mSize != 0 )
+    {
+        ofs.write(input.mData, input.mSize);
+        ofs.close();
+        return true;
+    }
+    return false;
+}
+
+bool OSInterface::memToFile( const std::string& path, const std::vector<char>& input )
+{
+    std::ofstream ofs(path.c_str(), std::ios::binary);
+    if (ofs.is_open() && !input.empty())
+    {
+        ofs.write(&input[0], input.size());
+        ofs.close();
+        return true;
+    }
+    return false;
+}
+
+class DumbBlock
+{
+public:
+    DumbBlock(bool flag)
+    {
+        if (flag)
+        {
+            mInt = 0;
+            mBool = true;
+            mFloat = 0.0f;
+        }
+        else
+        {
+            mInt = 1234;
+            mBool = false;
+            mFloat = 1234.1234f;
+        }
+    }
+    int mInt;
+    bool mBool;
+    float mFloat;
+};
+
 void debug_test_osi()
 {
     // get local time
@@ -231,4 +351,40 @@ void debug_test_osi()
 
     std::wstring strGlobal;
     globalTime.asString(strGlobal);
+
+    // string to file
+    std::string filename = "./test.txt";
+    std::stringstream  ss;
+    for (uint32 i = 0; i < 100; ++i)
+    {
+        ss <<  i << "_";
+    }
+    OSInterface::stringToFile(filename, ss.str());
+
+    // file to string
+    std::string content;
+    OSInterface::fileToString(filename, content);
+
+    filename = "test.bin";
+
+    /*
+    DumbBlock dumb(false);
+    MemBlock mem(reinterpret_cast<char*>(&dumb), sizeof(DumbBlock));
+    OSInterface::memToFile(filename, mem);
+    */
+
+    MemBlock mem2;
+    OSInterface::fileToMem(filename, mem2);
+    DumbBlock* d = reinterpret_cast<DumbBlock*>(mem2.mData);
+    d->mBool;
+    d->mFloat;
+    d->mInt;
+
+    std::vector<char> mem3;
+    OSInterface::fileToMem(filename, mem3);
+    DumbBlock* dd = reinterpret_cast<DumbBlock*>(&mem3[0]);
+    dd->mBool;
+    dd->mFloat;
+    dd->mInt;
+
 }

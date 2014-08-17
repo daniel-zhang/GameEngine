@@ -6,11 +6,13 @@
 // Phase 1 Singletons -- end
 
 // Phase 2 Singletons -- begin 
+#include "EffectMgr.h"
 // Phase 2 Singletons -- end 
 
+#include "RenderInterface.h"
 
 void initOrClearPhaseOneSingletons( bool isInit);
-void initOrClearPhaseTwoSingletons( bool isInit);
+void initOrClearPhaseTwoSingletons( bool isInit, RenderInterface* ri);
 
 void initPhaseOneSingletons()
 {
@@ -22,14 +24,14 @@ void clearPhaseOneSingletons()
 	initOrClearPhaseOneSingletons(false);
 }
 
-void initPhaseTwoSingletons()
+void initPhaseTwoSingletons(RenderInterface* ri)
 {
-    initOrClearPhaseTwoSingletons(true);
+    initOrClearPhaseTwoSingletons(true, ri);
 }
 
-void clearPhaseTwoSingletons()
+void clearPhaseTwoSingletons(RenderInterface* ri)
 {
-    initOrClearPhaseTwoSingletons(false);
+    initOrClearPhaseTwoSingletons(false, ri);
 }
 
 #define guard(x) {
@@ -52,13 +54,13 @@ void initOrClearPhaseOneSingletons( bool isInit)
 	unguard 
 }
 
-void initOrClearPhaseTwoSingletons( bool isInit )
+void initOrClearPhaseTwoSingletons( bool isInit, RenderInterface* ri)
 {
-    guard()
+    guard(EffectMgr)
         if (isInit)
-            ;
+            Singleton<EffectMgr>::getInstance().init(ri);
         else
-            ;
+            Singleton<EffectMgr>::getInstance().destroy();
     unguard
 }
 

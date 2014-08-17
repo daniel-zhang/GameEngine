@@ -200,11 +200,19 @@
     <None Include="Design.txt">
       <Filter>ReadMe</Filter>
     </None>
-    <None Include="GameResource\Shader\base.fx">
-      <Filter>GameResource\Shader</Filter>
-    </None>
     <None Include="GameResource\Config\config.txt">
       <Filter>GameResource\Config</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="GameResource\Shader\base.fx">
+      <Filter>GameResource\Shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GameResource\Shader\sky.fx">
+      <Filter>GameResource\Shader</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GameResource\Shader\basic.fx">
+      <Filter>GameResource\Shader</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
