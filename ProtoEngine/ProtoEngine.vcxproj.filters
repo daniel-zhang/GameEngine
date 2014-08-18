@@ -94,14 +94,17 @@
     <ClCompile Include="EffectMgr.cpp">
       <Filter>RenderCore\xxxMgr</Filter>
     </ClCompile>
-    <ClCompile Include="Effect.cpp">
-      <Filter>RenderCore\Material</Filter>
-    </ClCompile>
     <ClCompile Include="GameResourcePath.cpp">
       <Filter>GameResource</Filter>
     </ClCompile>
     <ClCompile Include="OSInterface.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>RenderCore\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialAttribute.cpp">
+      <Filter>RenderCore\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -183,14 +186,20 @@
     <ClInclude Include="EffectMgr.h">
       <Filter>RenderCore\xxxMgr</Filter>
     </ClInclude>
-    <ClInclude Include="Effect.h">
-      <Filter>RenderCore\Material</Filter>
-    </ClInclude>
     <ClInclude Include="GameResourcePath.h">
       <Filter>GameResource</Filter>
     </ClInclude>
     <ClInclude Include="OSInterface.h">
       <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>RenderCore\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialAttribute.h">
+      <Filter>RenderCore\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderEnum.h">
+      <Filter>RenderCore\Material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

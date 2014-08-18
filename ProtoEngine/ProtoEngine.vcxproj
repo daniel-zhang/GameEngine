@@ -77,7 +77,8 @@
     <ClCompile Include="ConfigMgr.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="EffectMgr.cpp" />
-    <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="MaterialAttribute.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameResourcePath.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
@@ -132,7 +133,8 @@
     <ClInclude Include="ConfigMgr.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="EffectMgr.h" />
-    <ClInclude Include="Effect.h" />
+    <ClInclude Include="MaterialAttribute.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="ForwardDecls.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameResourcePath.h" />
@@ -149,6 +151,7 @@
     <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="D3DUtilities.h" />
+    <ClInclude Include="ShaderEnum.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Entity.h" />

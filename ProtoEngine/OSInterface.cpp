@@ -367,11 +367,9 @@ void debug_test_osi()
 
     filename = "test.bin";
 
-    /*
     DumbBlock dumb(false);
     MemBlock mem(reinterpret_cast<char*>(&dumb), sizeof(DumbBlock));
     OSInterface::memToFile(filename, mem);
-    */
 
     MemBlock mem2;
     OSInterface::fileToMem(filename, mem2);

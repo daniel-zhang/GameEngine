@@ -1,7 +1,7 @@
 //
 // Data structures
 //
-struct Material
+struct Material 
 {
     float4 Ambient;
     float4 Diffuse;
@@ -29,28 +29,28 @@ struct VertexOut
 //
 cbuffer PerFrame
 {
-	float3 gEyePosW : HELLO_SEMANTICS;
+	float3 gEyePosW <string tag="cam_pos";>; 
 };
 
 cbuffer PerObj
 {
-    float4x4 gLocalToWorld;
-    float4x4 gWorldToView;
-    float4x4 gViewToProj;
-    float4x4 gWorldViewProj;
+    float4x4 gLocalToWorld          <string tag="local_to_world";>;
+    float4x4 gWorldToView           <string tag="world_to_view";>;
+    float4x4 gViewToProj            <string tag="view_to_proj";>;
+    float4x4 gWorldViewProj         <string tag="world_view_proj";>;
 
-    float4x4 gTexTransform;
-    float4x4 gWorldInvTranspose;
+    float4x4 gTexTransform          <string tag="tex_transform";>;
+    float4x4 gWorldInvTranspose     <string tag="world_inv_transpose";>;
 
-	Material gMaterial;
+	Material gMaterial              <string tag="plain_material";>;
 };
 
 //
 // Texture states
 //
-Texture2D gDiffuseMap;
+Texture2D gDiffuseMap <string tag="texture";>;
 
-SamplerState AnisotropicSamplerState
+SamplerState AnisotropicSamplerState <string tag="anisotropic_sampler";>
 {
     Filter = ANISOTROPIC;
     MaxAnisotropy = 4;

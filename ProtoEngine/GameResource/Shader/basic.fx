@@ -8,8 +8,8 @@
  
 cbuffer cbPerFrame
 {
-    DirectionalLight gDirLights[3];
-    float3 gEyePosW;
+    DirectionalLight gDirLights[3] : DIR_LIGHTS;
+    float3 gEyePosW : CAM_POSITION;
 
     float  gFogStart;
     float  gFogRange;
@@ -22,11 +22,11 @@ cbuffer cbPerObject
     float4x4 gWorldInvTranspose;
     float4x4 gWorldViewProj;
     float4x4 gTexTransform;
-    Material gMaterial;
+    Material gMaterial : OBJ_MATERIAL;
 }; 
 
 // Nonnumeric values cannot be added to a cbuffer.
-Texture2D gDiffuseMap;
+Texture2D gDiffuseMap : TEXTURE_1 <string sem="hello_annotation";>;
 
 SamplerState samAnisotropic
 {

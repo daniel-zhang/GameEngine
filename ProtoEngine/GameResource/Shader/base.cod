@@ -5,25 +5,55 @@
 //
 cbuffer PerFrame
 {
-    float3  gEyePosW : HELLO_SEMANTICS; // Offset:    0, size:   12
+    float3  gEyePosW
+    <
+        String tag = "cam_pos";
+    >;                                  // Offset:    0, size:   12
 }
 
 cbuffer PerObj
 {
-    float4x4 gLocalToWorld;             // Offset:    0, size:   64
-    float4x4 gWorldToView;              // Offset:   64, size:   64
-    float4x4 gViewToProj;               // Offset:  128, size:   64
-    float4x4 gWorldViewProj;            // Offset:  192, size:   64
-    float4x4 gTexTransform;             // Offset:  256, size:   64
-    float4x4 gWorldInvTranspose;        // Offset:  320, size:   64
-    Material gMaterial;                 // Offset:  384, size:   64
+    float4x4 gLocalToWorld
+    <
+        String tag = "local_to_world";
+    >;                                  // Offset:    0, size:   64
+    float4x4 gWorldToView
+    <
+        String tag = "world_to_view";
+    >;                                  // Offset:   64, size:   64
+    float4x4 gViewToProj
+    <
+        String tag = "view_to_proj";
+    >;                                  // Offset:  128, size:   64
+    float4x4 gWorldViewProj
+    <
+        String tag = "world_view_proj";
+    >;                                  // Offset:  192, size:   64
+    float4x4 gTexTransform
+    <
+        String tag = "tex_transform";
+    >;                                  // Offset:  256, size:   64
+    float4x4 gWorldInvTranspose
+    <
+        String tag = "world_inv_transpose";
+    >;                                  // Offset:  320, size:   64
+    Material gMaterial
+    <
+        String tag = "plain_material";
+    >;                                  // Offset:  384, size:   64
 }
 
 //
 // 2 local object(s)
 //
-Texture2D gDiffuseMap;
+Texture2D gDiffuseMap
+<
+    String tag = "texture";
+>;
 SamplerState AnisotropicSamplerState
+<
+    String tag = "anisotropic_sampler";
+>
 {
     Filter   = uint(ANISOTROPIC /* 85 */);
     MaxAnisotropy = uint(4);
@@ -111,7 +141,7 @@ fxgroup
                 dcl_output o3.xy
                 dcl_temps 5
                 
-                #line 70 "C:\workspace\GameEngine\ProtoEngine\GameResource\Shader\base.fx"
+                #line 70 "D:\workspace\github\GameEngine\ProtoEngine\GameResource\Shader\base.fx"
                 mov r0.xyz, v0.xyzx
                 mov r0.w, l(1.000000)
                 dp4 r1.x, r0.xyzw, cb0[0].xyzw  // vout<4:NaN:Inf>
@@ -167,7 +197,7 @@ fxgroup
                 dcl_globalFlags refactoringAllowed
                 dcl_output o0.xyzw
                 
-                #line 84 "C:\workspace\GameEngine\ProtoEngine\GameResource\Shader\base.fx"
+                #line 84 "D:\workspace\github\GameEngine\ProtoEngine\GameResource\Shader\base.fx"
                 mov o0.xyzw, l(0.300000,0.300000,0.300000,1.000000)  // PS<0: 0.3f,1: 0.3f,2: 0.3f,3: 1f>
                 ret 
                 // Approximately 2 instruction slots used

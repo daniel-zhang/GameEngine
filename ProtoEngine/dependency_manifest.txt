@@ -1,3 +1,4 @@
+
 External Libs Manifest
 
 ########################################
@@ -72,3 +73,22 @@ Note:
         dxgi.lib
         gdiplus.lib
 
+
+# Add fxc as customized compile tool:
+For each .fx file:
+
+DEBUG
+	command:
+		$(dxsdk_dir)/utilities/bin/x86/fxc /Fc /Od /Zi /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"
+	desc:
+		fxc debug for %(FullPath)
+	output:
+		%(RelativeDir)\%(Filename).fxo
+	
+RELEASE 
+	command:
+		$(dxsdk_dir)/utilities/bin/x86/fxc /T fx_5_0 /Fo "%(RelativeDir)\%(FileName).fxo" "%(FullPath)"
+	desc:
+		fxc release for %(FullPath)
+	output:
+		%(RelativeDir)\%(Filename).fxo

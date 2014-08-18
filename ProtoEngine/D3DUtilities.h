@@ -30,5 +30,4 @@ void safe_release(T** ppT)
     #endif
 #endif
 
-
 #endif

@@ -5,8 +5,8 @@
 #include <vector>
 #include "Singleton.h"
 #include "d3dx11effect.h"
+#include "Shader.h"
 
-class Effect;
 class RenderInterface;
 
 class EffectMgr : public Singleton<EffectMgr>
@@ -18,13 +18,15 @@ public:
     bool init(RenderInterface* ri);
     bool destroy();
 
-    Effect* getByName(const char* effectName);
-    Effect* getByIndex();
+    Shader* getByName(const char* effectName);
+    Shader* getByIndex();
 
 protected:
     std::string mDir;
     std::string mExtension;
-    std::vector<Effect*> mEffectColletion;
+
+    ShaderVarTagDefinition mTagDefinition;
+    std::vector<Shader*> mEffectColletion;
 };
 
 

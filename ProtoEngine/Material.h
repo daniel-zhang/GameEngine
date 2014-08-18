@@ -3,11 +3,12 @@
 
 #include "reference.h"
 #include <string>
+
+#include "MaterialAttribute.h"
+
 class Material
 {
 public:
-    void setParams();
-
 };
 
 class IRenderable
