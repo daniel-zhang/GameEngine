@@ -3,12 +3,17 @@
 
 #include "reference.h"
 #include <string>
+#include <vector>
 
 #include "MaterialAttribute.h"
 
 class Material
 {
 public:
+    Material(){}
+
+    Shader* mShader;
+    std::vector<MaterialAttributeInterface*> mAttributes;
 };
 
 class IRenderable
@@ -19,7 +24,7 @@ public:
     virtual void setMaterial() = 0;
 
 protected:
-
+    Material* mMaterial;
 };
 
 #endif

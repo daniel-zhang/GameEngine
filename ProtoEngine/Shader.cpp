@@ -99,13 +99,13 @@ void Shader::apply( std::vector<MaterialAttributeInterface*>& attrs )
     }
 }
 
-bool Shader::trySet( MaterialAttributeInterface* IMatAttr )
+bool Shader::trySet( MaterialAttributeInterface* matAttrInterface )
 {
     std::map<EnumShaderVarTag, ShaderParameter>::iterator iter;
-    iter = mParamMap.find(IMatAttr->mTag);
+    iter = mParamMap.find(matAttrInterface->mTag);
     if (iter != mParamMap.end())
     {
-        (iter->second).set(IMatAttr);
+        (iter->second).set(matAttrInterface);
         return true;
     }
     return false;

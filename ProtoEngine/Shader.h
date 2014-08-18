@@ -77,6 +77,9 @@ protected:
 };
 
 
+class MaterialAttributeInterface;
+class Material;
+
 struct ShaderVarTag
 {
     ShaderVarTag(EnumShaderVarTag tagEnum, const char* tagStr) :mTagEnum(tagEnum), mTagStr(tagStr) { }
@@ -101,7 +104,7 @@ public:
 
     ID3DX11EffectVariable* mVar;
     EnumShaderVarTag mVarTag;
-    void set(class MaterialAttributeInterface* IMatAttr);
+    void set(MaterialAttributeInterface* IMatAttr);
 };
 
 class Shader
@@ -112,9 +115,10 @@ public:
 
     bool init();
     void apply(std::vector<MaterialAttributeInterface*>& attrs);
+    void apply(Material* material);
 
 protected:
-    bool trySet(class MaterialAttributeInterface* IMatAttr);
+    bool trySet(MaterialAttributeInterface* IMatAttr);
 
 protected:
     uint32 mIndex;
@@ -128,7 +132,6 @@ protected:
     //std::vector<ShaderParameter> mParameters;
     std::map<EnumShaderVarTag, ShaderParameter> mParamMap;
     
-
     // For debug purpose
     std::vector<ID3DX11EffectVariable*> mTagsMissing;
     std::vector<ID3DX11EffectVariable*> mTagsNotDefined;
