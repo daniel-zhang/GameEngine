@@ -1,9 +1,7 @@
 #ifndef MATERIAL_ATTRIBUTE_H
 #define MATERIAL_ATTRIBUTE_H
 
-#include "d3dx11.h"
-#include "xnamath.h"
-#include "d3dx11effect.h"
+#include "reference.h"
 #include "ShaderEnum.h"
 #include "Shader.h"
 /*
@@ -11,7 +9,6 @@ Attribute types:
     - HLSL built-in types
     - Engine defined types
 */
-
 class MaterialAttributeInterface
 {
 public:
@@ -23,12 +20,20 @@ public:
 
 //
 // Template class for engine defined attribute types and most HLSL intrinsic types
+// Restriction: T must have a valid default ctor
 //
 template <typename T>
 class MaterialAttr : public MaterialAttributeInterface
 {
 public:
-    MaterialAttr(EnumShaderVarTag inTag) : MaterialAttributeInterface(inTag) {}
+    MaterialAttr(EnumShaderVarTag inTag) : MaterialAttributeInterface(inTag) 
+    {
+        pData = new T;
+    }
+    ~MaterialAttr()
+    {
+        if (pData) delete pData;
+    }
     virtual void sync(ShaderParameter* sp)
     {
         if (mTag == sp->mVarTag)
@@ -46,7 +51,14 @@ template<>
 class MaterialAttr<float> : public MaterialAttributeInterface
 {
 public:
-    MaterialAttr(EnumShaderVarTag inTag) : MaterialAttributeInterface(inTag) {}
+    MaterialAttr(EnumShaderVarTag inTag) : MaterialAttributeInterface(inTag) 
+    {
+        pData = new float(0.f);
+    }
+    ~MaterialAttr<float>()
+    {
+        if (pData) delete pData;
+    }
     virtual void sync(ShaderParameter* sp)
     {
         if (mTag == sp->mVarTag)
@@ -61,7 +73,14 @@ template<>
 class MaterialAttr<XMFLOAT4> : public MaterialAttributeInterface
 {
 public:
-    MaterialAttr(EnumShaderVarTag inTag):MaterialAttributeInterface(inTag){}
+    MaterialAttr(EnumShaderVarTag inTag):MaterialAttributeInterface(inTag)
+    {
+        pData = new XMFLOAT4(0.f, 0.f, 0.f, 0.f);
+    }
+    ~MaterialAttr<XMFLOAT4>()
+    {
+        if (pData) delete pData;
+    }
     virtual void sync(ShaderParameter* sp)
     {
         if (mTag == sp->mVarTag)
@@ -76,7 +95,15 @@ template<>
 class MaterialAttr<XMFLOAT4X4>: public MaterialAttributeInterface
 {
 public:
-    MaterialAttr(EnumShaderVarTag inTag):MaterialAttributeInterface(inTag){}
+    MaterialAttr(EnumShaderVarTag inTag):MaterialAttributeInterface(inTag)
+    {
+        pData = new XMFLOAT4X4;
+        XMStoreFloat4x4(pData, XMMatrixIdentity());
+    }
+    ~MaterialAttr<XMFLOAT4X4>()
+    {
+        if(pData) delete pData;
+    }
     virtual void sync(ShaderParameter* sp) 
     { 
         if (mTag == sp->mVarTag)
@@ -85,6 +112,22 @@ public:
         }
     }
     XMFLOAT4X4* pData;
+};
+
+template<>
+class MaterialAttr<ID3D11ShaderResourceView>:public MaterialAttributeInterface
+{
+public:
+    MaterialAttr(EnumShaderVarTag inTag):MaterialAttributeInterface(inTag)
+    {
+        pData = NULL;
+    }
+    virtual void sync(ShaderParameter* sp)
+    {
+        if(mTag == sp->mVarTag)
+            sp->mVar->AsShaderResource()->SetResource(pData);
+    }
+    ID3D11ShaderResourceView* pData;
 };
 
 //

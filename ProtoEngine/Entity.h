@@ -1,11 +1,21 @@
 #ifndef ENTITY_H 
 #define ENTITY_H 
 
-class Entity
+#include "reference.h"
+
+class Mesh;
+
+class SceneEntity
 {
 public:
-	void attach();
+    void attach(Mesh* mesh);
 
+public:
+    Mesh* mMesh;
 
+    XMFLOAT3 mTranslation;
+    XMFLOAT3 mRotation;
+    XMFLOAT3 mScaling;
 };
+
 #endif

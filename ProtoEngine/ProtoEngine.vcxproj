@@ -77,7 +77,9 @@
     <ClCompile Include="ConfigMgr.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="EffectMgr.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="MaterialAttribute.cpp" />
+    <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameResourcePath.cpp" />
@@ -94,6 +96,7 @@
     <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="Ticker.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="VertexFormatMgr.cpp" />
     <ClCompile Include="WinLauncher.h" />
   </ItemGroup>
   <ItemGroup>
@@ -141,7 +144,7 @@
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="Material.h" />
-    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Renderable.h" />
     <ClInclude Include="OSInterface.h" />
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="reference.h" />
@@ -159,7 +162,7 @@
     <ClInclude Include="Ticker.h" />
     <ClInclude Include="typedefs.h" />
     <ClInclude Include="VertexBuffer.h" />
-    <ClInclude Include="VertexDeclaration.h" />
+    <ClInclude Include="VertexFormatMgr.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

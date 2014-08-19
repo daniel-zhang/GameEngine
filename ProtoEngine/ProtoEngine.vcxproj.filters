@@ -106,6 +106,15 @@
     <ClCompile Include="MaterialAttribute.cpp">
       <Filter>RenderCore\Material</Filter>
     </ClCompile>
+    <ClCompile Include="Renderable.cpp">
+      <Filter>RenderCore\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexFormatMgr.cpp">
+      <Filter>RenderCore\xxxMgr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderCore.h">
@@ -138,9 +147,6 @@
     <ClInclude Include="ForwardDecls.h">
       <Filter>Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>RenderCore\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -151,9 +157,6 @@
       <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>RenderCore\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexDeclaration.h">
       <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="RenderStateMgr.h">
@@ -200,6 +203,12 @@
     </ClInclude>
     <ClInclude Include="ShaderEnum.h">
       <Filter>RenderCore\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable.h">
+      <Filter>RenderCore\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexFormatMgr.h">
+      <Filter>RenderCore\xxxMgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

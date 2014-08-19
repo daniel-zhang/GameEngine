@@ -1,30 +1,57 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "reference.h"
 #include <string>
 #include <vector>
-
+#include "reference.h"
 #include "MaterialAttribute.h"
 
-class Material
+struct MeshMaterial
 {
-public:
-    Material(){}
+    MeshMaterial() { ZeroMemory(this, sizeof(this)); }
 
-    Shader* mShader;
-    std::vector<MaterialAttributeInterface*> mAttributes;
+    XMFLOAT4 Ambient;
+    XMFLOAT4 Diffuse;
+    XMFLOAT4 Specular; // w = SpecPower
+    XMFLOAT4 Reflect;
 };
 
-class IRenderable
+class RenderInterface;
+class SceneEntity;
+class Shader;
+
+class MaterialInterface
 {
 public:
-    virtual void drawSelf(class RenderInterface* ri) = 0;
-    virtual void setTransform() = 0;
-    virtual void setMaterial() = 0;
+    MaterialInterface();
+    virtual ~MaterialInterface();
+
+    virtual void apply(RenderInterface* ri, SceneEntity* entity) = 0;
+
+public:
+    Shader* mShader;
+    std::vector<MaterialAttributeInterface*> mAttributes;
+
+    // Render States
+    // Blend State
+    // DepthStencil State
+    // Rasterizer State
+    // Sampler State
+};
+
+class DefaultMaterial : public MaterialInterface
+{
+public:
+    DefaultMaterial();
+    virtual void apply(RenderInterface* ri, SceneEntity* entity);
 
 protected:
-    Material* mMaterial;
+    void setDefault();
+
+public:
+    MaterialAttr<XMFLOAT4X4>* mpLocalToWorld;
+    MaterialAttr<ID3D11ShaderResourceView>* mpDiffuseMap;
+    MaterialAttr<MeshMaterial>* mpObjMaterial; 
 };
 
 #endif

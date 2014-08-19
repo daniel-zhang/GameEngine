@@ -78,7 +78,7 @@ protected:
 
 
 class MaterialAttributeInterface;
-class Material;
+class MaterialInterface;
 
 struct ShaderVarTag
 {
@@ -104,7 +104,16 @@ public:
 
     ID3DX11EffectVariable* mVar;
     EnumShaderVarTag mVarTag;
-    void set(MaterialAttributeInterface* IMatAttr);
+    void updateFrom(MaterialAttributeInterface* IMatAttr);
+};
+
+class ShaderParameterMap
+{
+public:
+    void add(ID3DX11EffectVariable* inVar, EnumShaderVarTag inTag);
+
+protected:
+    std::map<EnumShaderVarTag, ShaderParameter> mParamMap;
 };
 
 class Shader
@@ -114,13 +123,11 @@ public:
     ~Shader(){}
 
     bool init();
-    void apply(std::vector<MaterialAttributeInterface*>& attrs);
-    void apply(Material* material);
+    void syncFrom(std::vector<MaterialAttributeInterface*>& attrs);
+    void syncFrom(MaterialInterface* material);
 
-protected:
     bool trySet(MaterialAttributeInterface* IMatAttr);
 
-protected:
     uint32 mIndex;
     std::string mEffectName;
 

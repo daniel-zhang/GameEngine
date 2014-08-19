@@ -32,7 +32,7 @@ ShaderVarTag* ShaderVarTagDefinition::query( std::string& tagStr )
 
 
 
-void ShaderParameter::set( MaterialAttributeInterface* IMatAttr)
+void ShaderParameter::updateFrom( MaterialAttributeInterface* IMatAttr)
 {
     IMatAttr->sync(this);
 }
@@ -81,7 +81,7 @@ bool Shader::init()
     return ret;
 }
 
-void Shader::apply( std::vector<MaterialAttributeInterface*>& attrs )
+void Shader::syncFrom( std::vector<MaterialAttributeInterface*>& attrs )
 {
     for (uint32 i = 0; i < attrs.size(); ++i)
     {
@@ -99,13 +99,18 @@ void Shader::apply( std::vector<MaterialAttributeInterface*>& attrs )
     }
 }
 
+void Shader::syncFrom( MaterialInterface* material )
+{
+
+}
+
 bool Shader::trySet( MaterialAttributeInterface* matAttrInterface )
 {
     std::map<EnumShaderVarTag, ShaderParameter>::iterator iter;
     iter = mParamMap.find(matAttrInterface->mTag);
     if (iter != mParamMap.end())
     {
-        (iter->second).set(matAttrInterface);
+        (iter->second).updateFrom(matAttrInterface);
         return true;
     }
     return false;

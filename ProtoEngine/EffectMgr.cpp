@@ -57,7 +57,7 @@ bool EffectMgr::init(RenderInterface* ri)
 
     Shader shader(fx, &mTagDefinition);
     shader.init();
-    shader.apply(tmp);
+    shader.syncFrom(tmp);
 
     delete CamPos.pData;
     delete Local2World.pData;

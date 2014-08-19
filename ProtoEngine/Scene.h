@@ -1,7 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "typedefs.h"
+#include "reference.h"
 #include "Entity.h"
 #include <vector>
 
@@ -9,6 +9,7 @@
 a flattened scene structure
 no spatial culling
 */
+class Entity;
 class Scene
 {
 public:
