@@ -62,6 +62,14 @@ void initOrClearPhaseTwoSingletons( bool isInit, RenderInterface* ri)
         else
             Singleton<EffectMgr>::getInstance().destroy();
     unguard
+
+    guard(ShaderMgr)
+        if (isInit)
+            Singleton<ShaderMgr>::getInstance().init(ri);
+        else
+            Singleton<ShaderMgr>::getInstance().destroy();
+    unguard
+
 }
 
 

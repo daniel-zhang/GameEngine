@@ -84,7 +84,7 @@ float4 PS(VertexOut pin) : SV_TARGET
 	return float4(0.3f, 0.3f, 0.3f, 1.f);
 }
 
-technique11 BaseTech
+technique11 BaseTech<bool default_tech=true;>
 {
 	pass p0
 	{
@@ -92,6 +92,16 @@ technique11 BaseTech
         SetGeometryShader( NULL );
         SetPixelShader( CompileShader( ps_5_0, PS() ) );
 	}
+}
+
+technique11 FancyTech
+{
+    pass p0
+    {
+        SetVertexShader( CompileShader( vs_5_0, VS() ) );
+        SetGeometryShader( NULL );
+        SetPixelShader( CompileShader( ps_5_0, PS() ) );
+    }
 }
  
 

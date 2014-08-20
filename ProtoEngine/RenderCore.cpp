@@ -6,6 +6,8 @@
 #include "ConfigMgr.h"
 #include "Singleton.h"
 
+#include "TestHook.h"
+
 RenderCore::RenderCore()
 {
     mRI = new RenderInterface;
@@ -29,6 +31,8 @@ init order
 */
 bool RenderCore::init()
 {
+    test_hook(at_render_core_init);
+
     // Extract config obj
     RenderConfig& rc = Singleton<ConfigMgr>::getInstance().root.render_config;
 
@@ -37,6 +41,7 @@ bool RenderCore::init()
         return false;
 
     initPhaseTwoSingletons(mRI);
+    test_hook(after_phase_2_singletons);
 
     // Init render window
     if( mMainWindow->init(L"Test Main Window", 0, 0, rc.screen_width, rc.screen_height))

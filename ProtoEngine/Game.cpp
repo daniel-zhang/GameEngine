@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "Profiler.h"
-#include "OSInterface.h"
+#include "TestHook.h"
 
 Game::Game()
 {
@@ -14,9 +14,7 @@ Game::~Game()
 
 bool Game::init()
 {
-#if defined DEBUG || defined _DEBUG
-    debug_test_osi();
-#endif
+    test_hook(at_game_init);
 
     initPhaseOneSingletons();
 

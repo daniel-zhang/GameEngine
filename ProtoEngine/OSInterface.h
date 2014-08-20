@@ -108,6 +108,6 @@ public:
     static bool memToFile(const std::string& path, const std::vector<char>& input);
 };
 
-void debug_test_osi();
+void osi_test();
 
 #endif

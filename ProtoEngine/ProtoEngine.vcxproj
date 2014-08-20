@@ -92,8 +92,10 @@
     <ClCompile Include="RenderInterface.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
+    <ClCompile Include="ShaderEnum.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="Singleton.cpp" />
+    <ClCompile Include="TestHook.cpp" />
     <ClCompile Include="Ticker.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexFormatMgr.cpp" />
@@ -159,6 +161,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="TestHook.h" />
     <ClInclude Include="Ticker.h" />
     <ClInclude Include="typedefs.h" />
     <ClInclude Include="VertexBuffer.h" />

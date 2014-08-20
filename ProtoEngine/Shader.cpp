@@ -41,47 +41,59 @@ Shader::Shader( ID3DX11Effect* fx, ShaderVarTagDefinition* tagDef)
 {
     mShaderVarTagDef = tagDef;
     mFx = fx;
-    mFx->GetDesc(&mFxDesc);
-}
 
-bool Shader::init()
-{
-    bool ret = true;
-    // Bind global shader variables
-    for (uint32 i = 0; i < mFxDesc.GlobalVariables; ++i)
+    D3DX11_EFFECT_DESC fxDesc;
+    mFx->GetDesc(&fxDesc);
+
+    // parse annotation of global shader vars
+    for (uint32 i = 0; i < fxDesc.GlobalVariables; ++i )
     {
         ID3DX11EffectVariable* var = mFx->GetVariableByIndex(i);
-        ID3DX11EffectVariable* annotation = var->GetAnnotationByName("tag");
-        // Shader variable has <string tag="...">?
-        if (annotation->IsValid())
+        ID3DX11EffectVariable* varTag = var->GetAnnotationByName("tag");
+        if (varTag->IsValid())
         {
-            const char* tmp; 
-            annotation->AsString()->GetString(&tmp);
-            ShaderVarTag* binding = mShaderVarTagDef->query(std::string(tmp));
-            // <string tag="..."> is defined?
-            if (binding)
+            const char* tagstr;
+            varTag->AsString()->GetString(&tagstr);
+            ShaderVarTag* tag = mShaderVarTagDef->query(std::string(tagstr));
+            if (tag != NULL)
             {
-                //mParameters.push_back(ShaderParameter(var, binding->mTagEnum));
-                mParamMap.insert(std::pair<EnumShaderVarTag, ShaderParameter>(binding->mTagEnum, ShaderParameter(var, binding->mTagEnum)));
+                mParamMap.insert(std::pair<EnumShaderVarTag, ShaderParameter>(tag->mTagEnum, ShaderParameter(var, tag->mTagEnum)));
             }
-            // Shader variable's tag is not defined
             else
             {
                 mTagsNotDefined.push_back(var);
-                ret = false;
             }
         }
-        // Shader variable has no <string tag="...">
         else
         {
             mTagsMissing.push_back(var);
-            ret = false;
         }
     }
-    return ret;
+
+    // parse annotation of techniques
+    for (uint32 i = 0; i < fxDesc.Techniques; ++i)
+    {
+        ID3DX11EffectTechnique* tech = mFx->GetTechniqueByIndex(i);
+        if (tech->IsValid())
+        {
+            mTechs.push_back(tech);
+        }
+        ID3DX11EffectVariable* annotation = tech->GetAnnotationByName("default_tech");
+        if (annotation->IsValid())
+        { 
+            BOOL isDefaultTech = FALSE;
+            annotation->AsScalar()->GetBool(&isDefaultTech);
+            if (isDefaultTech)
+            {
+                mDefaultTech = tech;
+            }
+        }
+    }
+
+
 }
 
-void Shader::syncFrom( std::vector<MaterialAttributeInterface*>& attrs )
+void Shader::setMaterial( std::vector<MaterialAttributeInterface*>& attrs )
 {
     for (uint32 i = 0; i < attrs.size(); ++i)
     {
@@ -99,9 +111,12 @@ void Shader::syncFrom( std::vector<MaterialAttributeInterface*>& attrs )
     }
 }
 
-void Shader::syncFrom( MaterialInterface* material )
+void Shader::setMaterial( MaterialInterface* material )
 {
-
+    for (uint32 i = 0; i < material->mAttributes.size(); ++i)
+    {
+        trySet(material->mAttributes[i]);
+    }
 }
 
 bool Shader::trySet( MaterialAttributeInterface* matAttrInterface )

@@ -328,7 +328,7 @@ public:
     float mFloat;
 };
 
-void debug_test_osi()
+void osi_test()
 {
     // get local time
     DateTime localTime;

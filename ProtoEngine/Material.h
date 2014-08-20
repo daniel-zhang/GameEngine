@@ -23,14 +23,14 @@ class Shader;
 class MaterialInterface
 {
 public:
-    MaterialInterface();
+    MaterialInterface(std::string& shaderName);
     virtual ~MaterialInterface();
 
     virtual void apply(RenderInterface* ri, SceneEntity* entity) = 0;
 
 public:
-    Shader* mShader;
     std::vector<MaterialAttributeInterface*> mAttributes;
+    Shader* mShader;
 
     // Render States
     // Blend State
@@ -42,7 +42,7 @@ public:
 class DefaultMaterial : public MaterialInterface
 {
 public:
-    DefaultMaterial();
+    DefaultMaterial(std::string& shaderName);
     virtual void apply(RenderInterface* ri, SceneEntity* entity);
 
 protected:

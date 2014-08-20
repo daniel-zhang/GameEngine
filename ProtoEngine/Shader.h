@@ -79,7 +79,11 @@ protected:
 
 class MaterialAttributeInterface;
 class MaterialInterface;
+class RenderInterface;
 
+//
+// Define all variables in all shaders
+//
 struct ShaderVarTag
 {
     ShaderVarTag(EnumShaderVarTag tagEnum, const char* tagStr) :mTagEnum(tagEnum), mTagStr(tagStr) { }
@@ -107,38 +111,36 @@ public:
     void updateFrom(MaterialAttributeInterface* IMatAttr);
 };
 
-class ShaderParameterMap
-{
-public:
-    void add(ID3DX11EffectVariable* inVar, EnumShaderVarTag inTag);
-
-protected:
-    std::map<EnumShaderVarTag, ShaderParameter> mParamMap;
-};
-
 class Shader
 {
 public:
     Shader(ID3DX11Effect* fx, ShaderVarTagDefinition* tagDefs);
     ~Shader(){}
 
-    bool init();
-    void syncFrom(std::vector<MaterialAttributeInterface*>& attrs);
-    void syncFrom(MaterialInterface* material);
+    void setMaterial(std::vector<MaterialAttributeInterface*>& attrs);
+    void setMaterial(MaterialInterface* material);
+    void setOthers();
 
+    void apply_default(RenderInterface* ri);
+    void apply(RenderInterface* ri, uint32 techIndex);
+
+protected:
     bool trySet(MaterialAttributeInterface* IMatAttr);
 
-    uint32 mIndex;
-    std::string mEffectName;
-
+    // Shader Linkage
+public:
     ID3DX11Effect* mFx;
-    D3DX11_EFFECT_DESC mFxDesc;
+    ID3DX11EffectTechnique* mDefaultTech;
+    std::vector<ID3DX11EffectTechnique*> mTechs;
+    uint32 mActiveTechIndex;
 
+    // Parameters
+public:
     ShaderVarTagDefinition* mShaderVarTagDef;
-    // TODO: Make it a map<Enum, ShaderParameter>...
-    //std::vector<ShaderParameter> mParameters;
+    typedef std::map<EnumShaderVarTag, ShaderParameter> ShaderParamMap;
     std::map<EnumShaderVarTag, ShaderParameter> mParamMap;
     
+public:
     // For debug purpose
     std::vector<ID3DX11EffectVariable*> mTagsMissing;
     std::vector<ID3DX11EffectVariable*> mTagsNotDefined;

@@ -13,7 +13,7 @@ void MeshSection::drawSelf( RenderInterface* ri )
     // set primitive topo
     // set vertex buffer
 
-    mMaterial->apply(ri, mEntity);
+    //mMaterial->apply(ri, mEntity);
 
     // draw()
 }

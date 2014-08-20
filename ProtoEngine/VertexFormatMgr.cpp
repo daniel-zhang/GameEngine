@@ -40,6 +40,9 @@ VertexFormatMgr::~VertexFormatMgr() { }
 
 bool VertexFormatMgr::init( RenderInterface* ri )
 {
+    //
+    // The order of creation must follow that of EnumVertexFormat
+    //
     mVFormats.push_back(VertexFormat( 
         ri,
         //TODO
@@ -61,5 +64,7 @@ bool VertexFormatMgr::destroy()
 
 VertexFormat* VertexFormatMgr::get( EnumVertexFormat evf )
 {
+    if (evf < VF_POS_NORMAL_TEX || evf >= TOTAL_NUMBER)
+        return NULL;
     return &mVFormats[evf];
 }

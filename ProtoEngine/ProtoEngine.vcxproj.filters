@@ -41,6 +41,9 @@
     <Filter Include="GameResource\Shader">
       <UniqueIdentifier>{b2adde42-9df2-4910-9012-9175c69f02e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TEST_HOOK">
+      <UniqueIdentifier>{748c9082-bbc2-4c25-949d-87fda3124059}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderCore.cpp">
@@ -91,9 +94,6 @@
     <ClCompile Include="Profiler.cpp">
       <Filter>RenderCore\xxxMgr</Filter>
     </ClCompile>
-    <ClCompile Include="EffectMgr.cpp">
-      <Filter>RenderCore\xxxMgr</Filter>
-    </ClCompile>
     <ClCompile Include="GameResourcePath.cpp">
       <Filter>GameResource</Filter>
     </ClCompile>
@@ -114,6 +114,15 @@
     </ClCompile>
     <ClCompile Include="VertexFormatMgr.cpp">
       <Filter>RenderCore\xxxMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderEnum.cpp">
+      <Filter>RenderCore\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="TestHook.cpp">
+      <Filter>TEST_HOOK</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectMgr.cpp">
+      <Filter>RenderCore\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -186,9 +195,6 @@
     <ClInclude Include="Profiler.h">
       <Filter>RenderCore\xxxMgr</Filter>
     </ClInclude>
-    <ClInclude Include="EffectMgr.h">
-      <Filter>RenderCore\xxxMgr</Filter>
-    </ClInclude>
     <ClInclude Include="GameResourcePath.h">
       <Filter>GameResource</Filter>
     </ClInclude>
@@ -209,6 +215,12 @@
     </ClInclude>
     <ClInclude Include="VertexFormatMgr.h">
       <Filter>RenderCore\xxxMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="TestHook.h">
+      <Filter>TEST_HOOK</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectMgr.h">
+      <Filter>RenderCore\Material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

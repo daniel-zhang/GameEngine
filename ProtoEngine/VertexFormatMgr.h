@@ -17,7 +17,8 @@ struct VERTEX_POS_NORMAL_TEX
 
 enum EnumVertexFormat
 {
-    VF_POS_NORMAL_TEX = 0
+    VF_POS_NORMAL_TEX = 0,
+    TOTAL_NUMBER
 };
 
 class VertexFormat

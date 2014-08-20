@@ -3,8 +3,9 @@
 
 #include <string>
 #include <vector>
+#include <map>
+#include "reference.h"
 #include "Singleton.h"
-#include "d3dx11effect.h"
 #include "Shader.h"
 
 class RenderInterface;
@@ -30,5 +31,30 @@ protected:
 };
 
 
+class ShaderMgr: public Singleton<ShaderMgr>
+{
+public:
+    ShaderMgr();
+    ~ShaderMgr();
+
+    bool init(RenderInterface* ri);
+    bool destroy();
+
+    Shader* getShaderByName(std::string& shaderName);
+
+protected:
+    void buildShaderNameMap();
+    bool shaderNameToIndex(const std::string& inShaderName, uint32& outIndex);
+    bool loadShader();
+    typedef std::map<std::string, uint32> ShaderNameMap;
+    ShaderNameMap mShaderNameMap;
+    std::vector<std::string> mShaderNames;
+
+protected:
+    ShaderVarTagDefinition mTagDefinition;
+    std::vector<Shader*> mShaders;
+};
+
+void shader_mgr_test();
 
 #endif
