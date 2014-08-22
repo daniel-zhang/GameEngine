@@ -112,9 +112,6 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="VertexFormatMgr.cpp">
-      <Filter>RenderCore\xxxMgr</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderEnum.cpp">
       <Filter>RenderCore\Material</Filter>
     </ClCompile>
@@ -123,6 +120,9 @@
     </ClCompile>
     <ClCompile Include="EffectMgr.cpp">
       <Filter>RenderCore\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexFormat.cpp">
+      <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -213,14 +213,14 @@
     <ClInclude Include="Renderable.h">
       <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="VertexFormatMgr.h">
-      <Filter>RenderCore\xxxMgr</Filter>
-    </ClInclude>
     <ClInclude Include="TestHook.h">
       <Filter>TEST_HOOK</Filter>
     </ClInclude>
     <ClInclude Include="EffectMgr.h">
       <Filter>RenderCore\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexFormat.h">
+      <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

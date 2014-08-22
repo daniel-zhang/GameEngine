@@ -146,5 +146,31 @@ public:
     std::vector<ID3DX11EffectVariable*> mTagsNotDefined;
 };
 
+/*
+Use-case:
+
+ShaderLinkage:
+    uint32 effect_index
+    uint32 tech_index
+    uint32 pass_index
+
+material:
+    EffectInstance* effect;
+    TechInstance* tech;
+    PasstInstance* pass;
+
+material.setShaderLinkage(effect_name, tech_name, pass_name):
+    
+for(...)
+    material.updateAttributes(...);
+    material.apply():
+        fxInstace.getPass(pShaderLinkage)->
+
+
+class MetaEffect;
+class MetaTechnique;
+class MetaPass;
+*/
+
 
 #endif

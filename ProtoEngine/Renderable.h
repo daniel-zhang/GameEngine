@@ -6,7 +6,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 
-class SceneEntity;
+class Entity;
 class RenderInterface;
 class Mesh;
 class MaterialInterface;
@@ -30,7 +30,7 @@ public:
     uint32 index_offset;
 
     Mesh* mMesh;
-    SceneEntity* mEntity;
+    Entity* mEntity;
 };
 
 class Mesh : public IRenderable
@@ -43,7 +43,7 @@ public:
 
 public:
     virtual void drawSelf(RenderInterface* ri);
-    void setLinkage(SceneEntity* entity);
+    void setLinkage(Entity* entity);
 };
 
 #endif

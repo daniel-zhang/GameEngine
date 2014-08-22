@@ -98,7 +98,7 @@
     <ClCompile Include="TestHook.cpp" />
     <ClCompile Include="Ticker.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
-    <ClCompile Include="VertexFormatMgr.cpp" />
+    <ClCompile Include="VertexFormat.cpp" />
     <ClCompile Include="WinLauncher.h" />
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +165,7 @@
     <ClInclude Include="Ticker.h" />
     <ClInclude Include="typedefs.h" />
     <ClInclude Include="VertexBuffer.h" />
-    <ClInclude Include="VertexFormatMgr.h" />
+    <ClInclude Include="VertexFormat.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

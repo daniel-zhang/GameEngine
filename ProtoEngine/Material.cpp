@@ -28,7 +28,7 @@ DefaultMaterial::DefaultMaterial( std::string& shaderName ) : MaterialInterface(
 }
 
 
-void DefaultMaterial::apply( RenderInterface* ri, SceneEntity* entity )
+void DefaultMaterial::apply( RenderInterface* ri, Entity* entity )
 {
     //
     // update material attributes

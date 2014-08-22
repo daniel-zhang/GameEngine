@@ -11,9 +11,11 @@ IndexBuffer::~IndexBuffer()
 	safe_release(&mBuffer);
 }
 
-
-void StaticIndexBuffer::create( RenderInterface* ri, uint32 indexNum, uint32* pData )
+void IndexBuffer::create( RenderInterface* ri, uint32 indexNum, uint32* pData )
 {
+    //
+    // Create d3d buffer
+    //
 	D3D11_BUFFER_DESC ibd;
 	ibd.Usage = D3D11_USAGE_IMMUTABLE;
 	ibd.ByteWidth = sizeof(UINT) * indexNum;
@@ -26,4 +28,15 @@ void StaticIndexBuffer::create( RenderInterface* ri, uint32 indexNum, uint32* pD
 	iinitData.pSysMem = pData;
 
 	d3d_check(ri->mDevice->CreateBuffer(&ibd, &iinitData, &mBuffer));
+
+    //
+    // Reserve a local copy
+    //
+    mData.reserve(indexNum);
+    mData.clear();
+    for (uint32 i = 0; i < indexNum; ++i)
+    {
+        mData.push_back(pData[i]);
+    }
+    mIndexNum = indexNum;
 }

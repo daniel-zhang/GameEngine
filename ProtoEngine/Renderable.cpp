@@ -29,7 +29,7 @@ void Mesh::drawSelf( RenderInterface* ri )
     }
 }
 
-void Mesh::setLinkage( SceneEntity* entity )
+void Mesh::setLinkage( Entity* entity )
 {
 
 }

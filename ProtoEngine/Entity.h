@@ -5,7 +5,7 @@
 
 class Mesh;
 
-class SceneEntity
+class Entity
 {
 public:
     void attach(Mesh* mesh);

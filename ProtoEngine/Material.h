@@ -17,7 +17,7 @@ struct MeshMaterial
 };
 
 class RenderInterface;
-class SceneEntity;
+class Entity;
 class Shader;
 
 class MaterialInterface
@@ -26,7 +26,7 @@ public:
     MaterialInterface(std::string& shaderName);
     virtual ~MaterialInterface();
 
-    virtual void apply(RenderInterface* ri, SceneEntity* entity) = 0;
+    virtual void apply(RenderInterface* ri, Entity* entity) = 0;
 
 public:
     std::vector<MaterialAttributeInterface*> mAttributes;
@@ -43,7 +43,7 @@ class DefaultMaterial : public MaterialInterface
 {
 public:
     DefaultMaterial(std::string& shaderName);
-    virtual void apply(RenderInterface* ri, SceneEntity* entity);
+    virtual void apply(RenderInterface* ri, Entity* entity);
 
 protected:
     void setDefault();
