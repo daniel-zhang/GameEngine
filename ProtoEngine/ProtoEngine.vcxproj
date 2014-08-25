@@ -93,7 +93,6 @@
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="ShaderEnum.cpp" />
-    <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="TestHook.cpp" />
     <ClCompile Include="Ticker.cpp" />
@@ -139,6 +138,7 @@
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="EffectMgr.h" />
     <ClInclude Include="MaterialAttribute.h" />
+    <ClInclude Include="ProtoMath.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ForwardDecls.h" />
     <ClInclude Include="Game.h" />
@@ -157,7 +157,6 @@
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="D3DUtilities.h" />
     <ClInclude Include="ShaderEnum.h" />
-    <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Singleton.h" />

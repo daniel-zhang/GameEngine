@@ -11,6 +11,8 @@ class Timer
 public:
 	uint32 totalCalls();
 	float totalTime();
+    float lastDelta_second();
+    float lastDelta_millisecond();
 
 protected:
 	friend class Profiler;

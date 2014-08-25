@@ -2,11 +2,13 @@
 #define RENDER_INTERFACE_H
 
 #include "reference.h"
-#include "RenderTarget.h"
 
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 
+class RenderWindow;
+class SwapChainRT;
+class Viewport;
 // A thin layer upon d3d11
 class RenderInterface
 {
@@ -21,21 +23,31 @@ public:
 
     // Operations
 
-    void attachRenderTarget(RenderTarget* rt);
-    void setRenderTarget();
-    void setViewport();
+    void presentBackBuffer();
+
+    /*
+    void setRenderTarget(RenderTarget* rt);
+    RenderTarget* getRenderTarget();
+    void setSwapChain(SwapChainRT* inSwapChain);
+    */
+
+    Viewport* createViewport(RenderWindow* rw);
+    void setViewport(Viewport* vp);
+    void setViewportByIndex(uint32 index);
+
+    void clearBackground(XMFLOAT4& color);
 
     void setShader();
 
     void setIndexBuffer(IndexBuffer* pIB){}
     void setVertexBuffer(VertexBuffer* pVB){}
-    
 
 public:
     ID3D11Device*				mDevice;
     ID3D11DeviceContext*		mCtx;
 
     bool mInitialized;
+    std::vector<Viewport*> mViewports;
 };
 
 #endif

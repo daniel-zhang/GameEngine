@@ -2,8 +2,8 @@ root
 {
 	render_config
 	{
-		screen_width = 1600
-		screen_height = 600
+		screen_width = 1024
+		screen_height = 300
 		enable_msaa = true 
 		msaa_quality = 4
 		force_singlethread = true

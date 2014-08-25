@@ -24,4 +24,5 @@ typedef unsigned long long uint64;
 	#define static_assert(condition, name)
 #endif
 
+
 #endif

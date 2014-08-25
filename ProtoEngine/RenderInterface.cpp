@@ -1,4 +1,5 @@
 #include "RenderInterface.h"
+#include "RenderTarget.h"
 #include <Windows.h>
 
 RenderInterface::RenderInterface()
@@ -13,6 +14,14 @@ RenderInterface::~RenderInterface()
     if (mCtx) mCtx->ClearState(); 
     safe_release(&mCtx);
     safe_release(&mDevice);
+    for (uint32 i = 0; i < mViewports.size(); ++i)
+    {
+        if (mViewports[i])
+        {
+            delete mViewports[i];
+        }
+    }
+    mViewports.clear();
 }
 
 bool RenderInterface::init()
@@ -42,16 +51,66 @@ bool RenderInterface::init()
     return mInitialized;
 }
 
-void RenderInterface::attachRenderTarget( RenderTarget* rt )
-{
-    if (rt)
-    {
-        mCtx->OMSetRenderTargets(1, &rt->mRenderTargetView, rt->mDepthStencilView);
-    }
-}
-
 bool RenderInterface::isInitialized()
 {
     return mInitialized;
 }
+/*
+void RenderInterface::setRenderTarget( RenderTarget* rt )
+{
+    if (rt)
+    {
+        if (mActiveRenderTarget)
+            mActiveRenderTarget->detach();
+        mActiveRenderTarget = rt;
+        mActiveRenderTarget->attach(this);
+    }
+}
+
+RenderTarget* RenderInterface::getRenderTarget()
+{
+    return mActiveRenderTarget;
+}
+*/
+
+void RenderInterface::clearBackground( XMFLOAT4& color )
+{
+    //mActiveRenderTarget->clear(color);
+    mViewports[0]->clear(color);
+}
+
+void RenderInterface::presentBackBuffer()
+{
+    //mSwapChain->swap();
+    mViewports[0]->flip();
+}
+
+/*
+void RenderInterface::setSwapChain( SwapChainRT* inSwapChain )
+{
+    mSwapChain = inSwapChain;
+}
+*/
+
+Viewport* RenderInterface::createViewport( RenderWindow* rw )
+{
+    Viewport* vp = new Viewport();
+    if (vp->init(this, rw))
+    {
+        mViewports.push_back(vp);
+    }
+    return vp;
+}
+
+void RenderInterface::setViewport(Viewport* vp)
+{
+    vp->attach();
+}
+
+void RenderInterface::setViewportByIndex( uint32 index )
+{
+    if (index < mViewports.size() && index >= 0)
+        mViewports[index]->attach();
+}
+
 

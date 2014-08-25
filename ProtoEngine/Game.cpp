@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "Profiler.h"
 #include "TestHook.h"
+#include "RenderWindow.h"
+#include <sstream>
 
 Game::Game()
 {
@@ -48,8 +50,15 @@ bool Game::exit()
 
 int32 Game::runWin32()
 {
-    Timer* logicTimer = Singleton<Profiler>::getInstance().createTimer(L"LogicStats", L"Logic Stats");
-    Timer* renderTimer = Singleton<Profiler>::getInstance().createTimer(L"RenderStats", L"Render Stats");
+    Timer* gameTimer = Singleton<Profiler>::getInstance().createTimer(L"LogicStats", L"Logic Stats");
+    Timer* renderingTimer = Singleton<Profiler>::getInstance().createTimer(L"RenderStats", L"Render Stats");
+    std::wostringstream frameInfo; 
+    frameInfo.precision(4);
+    static float frameTimeSum = 0.f;
+    static float gameTimeSum = 0.f;
+    static float renderingTimeSum = 0.f; 
+    static float smoothRange = 300.f; // 300ms, 3 updates per sec 
+    static uint32 frameCounter = 0;
 
     MSG msg = {0};
     while (msg.message != WM_QUIT)
@@ -63,13 +72,37 @@ int32 Game::runWin32()
         {
             mTicker.tick();
 
-            Singleton<Profiler>::getInstance().startTimer(logicTimer);
-            step(mTicker.deltaTime());
-            Singleton<Profiler>::getInstance().endTimer(logicTimer);
+            Singleton<Profiler>::getInstance().startTimer(gameTimer);
+            step(mTicker.delta_second());
+            Singleton<Profiler>::getInstance().endTimer(gameTimer);
 
-            Singleton<Profiler>::getInstance().startTimer(renderTimer);
+            Singleton<Profiler>::getInstance().startTimer(renderingTimer);
             driveRenderCore();
-            Singleton<Profiler>::getInstance().endTimer(renderTimer);
+            Singleton<Profiler>::getInstance().endTimer(renderingTimer);
+
+            // Display frame info text
+
+            frameTimeSum += mTicker.delta_millisecond();
+            gameTimeSum += gameTimer->lastDelta_millisecond();
+            renderingTimeSum += renderingTimer->lastDelta_millisecond();
+            frameCounter++;
+            //Sleep(30);
+            if (frameTimeSum > smoothRange)
+            {
+                float avgFrame = frameTimeSum / frameCounter;
+                float avgGame = gameTimeSum / frameCounter;
+                float avgRendering = renderingTimeSum / frameCounter;
+                float avgFPS = 1000.f / avgFrame;
+
+                frameTimeSum = 0.f;
+                gameTimeSum = 0.f;
+                renderingTimeSum = 0.f;
+                frameCounter = 0;
+
+                frameInfo << L"Frame: " << avgFrame << L"ms | Game: " << avgGame << L"ms | Render: " << avgRendering << L"ms | FPS: " << avgFPS;
+                mRenderCore->getActiveRenderWindow()->setTitleBarText(frameInfo.str());
+                frameInfo.str(L"");
+            }
         }
     }
     return (int)msg.wParam;

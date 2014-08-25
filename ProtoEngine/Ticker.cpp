@@ -27,7 +27,7 @@ float Ticker::totalTime() const
 	}
 }
 
-float Ticker::deltaTime() const
+float Ticker::delta_second() const
 {
 	return (float)mDeltaTime;
 }
@@ -85,4 +85,9 @@ void Ticker::tick()
 	// Force non-negative delta time. Delta time can be negative in CPU power save mode, or when the program is switched to another CPU core.
 	if(mDeltaTime < 0.0)
 		mDeltaTime = 0.0;
+}
+
+float Ticker::delta_millisecond() const
+{
+    return 1000.f * (float)mDeltaTime;
 }
