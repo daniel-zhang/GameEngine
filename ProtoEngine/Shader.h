@@ -1,81 +1,13 @@
 #ifndef EFFECT_WRAPPER_H
 #define EFFECT_WRAPPER_H
 
-#include "typedefs.h"
-#include "d3dx11effect.h"
-#include "ShaderEnum.h"
 #include <string>
 #include <vector>
 #include <map>
 
-class EffectInspector
-{
-public:
-    EffectInspector(){mFX = NULL;}
-    EffectInspector(ID3DX11Effect* fx):mFX(fx){}
-
-    void go()
-    {
-        if(mFX == NULL)
-            return;
-        /*
-        UINT    ConstantBuffers;        // Number of constant buffers in this effect
-        UINT    GlobalVariables;        // Number of global variables in this effect
-        UINT    InterfaceVariables;     // Number of global interfaces in this effect
-        UINT    Techniques;             // Number of techniques in this effect
-        UINT    Groups;                 // Number of groups in this effect
-        */
-        D3DX11_EFFECT_DESC desc;
-        mFX->GetDesc(&desc);
-
-        for (uint32  i  = 0; i < desc.ConstantBuffers; ++i)
-        {
-            mConstBuffers.push_back(mFX->GetConstantBufferByIndex(i));
-            D3DX11_EFFECT_VARIABLE_DESC cbufferDesc;
-            mConstBuffers[i]->GetDesc(&cbufferDesc);
-            mConstBufferDescs.push_back(cbufferDesc);
-        }
-
-        for (uint32 i = 0; i < desc.GlobalVariables; ++i)
-        {
-            mGlobalVars.push_back(mFX->GetVariableByIndex(i));
-
-            D3DX11_EFFECT_VARIABLE_DESC varDesc;
-            mGlobalVars[i]->GetDesc(&varDesc);
-            mGlobalVarDescs.push_back(varDesc);
-        }
-
-        for (uint32  i  = 0; i < desc.Techniques; ++i)
-        {
-            mTechs.push_back(mFX->GetTechniqueByIndex(i));
-            D3DX11_TECHNIQUE_DESC techDesc;
-            mTechs[i]->GetDesc(&techDesc);
-            mTechDescs.push_back(techDesc);
-            for(uint32 j = 0; j < techDesc.Passes; ++j)
-            {
-                mPasses.push_back(mTechs[i]->GetPassByIndex(j));
-                D3DX11_PASS_DESC passDesc;
-                mPasses[mPasses.size() - 1]->GetDesc(&passDesc);
-                mPassDescs.push_back(passDesc);
-            }
-        }
-    }
-
-protected:
-    ID3DX11Effect* mFX;
-    std::vector<ID3DX11EffectVariable*> mGlobalVars;
-    std::vector<D3DX11_EFFECT_VARIABLE_DESC> mGlobalVarDescs;
-
-    std::vector<ID3DX11EffectConstantBuffer*> mConstBuffers;
-    std::vector<D3DX11_EFFECT_VARIABLE_DESC> mConstBufferDescs;
-
-    std::vector<ID3DX11EffectTechnique*> mTechs;
-    std::vector<D3DX11_TECHNIQUE_DESC> mTechDescs;
-
-    std::vector<ID3DX11EffectPass*> mPasses;
-    std::vector<D3DX11_PASS_DESC> mPassDescs;
-};
-
+#include "typedefs.h"
+#include "d3dx11effect.h"
+#include "ShaderEnum.h"
 
 class MaterialAttributeInterface;
 class MaterialInterface;
@@ -84,6 +16,7 @@ class RenderInterface;
 //
 // Define all variables in all shaders
 //
+/*
 struct ShaderVarTag
 {
     ShaderVarTag(EnumShaderVarTag tagEnum, const char* tagStr) :mTagEnum(tagEnum), mTagStr(tagStr) { }
@@ -110,12 +43,11 @@ public:
     EnumShaderVarTag mVarTag;
     void updateFrom(MaterialAttributeInterface* IMatAttr);
 };
-
-class Shader
+class MetaEffect
 {
 public:
-    Shader(ID3DX11Effect* fx, ShaderVarTagDefinition* tagDefs);
-    ~Shader(){}
+    MetaEffect(ID3DX11Effect* fx, ShaderVarTagDefinition* tagDefs);
+    ~MetaEffect(){}
 
     void setMaterial(std::vector<MaterialAttributeInterface*>& attrs);
     void setMaterial(MaterialInterface* material);
@@ -130,6 +62,7 @@ protected:
     // Shader Linkage
 public:
     ID3DX11Effect* mFx;
+    /*
     ID3DX11EffectTechnique* mDefaultTech;
     std::vector<ID3DX11EffectTechnique*> mTechs;
     uint32 mActiveTechIndex;
@@ -144,6 +77,72 @@ public:
     // For debug purpose
     std::vector<ID3DX11EffectVariable*> mTagsMissing;
     std::vector<ID3DX11EffectVariable*> mTagsNotDefined;
+};
+*/
+
+//
+// Version 2
+//
+
+class ShaderParameter
+{
+public:
+    ShaderParameter(ID3DX11EffectVariable* var, NativeEnum_ShaderVarTag tag);
+
+    void setFrom(MaterialAttributeInterface* matAttr);
+
+    NativeEnum_ShaderVarTag mTag;
+    ID3DX11EffectVariable* mVar;
+};
+
+class ShaderInterface;
+
+class ShaderEffect 
+{
+public:
+    ShaderEffect();
+    bool init(ID3DX11Effect* inFx, SmartEnum_ShaderVarTag* inTagDefintion);
+    void clear();
+    bool trySetFrom(MaterialAttributeInterface* matAttr);
+
+public:
+    ID3DX11Effect* mFx;
+
+    SmartEnum_ShaderVarTag* mTagDefinition;
+    typedef std::map<NativeEnum_ShaderVarTag, ShaderParameter> TParameterMap;
+    TParameterMap mValidParams;
+
+    // For debug purpose
+    std::vector<ShaderParameter> mTagsDuplicated;
+    std::vector<ID3DX11EffectVariable*> mTagsMissing;
+    std::vector<std::string> mTagsNotDefined;
+};
+
+class ShaderInterface
+{
+public:
+    ShaderInterface();
+    ShaderInterface(std::string& inEffectName, std::string inTechName, uint32 inPassIndex );
+
+    void init(std::string& inEffectName, std::string inTechName, uint32 inPassIndex );
+    bool isValid();
+    void clear();
+
+    void setMaterial(MaterialInterface* material);
+    void apply(RenderInterface* ri);
+
+    ShaderEffect* getOwningEffect();
+
+protected:
+    std::string mEffectName;
+    std::string mTechName;
+    uint32 mPassIndex;
+    bool mIsValid;
+
+    ShaderEffect* mEffect;
+    ID3DX11EffectTechnique* mTech;
+    ID3DX11EffectPass* mPass;
+
 };
 
 /*

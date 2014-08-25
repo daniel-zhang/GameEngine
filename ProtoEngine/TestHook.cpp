@@ -25,7 +25,7 @@ void test_render_core_init()
 
 void test_phase_2_singletons()
 {
-    shader_mgr_test();
+    effect_mgr_test();
 }
 
 //

@@ -30,4 +30,7 @@ void safe_release(T** ppT)
     #endif
 #endif
 
+// A DXTrace() like customized exception for general debugging
+
+
 #endif

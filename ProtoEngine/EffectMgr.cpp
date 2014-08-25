@@ -8,7 +8,7 @@
 #include <D3Dcompiler.h>
 #include <d3dx11.h>
 
-
+/*
 EffectMgr::EffectMgr()
 {
     mDir = std::string(gShaderPath);
@@ -48,17 +48,18 @@ bool EffectMgr::destroy()
     return true;
 }
 
-Shader* EffectMgr::getByName( const char* effectName )
+MetaEffect* EffectMgr::getByName( const char* effectName )
 {
 
     return NULL;
 }
 
-Shader* EffectMgr::getByIndex()
+MetaEffect* EffectMgr::getByIndex()
 {
     return NULL;
 
 }
+*/
 
 //
 //
@@ -66,26 +67,26 @@ Shader* EffectMgr::getByIndex()
 
 // TODO 
 // shader names should be read from config or scanned from shader dir
-const char* gShaderNames[] = {
+const char* gEffectName[] = {
     "base"
 };
 
-ShaderMgr::ShaderMgr()
+EffectMgr::EffectMgr()
 {
 
 }
 
-ShaderMgr::~ShaderMgr()
+EffectMgr::~EffectMgr()
 {
 }
 
-bool ShaderMgr::init( RenderInterface* ri )
+bool EffectMgr::init( RenderInterface* ri )
 {
-    buildShaderNameMap();
+    buildEffectNameMap();
     // Load shaders
-    for (uint32 i = 0; i < mShaderNames.size(); ++i)
+    for (uint32 i = 0; i < mEffectNames.size(); ++i)
     {
-        std::string fullname = gShaderPath + mShaderNames[i] + ".fxo";
+        std::string fullname = gShaderPath + mEffectNames[i] + ".fxo";
         MemBlock rawMem;
         if ( OSInterface::fileToMem(fullname, rawMem ) == false )
         {
@@ -94,51 +95,53 @@ bool ShaderMgr::init( RenderInterface* ri )
         ID3DX11Effect* fx= NULL;
         d3d_check( D3DX11CreateEffectFromMemory(rawMem.mData, rawMem.mSize, 0, ri->mDevice, &fx) );
 
-        Shader* shader = new Shader(fx, &mTagDefinition);
-        mShaders.push_back(shader);
+        ShaderEffect* effect = new ShaderEffect;
+        if(effect->init(fx, &mTagDefinition))
+            mEffects.push_back(effect);
+        else
+            ; //throw error
     }
-
     return true;
 }
 
-bool ShaderMgr::destroy()
+bool EffectMgr::destroy()
 {
-    for (uint32 i = 0; i < mShaders.size(); ++i)
+    for (uint32 i = 0; i < mEffects.size(); ++i)
     {
-        if (mShaders[i])
-            delete mShaders[i];
+        if (mEffects[i])
+            delete mEffects[i];
     }
-    mShaders.clear();
-    mShaderNames.clear();
-    mShaderNameMap.clear();
+    mEffects.clear();
+    mEffectNames.clear();
+    mEffectNameMap.clear();
 
     return true;
 }
 
-Shader* ShaderMgr::getShaderByName( std::string& shaderName )
+ShaderEffect* EffectMgr::getEffect( std::string& inEffectName )
 {
-    uint32 shaderIndex = 0;
-    if (shaderNameToIndex(shaderName, shaderIndex) == false)
+    uint32 effectIndex = 0;
+    if (effectNameToIndex(inEffectName, effectIndex) == false)
         return NULL;
 
-    return mShaders[shaderIndex];
+    return mEffects[effectIndex];
 }
 
-void ShaderMgr::buildShaderNameMap()
+void EffectMgr::buildEffectNameMap()
 {
-    mShaderNameMap.clear();
-    uint32 numShader = ARRAYSIZE(gShaderNames);
+    mEffectNameMap.clear();
+    uint32 numShader = ARRAYSIZE(gEffectName);
     for (uint32 i = 0; i < numShader; ++i)
     {
-        mShaderNames.push_back(std::string(gShaderNames[i]));
-        mShaderNameMap.insert(std::pair<std::string, uint32>(std::string(gShaderNames[i]), i));
+        mEffectNames.push_back(std::string(gEffectName[i]));
+        mEffectNameMap.insert(std::pair<std::string, uint32>(std::string(gEffectName[i]), i));
     }
 }
 
-bool ShaderMgr::shaderNameToIndex( const std::string& inShaderName, uint32& outIndex)
+bool EffectMgr::effectNameToIndex( const std::string& inEffectName, uint32& outIndex)
 {
-    ShaderNameMap::const_iterator citor = mShaderNameMap.find(inShaderName);
-    if (citor != mShaderNameMap.end())
+    TEffectNameMap::const_iterator citor = mEffectNameMap.find(inEffectName);
+    if (citor != mEffectNameMap.end())
     {
         outIndex = citor->second;
         return true;
@@ -146,28 +149,36 @@ bool ShaderMgr::shaderNameToIndex( const std::string& inShaderName, uint32& outI
     return false;
 }
 
-void shader_mgr_test()
+#include <cassert>
+#include <exception>
+
+// In debug mode, throwing this exception will first trigger a breakpoint
+// This side effect is taken off in release mode
+class SmartException: public std::runtime_error
 {
-    MaterialAttr<XMFLOAT4X4> Local2World(local_to_world);
-    MaterialAttr<XMFLOAT3> CamPos(cam_pos);
+public:
+
+
+};
+void effect_mgr_test()
+{
+    /*
+    MaterialAttr<XMFLOAT4X4> Local2World(e_local_to_world);
+    MaterialAttr<XMFLOAT3> CamPos(e_cam_pos);
 
     std::vector<MaterialAttributeInterface*> tmp;
     tmp.push_back(&Local2World);
     tmp.push_back(&CamPos);
+    */
 
-    std::string baseShader ("base");
-    Shader* shader = Singleton<ShaderMgr>::getInstance().getShaderByName(baseShader);
-    shader->setMaterial(tmp);
-
+    //assert(0);
+    //DebugBreak();
+    //d3d_check(D3D11_ERROR_FILE_NOT_FOUND);
     DefaultMaterial baseMat(std::string("base"));
-    shader->setMaterial(&baseMat);
 
-    // Check if correctly set
-    Shader::ShaderParamMap::iterator it =  shader->mParamMap.find(plain_material);
-    MeshMaterial testData;
-    if (it != shader->mParamMap.end())
-    {
-        it->second.mVar->GetRawValue(&testData, 0, sizeof MeshMaterial);
-        ;
-    }
+    std::string effectName("base");
+    ShaderEffect* effect = Singleton<EffectMgr>::getInstance().getEffect(effectName);
+    ShaderInterface* shader = new ShaderInterface;
+    shader->init(effectName, std::string("BaseTech"), 0);
+    shader->setMaterial(&baseMat);
 }

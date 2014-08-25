@@ -12,10 +12,11 @@ Attribute types:
 class MaterialAttributeInterface
 {
 public:
-    MaterialAttributeInterface(EnumShaderVarTag inTag):mTag(inTag){}
+    MaterialAttributeInterface(NativeEnum_ShaderVarTag inTag)
+        :mTag(inTag){}
 
-    virtual void sync(ShaderParameter* sp) = 0;
-    EnumShaderVarTag mTag;
+    virtual void setTo(ShaderParameter* sp) = 0;
+    NativeEnum_ShaderVarTag mTag;
 };
 
 //
@@ -26,7 +27,7 @@ template <typename T>
 class MaterialAttr : public MaterialAttributeInterface
 {
 public:
-    MaterialAttr(EnumShaderVarTag inTag) : MaterialAttributeInterface(inTag) 
+    MaterialAttr(NativeEnum_ShaderVarTag inTag) : MaterialAttributeInterface(inTag) 
     {
         pData = new T;
     }
@@ -34,9 +35,9 @@ public:
     {
         if (pData) delete pData;
     }
-    virtual void sync(ShaderParameter* sp)
+    virtual void setTo(ShaderParameter* sp)
     {
-        if (mTag == sp->mVarTag)
+        if (mTag == sp->mTag)
         {
             sp->mVar->SetRawValue(pData, 0, sizeof(T));
         }
@@ -51,7 +52,7 @@ template<>
 class MaterialAttr<float> : public MaterialAttributeInterface
 {
 public:
-    MaterialAttr(EnumShaderVarTag inTag) : MaterialAttributeInterface(inTag) 
+    MaterialAttr(NativeEnum_ShaderVarTag inTag) : MaterialAttributeInterface(inTag) 
     {
         pData = new float(0.f);
     }
@@ -59,9 +60,9 @@ public:
     {
         if (pData) delete pData;
     }
-    virtual void sync(ShaderParameter* sp)
+    virtual void setTo(ShaderParameter* sp)
     {
-        if (mTag == sp->mVarTag)
+        if (mTag == sp->mTag)
         {
             sp->mVar->AsScalar()->SetFloat(*pData);
         }
@@ -73,7 +74,7 @@ template<>
 class MaterialAttr<XMFLOAT4> : public MaterialAttributeInterface
 {
 public:
-    MaterialAttr(EnumShaderVarTag inTag):MaterialAttributeInterface(inTag)
+    MaterialAttr(NativeEnum_ShaderVarTag inTag):MaterialAttributeInterface(inTag)
     {
         pData = new XMFLOAT4(0.f, 0.f, 0.f, 0.f);
     }
@@ -81,9 +82,9 @@ public:
     {
         if (pData) delete pData;
     }
-    virtual void sync(ShaderParameter* sp)
+    virtual void setTo(ShaderParameter* sp)
     {
-        if (mTag == sp->mVarTag)
+        if (mTag == sp->mTag)
         {
             sp->mVar->AsVector()->SetFloatVector(reinterpret_cast<const float*>( &(XMLoadFloat4(pData)) ) );
         }
@@ -95,7 +96,7 @@ template<>
 class MaterialAttr<XMFLOAT4X4>: public MaterialAttributeInterface
 {
 public:
-    MaterialAttr(EnumShaderVarTag inTag):MaterialAttributeInterface(inTag)
+    MaterialAttr(NativeEnum_ShaderVarTag inTag):MaterialAttributeInterface(inTag)
     {
         pData = new XMFLOAT4X4;
         XMStoreFloat4x4(pData, XMMatrixIdentity());
@@ -104,9 +105,9 @@ public:
     {
         if(pData) delete pData;
     }
-    virtual void sync(ShaderParameter* sp) 
+    virtual void setTo(ShaderParameter* sp) 
     { 
-        if (mTag == sp->mVarTag)
+        if (mTag == sp->mTag)
         {
             sp->mVar->AsMatrix()->SetMatrix(reinterpret_cast<const float*>( &(XMLoadFloat4x4(pData)) )); 
         }
@@ -118,13 +119,13 @@ template<>
 class MaterialAttr<ID3D11ShaderResourceView>:public MaterialAttributeInterface
 {
 public:
-    MaterialAttr(EnumShaderVarTag inTag):MaterialAttributeInterface(inTag)
+    MaterialAttr(NativeEnum_ShaderVarTag inTag):MaterialAttributeInterface(inTag)
     {
         pData = NULL;
     }
-    virtual void sync(ShaderParameter* sp)
+    virtual void setTo(ShaderParameter* sp)
     {
-        if(mTag == sp->mVarTag)
+        if(mTag == sp->mTag)
             sp->mVar->AsShaderResource()->SetResource(pData);
     }
     ID3D11ShaderResourceView* pData;

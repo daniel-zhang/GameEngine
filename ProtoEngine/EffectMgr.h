@@ -10,6 +10,7 @@
 
 class RenderInterface;
 
+/*
 class EffectMgr : public Singleton<EffectMgr>
 {
 public:
@@ -19,42 +20,42 @@ public:
     bool init(RenderInterface* ri);
     bool destroy();
 
-    Shader* getByName(const char* effectName);
-    Shader* getByIndex();
+    Effect* getEffect(std::string inEffectName);
+    MetaEffect* getByName(const char* effectName);
+    MetaEffect* getByIndex();
 
 protected:
     std::string mDir;
     std::string mExtension;
 
-    ShaderVarTagDefinition mTagDefinition;
-    std::vector<Shader*> mEffectColletion;
+    SmartEnum_ShaderVarTag mTagDefinition;
+    std::vector<MetaEffect*> mEffectColletion;
 };
+*/
 
-
-class ShaderMgr: public Singleton<ShaderMgr>
+class EffectMgr: public Singleton<EffectMgr>
 {
 public:
-    ShaderMgr();
-    ~ShaderMgr();
+    EffectMgr();
+    ~EffectMgr();
 
     bool init(RenderInterface* ri);
     bool destroy();
 
-    Shader* getShaderByName(std::string& shaderName);
+    ShaderEffect* getEffect(std::string& inEffectName);
 
 protected:
-    void buildShaderNameMap();
-    bool shaderNameToIndex(const std::string& inShaderName, uint32& outIndex);
-    bool loadShader();
-    typedef std::map<std::string, uint32> ShaderNameMap;
-    ShaderNameMap mShaderNameMap;
-    std::vector<std::string> mShaderNames;
+    void buildEffectNameMap();
+    bool effectNameToIndex(const std::string& inEffectName, uint32& outIndex);
+    typedef std::map<std::string, uint32> TEffectNameMap;
+    TEffectNameMap mEffectNameMap;
+    std::vector<std::string> mEffectNames;
 
 protected:
-    ShaderVarTagDefinition mTagDefinition;
-    std::vector<Shader*> mShaders;
+    SmartEnum_ShaderVarTag mTagDefinition;
+    std::vector<ShaderEffect*> mEffects;
 };
 
-void shader_mgr_test();
+void effect_mgr_test();
 
 #endif

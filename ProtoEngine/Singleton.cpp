@@ -16,12 +16,12 @@ void initOrClearPhaseTwoSingletons( bool isInit, RenderInterface* ri);
 
 void initPhaseOneSingletons()
 {
-	initOrClearPhaseOneSingletons(true);
+    initOrClearPhaseOneSingletons(true);
 }
 
 void clearPhaseOneSingletons()
 {
-	initOrClearPhaseOneSingletons(false);
+    initOrClearPhaseOneSingletons(false);
 }
 
 void initPhaseTwoSingletons(RenderInterface* ri)
@@ -40,18 +40,18 @@ void clearPhaseTwoSingletons(RenderInterface* ri)
 void initOrClearPhaseOneSingletons( bool isInit)
 {
     guard(ConfigMgr)	
-		if (isInit)
+        if (isInit)
             Singleton<ConfigMgr>::getInstance().init();
-		else
+        else
             Singleton<ConfigMgr>::getInstance().destroy();
     unguard
-	 
-	guard(Profiler) 
-		if (isInit)
-			Singleton<Profiler>::getInstance().init();
-		else
-			Singleton<Profiler>::getInstance().destroy();
-	unguard 
+     
+    guard(Profiler) 
+        if (isInit)
+            Singleton<Profiler>::getInstance().init();
+        else
+            Singleton<Profiler>::getInstance().destroy();
+    unguard 
 }
 
 void initOrClearPhaseTwoSingletons( bool isInit, RenderInterface* ri)
@@ -62,14 +62,6 @@ void initOrClearPhaseTwoSingletons( bool isInit, RenderInterface* ri)
         else
             Singleton<EffectMgr>::getInstance().destroy();
     unguard
-
-    guard(ShaderMgr)
-        if (isInit)
-            Singleton<ShaderMgr>::getInstance().init(ri);
-        else
-            Singleton<ShaderMgr>::getInstance().destroy();
-    unguard
-
 }
 
 

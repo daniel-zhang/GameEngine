@@ -6,7 +6,7 @@
 #include "reference.h"
 
 class RenderInterface;
-class Shader;
+class MetaEffect;
 
 enum EnumVertexFormat
 {

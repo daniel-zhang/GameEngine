@@ -7,7 +7,9 @@
 
 MaterialInterface::MaterialInterface(std::string& inShaderName)
 {
-    mShader = Singleton<ShaderMgr>::getInstance().getShaderByName(inShaderName);
+    mShader = new ShaderInterface();
+    // TODO
+    mShader->init(std::string(), std::string(), 0 );
 }
 
 MaterialInterface::~MaterialInterface()
@@ -20,6 +22,12 @@ MaterialInterface::~MaterialInterface()
         }
     }
     mAttributes.clear();
+
+    if (mShader != NULL)
+    {
+        delete mShader;
+        mShader = NULL;
+    }
 }
 
 DefaultMaterial::DefaultMaterial( std::string& shaderName ) : MaterialInterface(shaderName)
@@ -57,10 +65,10 @@ void DefaultMaterial::apply( RenderInterface* ri, Entity* entity )
 void DefaultMaterial::setDefault()
 {
     // Per object material attribute
-    mpLocalToWorld = new MaterialAttr<XMFLOAT4X4>(local_to_world);
-    mpDiffuseMap = new MaterialAttr<ID3D11ShaderResourceView>(texture);
+    mpLocalToWorld = new MaterialAttr<XMFLOAT4X4>(e_local_to_world);
+    mpDiffuseMap = new MaterialAttr<ID3D11ShaderResourceView>(e_texture);
     // TODO: mpDiffuseMap->pData = TextureMgr::someTexture()
-    mpObjMaterial = new MaterialAttr<MeshMaterial>(plain_material);
+    mpObjMaterial = new MaterialAttr<MeshMaterial>(e_plain_material);
     mpObjMaterial->pData->Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
     mpObjMaterial->pData->Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 2.0f);
     mpObjMaterial->pData->Specular= XMFLOAT4(0.3f, 0.3f, 0.3f, 3.0f);

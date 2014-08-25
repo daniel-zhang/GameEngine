@@ -6,6 +6,10 @@
 #include "reference.h"
 #include "MaterialAttribute.h"
 
+class RenderInterface;
+class Entity;
+class MetaEffect;
+
 struct MeshMaterial
 {
     MeshMaterial() { ZeroMemory(this, sizeof(this)); }
@@ -15,10 +19,6 @@ struct MeshMaterial
     XMFLOAT4 Specular; // w = SpecPower
     XMFLOAT4 Reflect;
 };
-
-class RenderInterface;
-class Entity;
-class Shader;
 
 class MaterialInterface
 {
@@ -30,7 +30,7 @@ public:
 
 public:
     std::vector<MaterialAttributeInterface*> mAttributes;
-    Shader* mShader;
+    ShaderInterface* mShader;
 
     // Render States
     // Blend State

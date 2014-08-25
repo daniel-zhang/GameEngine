@@ -1,6 +1,7 @@
 #include "Shader.h"
 #include "Material.h"
-
+#include "EffectMgr.h"
+/*
 #define DEF_SHADER_VAR_TAG(e) mDefinitions.push_back(ShaderVarTag(e, #e))
 
 ShaderVarTagDefinition::ShaderVarTagDefinition()
@@ -37,7 +38,7 @@ void ShaderParameter::updateFrom( MaterialAttributeInterface* IMatAttr)
     IMatAttr->sync(this);
 }
 
-Shader::Shader( ID3DX11Effect* fx, ShaderVarTagDefinition* tagDef)
+MetaEffect::MetaEffect( ID3DX11Effect* fx, ShaderVarTagDefinition* tagDef)
 {
     mShaderVarTagDef = tagDef;
     mFx = fx;
@@ -93,7 +94,7 @@ Shader::Shader( ID3DX11Effect* fx, ShaderVarTagDefinition* tagDef)
 
 }
 
-void Shader::setMaterial( std::vector<MaterialAttributeInterface*>& attrs )
+void MetaEffect::setMaterial( std::vector<MaterialAttributeInterface*>& attrs )
 {
     for (uint32 i = 0; i < attrs.size(); ++i)
     {
@@ -111,7 +112,7 @@ void Shader::setMaterial( std::vector<MaterialAttributeInterface*>& attrs )
     }
 }
 
-void Shader::setMaterial( MaterialInterface* material )
+void MetaEffect::setMaterial( MaterialInterface* material )
 {
     for (uint32 i = 0; i < material->mAttributes.size(); ++i)
     {
@@ -119,7 +120,7 @@ void Shader::setMaterial( MaterialInterface* material )
     }
 }
 
-bool Shader::trySet( MaterialAttributeInterface* matAttrInterface )
+bool MetaEffect::trySet( MaterialAttributeInterface* matAttrInterface )
 {
     std::map<EnumShaderVarTag, ShaderParameter>::iterator iter;
     iter = mParamMap.find(matAttrInterface->mTag);
@@ -130,4 +131,169 @@ bool Shader::trySet( MaterialAttributeInterface* matAttrInterface )
     }
     return false;
 }
+*/
 
+//
+//
+//
+
+ShaderInterface::ShaderInterface()
+{
+    clear();
+}
+
+ShaderInterface::ShaderInterface( std::string& inEffectName, std::string inTechName, uint32 inPassIndex )
+{
+    clear();
+    init(inEffectName, inTechName, inPassIndex );
+}
+
+void ShaderInterface::init( std::string& inEffectName, std::string inTechName, uint32 inPassIndex )
+{
+    mEffectName = inEffectName;
+    mTechName = inTechName;
+    mPassIndex = inPassIndex;
+
+    mEffect = Singleton<EffectMgr>::getInstance().getEffect(mEffectName);
+    if (!mEffect)
+    {
+        mIsValid = false;
+    }
+    else
+    {
+        mTech = mEffect->mFx->GetTechniqueByName(mTechName.c_str());
+        mPass = mTech->GetPassByIndex(mPassIndex);
+        if (mTech->IsValid() && mPass->IsValid())
+            mIsValid = true;
+        else
+            mIsValid = false;
+    }
+}
+
+
+bool ShaderInterface::isValid()
+{
+    return mIsValid;
+}
+
+void ShaderInterface::clear()
+{
+    mEffectName.clear(); 
+    mTechName.clear();
+    mPassIndex = 0;
+    mEffect = NULL;
+    mTech = NULL;
+    mPass = NULL;
+
+    mIsValid = false;
+}
+
+void ShaderInterface::setMaterial( MaterialInterface* inMaterial)
+{
+    for (uint32 i = 0; i < inMaterial->mAttributes.size(); ++i)
+    {
+        bool succ = mEffect->trySetFrom(inMaterial->mAttributes[i]);
+        if (succ)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+}
+
+void ShaderInterface::apply( RenderInterface* ri )
+{
+    // TODO
+}
+
+ShaderEffect* ShaderInterface::getOwningEffect()
+{
+    return mEffect;
+}
+
+ShaderEffect::ShaderEffect()
+{
+    clear();
+}
+
+bool ShaderEffect::init( ID3DX11Effect* inFx, SmartEnum_ShaderVarTag* inTagDefintion )
+{
+    if (!inFx->IsValid())
+    {
+        return false;// throw sth
+    }
+    mFx = inFx;
+    mTagDefinition = inTagDefintion;
+
+    D3DX11_EFFECT_DESC fxDesc;
+    mFx->GetDesc(&fxDesc);
+    // Parse annotation of global shader vars
+    for (uint32 i = 0; i < fxDesc.GlobalVariables; ++i )
+    {
+        ID3DX11EffectVariable* var = mFx->GetVariableByIndex(i);
+        ID3DX11EffectVariable* tag = var->GetAnnotationByName("tag");
+        if (!tag->IsValid())
+        {
+            // Tag annotation is missing
+            mTagsMissing.push_back(var);
+        }
+        else
+        {
+            const char* lpcsTag;
+            tag->AsString()->GetString(&lpcsTag);
+            std::string tagstr(lpcsTag);
+            NativeEnum_ShaderVarTag eTag = mTagDefinition->toEnum(tagstr);
+            if (eTag != (NativeEnum_ShaderVarTag)(-1))
+            {
+                ShaderParameter sp(var, eTag);
+                TParameterMap::const_iterator iter = mValidParams.find(eTag);
+                if (iter != mValidParams.end())
+                    mValidParams.insert(std::pair<NativeEnum_ShaderVarTag, ShaderParameter>(eTag, sp));
+                else
+                    // Duplicated tags
+                    mTagsDuplicated.push_back(sp);
+            }
+            else
+            {
+                // Tag is not defined
+                mTagsNotDefined.push_back(tagstr);
+            }
+        }
+    }
+    return true;
+}
+
+void ShaderEffect::clear()
+{
+    mFx = NULL;
+    mTagDefinition = NULL;
+
+    mValidParams.clear();
+
+    mTagsDuplicated.clear();
+    mTagsMissing.clear();
+    mTagsNotDefined.clear();
+}
+
+bool ShaderEffect::trySetFrom( MaterialAttributeInterface* matAttr )
+{
+    TParameterMap::iterator iter;
+    iter = mValidParams.find(matAttr->mTag);
+    if (iter != mValidParams.end())
+    {
+        (iter->second).setFrom(matAttr);
+        return true;
+    }
+    return false;
+}
+
+ShaderParameter::ShaderParameter( ID3DX11EffectVariable* var, NativeEnum_ShaderVarTag tag ) 
+    :mVar(var), mTag(tag) { }
+
+void ShaderParameter::setFrom( MaterialAttributeInterface* matAttr )
+{
+    matAttr->setTo(this);
+}
