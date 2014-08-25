@@ -4,8 +4,10 @@
 #include "D3DUtilities.h"
 #include "ConfigMgr.h"
 
+/*
 SwapChain::SwapChain()
 {
+    mRI = NULL;
 }
 
 SwapChain::~SwapChain()
@@ -21,7 +23,8 @@ bool SwapChain::init( RenderInterface* ri, RenderWindow* rw)
     }
     mWidth = mRenderWindow->mWidth;
     mHeight = mRenderWindow->mHeight;
-    */
+
+    mRI = ri;
 
     RenderConfig& rc = Singleton<ConfigMgr>::getInstance().root.render_config;
     this->mWidth = rc.screen_width;
@@ -121,5 +124,15 @@ bool SwapChain::init( RenderInterface* ri, RenderWindow* rw)
     return true;
 }
 
+void SwapChain::clearBackground( XMVECTORF32& color )
+{
+    XMVECTORF32 lightSteelBlue = {0.69f, 0.77f, 0.87f, 1.0f};
+    if (mRI != NULL)
+    {
+        mRI->mCtx->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&lightSteelBlue));
+        mRI->mCtx->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+    }
+}
 
 
+*/

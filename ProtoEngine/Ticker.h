@@ -9,7 +9,8 @@ public:
 	Ticker();
 
 	float totalTime() const;		// in seconds
-	float deltaTime() const;		// in seconds
+	float delta_second() const;		// in seconds
+	float delta_millisecond() const;		// in ms
 
 	void start();
 	void stop();

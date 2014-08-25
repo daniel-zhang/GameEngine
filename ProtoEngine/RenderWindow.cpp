@@ -4,6 +4,8 @@ RenderWindow::RenderWindow()
 {
     mClassName = L"RenderWindow";
     mHwnd = NULL;
+    mX = mY = 0;
+    mWidth = mHeight = 0;
 }
 
 RenderWindow::~RenderWindow()
@@ -93,4 +95,19 @@ LRESULT CALLBACK RenderWindow::winProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPA
     {
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
+}
+
+void RenderWindow::setTitleBarText( std::wstring& input )
+{
+    SetWindowText(mHwnd, input.c_str());
+}
+
+uint32 RenderWindow::getWidth()
+{
+    return mWidth;
+}
+
+uint32 RenderWindow::getHeight()
+{
+    return mHeight;
 }

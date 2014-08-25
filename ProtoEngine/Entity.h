@@ -9,6 +9,7 @@ class Entity
 {
 public:
     void attach(Mesh* mesh);
+    void detach();
 
 public:
     Mesh* mMesh;

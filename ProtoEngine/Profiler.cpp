@@ -48,6 +48,17 @@ float Timer::totalTime()
 	return (float)(mTotalTicks * 1.0 / mFrequency);
 }
 
+float Timer::lastDelta_second()
+{
+    return (float)(mCurrInterval.delta * 1.0f / mFrequency);
+}
+
+float Timer::lastDelta_millisecond()
+{
+    return (float)(mCurrInterval.delta * 1000.0f / mFrequency);
+}
+
+
 void Timer::start()
 {
 	mCurrInterval.reset();

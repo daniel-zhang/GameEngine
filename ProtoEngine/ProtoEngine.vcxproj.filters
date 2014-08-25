@@ -76,9 +76,6 @@
     <ClCompile Include="IndexBuffer.cpp">
       <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="SwapChain.cpp">
-      <Filter>RenderCore</Filter>
-    </ClCompile>
     <ClCompile Include="RenderTarget.cpp">
       <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
@@ -174,9 +171,6 @@
     <ClInclude Include="Config.h">
       <Filter>deprecated</Filter>
     </ClInclude>
-    <ClInclude Include="SwapChain.h">
-      <Filter>RenderCore</Filter>
-    </ClInclude>
     <ClInclude Include="RenderTarget.h">
       <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
@@ -221,6 +215,9 @@
     </ClInclude>
     <ClInclude Include="VertexFormat.h">
       <Filter>RenderCore\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtoMath.h">
+      <Filter>Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
