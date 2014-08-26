@@ -1,22 +1,25 @@
 #include "RenderWindow.h"
 #include "Game.h"
 
+EventHandlerInterface gNullHandler;
 RenderWindow::RenderWindow()
 {
     mClassName = L"RenderWindow";
     mHwnd = NULL;
     mX = mY = 0;
     mWidth = mHeight = 0;
-    mEHI = NULL;
+    mState = ws_uninitialized;
+    mInitialized = false;
+    mCurrentHandler = &gNullHandler; // Use null handler by default
 }
 
 RenderWindow::~RenderWindow()
 {
-
 }
 
-bool RenderWindow::init( std::wstring title, int x, int y, int width, int height, EventHandlerInterface* ehi )
+bool RenderWindow::init( std::wstring title, int x, int y, int width, int height )
 {
+    if (mInitialized) return false;
     mTitle = title;
     mX = x;
     mY = y;
@@ -45,11 +48,11 @@ bool RenderWindow::init( std::wstring title, int x, int y, int width, int height
     ShowWindow(mHwnd, SW_SHOWNORMAL);
     UpdateWindow(mHwnd);
 
-    if (mHwnd && ehi)
+    if (mHwnd)
     {
         mState = ws_normal;
-        mEHI = ehi;
-        return true;
+        mInitialized = true;
+        return mInitialized;
     }
     return false;
 }
@@ -99,12 +102,12 @@ LRESULT CALLBACK RenderWindow::winProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             if( LOWORD(wParam) == WA_INACTIVE )
             {
                 pThis->mState = ws_lostfocus;
-                pThis->mEHI->pause();
+                pThis->mCurrentHandler->pause();
             }
             else
             {
                 pThis->mState = ws_normal;
-                pThis->mEHI->restore();
+                pThis->mCurrentHandler->restore();
             }
             return 0;
 
@@ -116,14 +119,14 @@ LRESULT CALLBACK RenderWindow::winProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             if(wParam == SIZE_MINIMIZED)
             {
                 pThis->mState = ws_minimized;
-                pThis->mEHI->pause();
+                pThis->mCurrentHandler->pause();
             }
             // max button clicked
             else if (wParam == SIZE_MAXIMIZED)
             {
                 pThis->mState = ws_maximized;
-                pThis->mEHI->resize(pThis->mWidth, pThis->mHeight);
-                pThis->mEHI->restore();
+                pThis->mCurrentHandler->resize(pThis->mWidth, pThis->mHeight);
+                pThis->mCurrentHandler->restore();
             }
             else if( wParam == SIZE_RESTORED )
             {
@@ -131,27 +134,27 @@ LRESULT CALLBACK RenderWindow::winProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPA
                 if (pThis->mState == ws_minimized || pThis->mState == ws_maximized)
                 {
                     pThis->mState = ws_normal;
-                    pThis->mEHI->resize(pThis->mWidth, pThis->mHeight);
-                    pThis->mEHI->restore();
+                    pThis->mCurrentHandler->resize(pThis->mWidth, pThis->mHeight);
+                    pThis->mCurrentHandler->restore();
                 }
                 else if(pThis->mState == ws_resizing)
                 {
                     
                 }
                 else
-                    pThis->mEHI->resize(pThis->mWidth, pThis->mHeight);
+                    pThis->mCurrentHandler->resize(pThis->mWidth, pThis->mHeight);
             }
             return 0;
             
         case WM_ENTERSIZEMOVE:
             pThis->mState = ws_resizing;
-            pThis->mEHI->pause();
+            pThis->mCurrentHandler->pause();
             return 0;
 
         case WM_EXITSIZEMOVE:
             pThis->mState = ws_normal;
-            pThis->mEHI->resize(pThis->mWidth, pThis->mHeight);
-            pThis->mEHI->restore();
+            pThis->mCurrentHandler->resize(pThis->mWidth, pThis->mHeight);
+            pThis->mCurrentHandler->restore();
             return 0;
 
         default:
@@ -177,4 +180,14 @@ uint32 RenderWindow::getWidth()
 uint32 RenderWindow::getHeight()
 {
     return mHeight;
+}
+
+void RenderWindow::hookEventHandler( EventHandlerInterface* evi )
+{
+    mCurrentHandler = evi;
+}
+
+void RenderWindow::unhookEventHandler()
+{
+    mCurrentHandler = &gNullHandler;
 }

@@ -15,9 +15,10 @@ RenderCore::RenderCore()
 {
     // Owned stuff
     mRI = NULL;
-    mMainWindow = NULL;
+    mInitialized = false;
 
     // Referenced stuff
+    mMainWindow = NULL;
 }
 
 RenderCore::~RenderCore()
@@ -31,6 +32,7 @@ RenderCore::~RenderCore()
 
 bool RenderCore::init(RenderWindow* rw)
 {
+    if (mInitialized) return false;
     test_hook(at_render_core_init);
 
     mMainWindow = rw;
@@ -44,6 +46,7 @@ bool RenderCore::init(RenderWindow* rw)
     initPhaseTwoSingletons(mRI);
     test_hook(after_phase_2_singletons);
 
+    // Create viewport from game window
     if(mRI->createViewport(mMainWindow) == false) return false;
 
     return true;
@@ -62,5 +65,10 @@ bool RenderCore::exit()
 {
     clearPhaseTwoSingletons(mRI);
     return true;
+}
+
+bool RenderCore::isInitialized()
+{
+    return mInitialized;
 }
 

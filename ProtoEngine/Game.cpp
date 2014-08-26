@@ -10,7 +10,7 @@ TestHandler::TestHandler()
     mDebugInfo = L"Started";
 }
 
-void TestHandler::bind( Game* game )
+void TestHandler::bindImple( Game* game )
 {
 
 }
@@ -38,7 +38,7 @@ Win32EventHander::Win32EventHander()
     mRenderCore = NULL;
 }
 
-void Win32EventHander::bind( Game* game )
+void Win32EventHander::bindImple( Game* game )
 {
     mGame = game;
     mRenderCore = mGame->getRenderCore();
@@ -64,7 +64,10 @@ Game::Game()
 {
     // Heap resource section: begin
     mRenderCore = NULL;
+    mMainWindow = NULL;
     // Heap resource section: end
+
+    mInitialized = false;
 
     mGameTimer = NULL;
     mRenderTimer = NULL;
@@ -95,8 +98,11 @@ Game::~Game()
 
 bool Game::init()
 {
-    test_hook(at_game_init);
+    // Prevent double init
+    if (mInitialized)
+        return false;
 
+    test_hook(at_game_init);
     initPhaseOneSingletons();
 
     mGameTimer = Singleton<Profiler>::getInstance().createTimer(L"LogicStats", L"Logic Stats");
@@ -110,30 +116,35 @@ bool Game::init()
 
     // Init RenderWindow
     mMainWindow = new RenderWindow();
-    if (mMainWindow == NULL) return false;
-    if (mMainWindow->init(L"Test Main Window", 0, 0, rc.screen_width, rc.screen_height, mEHI) == false) return false;
+    if (NULL == mMainWindow) return false;
+    if (false == mMainWindow->init(L"Test Main Window", 0, 0, rc.screen_width, rc.screen_height) ) return false;
 
     // Init RenderCore
-    if (!mRenderCore)
-    {
-        mRenderCore = new RenderCore();
-        mRenderCore->init();
-    }
+    mRenderCore = new RenderCore();
+    if (NULL == mRenderCore) return false;
+    if (false == mRenderCore->init(mMainWindow)) return false;
 
     Singleton<Profiler>::getInstance().endTimer(mInitTimer);
     float time = mInitTimer->totalTime();
 
     // Have to bind after RenderCore is initialized
-    mEventHandler.bind(this);
-    return true;
+    mEventHandler.bindImple(this);
+    //mMainWindow->hookEventHandler(&mEventHandler);
+    mMainWindow->hookEventHandler(&mTestHandler);
+
+    mInitialized = true;
+    return mInitialized;
 }
 
 bool Game::exit()
 {
-    if (mRenderCore)
+    mMainWindow->unhookEventHandler();
+
+    if (mRenderCore && mRenderCore->isInitialized())
     {
         mRenderCore->exit();
         delete mRenderCore;
+        mRenderCore = NULL;
     }
 
     clearPhaseOneSingletons();
@@ -200,20 +211,20 @@ void Game::calcFrameTime()
         float avgGame = mGameTimeSum / mFrameCounter;
         float avgRendering = mRenderTimeSum / mFrameCounter;
         float avgFPS = 1000.f / avgFrame;
-        float avgMisc = avgFrame - avgFrame - avgGame;
+        float avgMisc = avgFrame - (avgRendering + avgGame);
 
         mFrameTimeSum = 0.f;
         mGameTimeSum = 0.f;
         mRenderTimeSum = 0.f;
         mFrameCounter = 0;
 
-        mRenderCore->getFrameDebugInfo(mRenderCoreDebugInfo);
-        mFrameDebugInfo << L"[" << mRenderCoreDebugInfo << "] | Frame: " << avgFrame 
+        mFrameDebugInfo 
+            << L"Frame: " << avgFrame 
             << L"ms | Game: " << avgGame 
             << L"ms | Render: " << avgRendering 
             << L"ms | Misc: " << avgMisc
             << L"ms | FPS: " << avgFPS;
-        mRenderCore->getActiveRenderWindow()->setTitleBarText(mFrameDebugInfo.str());
+        mMainWindow->setTitleBarText(mFrameDebugInfo.str());
         mFrameDebugInfo.str(L"");
     }
 }

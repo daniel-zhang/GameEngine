@@ -17,17 +17,17 @@ class Game;
 class EventHandlerInterface
 {
 public:
-    virtual void bind(Game* game) = 0;
-    virtual void pause() = 0;
-    virtual void restore() = 0;
-    virtual void resize(int newWidth, int newHeight) = 0;
+    virtual void bindImple(Game* game){} 
+    virtual void pause(){}
+    virtual void restore(){}
+    virtual void resize(int newWidth, int newHeight){} 
 };
 
 class TestHandler :  public EventHandlerInterface
 {
 public:
     TestHandler();
-    virtual void bind(Game* game); 
+    virtual void bindImple(Game* game); 
     virtual void pause();
     virtual void restore();
     virtual void resize(int newWidth, int newHeight);
@@ -41,7 +41,7 @@ class Win32EventHander : public EventHandlerInterface
 {
 public:
     Win32EventHander();
-    virtual void bind(Game* game);
+    virtual void bindImple(Game* game);
     virtual void pause();
     virtual void restore(); 
     virtual void resize(int newWidth, int newHeight);
@@ -51,17 +51,17 @@ protected:
     RenderCore* mRenderCore;
 };
 
-
 class Game
 {
 public:
-	Game();
-	~Game();
+    Game();
+    ~Game();
 
-	bool init();
-	bool exit();
+    bool isInitialized(){return mInitialized;}
+    bool init();
+    bool exit();
     // A windows msg pump
-	int32 runWin32();
+    int32 runWin32();
     RenderCore* getRenderCore();
 
 protected:
@@ -69,15 +69,17 @@ protected:
     void onRestore();
 
 protected:
-	void step(float delta);
-	void driveRenderCore();
+    void step(float delta);
+    void driveRenderCore();
     void calcFrameTime();
 
 protected:
-	Ticker mTicker;
+    bool mInitialized;
+    Ticker mTicker;
     Win32EventHander mEventHandler;
+    TestHandler mTestHandler;
     RenderWindow* mMainWindow;
-	RenderCore* mRenderCore;
+    RenderCore* mRenderCore;
 
     // Stat variables
 protected:

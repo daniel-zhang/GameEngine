@@ -24,10 +24,10 @@ public:
     RenderCore();
     ~RenderCore();
 
-    void getFrameDebugInfo(std::wstring& output);
+    bool isInitialized();
     bool init(RenderWindow* rw);
-	bool exit();
-	int draw();
+    bool exit();
+    int draw();
 
     void pause();
     void restore();

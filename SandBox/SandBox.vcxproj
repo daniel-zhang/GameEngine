@@ -67,10 +67,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="template_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="parser_test.h" />
     <ClInclude Include="parser_test2.h" />
+    <ClInclude Include="template_test.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sample_config.txt" />

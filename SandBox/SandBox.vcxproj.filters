@@ -11,10 +11,16 @@
     <Filter Include="Testcases\ConfigParser">
       <UniqueIdentifier>{88201f44-a195-4775-9d73-e605bfba9bb1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Testcases\TemplateTyped">
+      <UniqueIdentifier>{15808ba7-730d-4f2a-a1ce-7df4215d1133}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="template_test.cpp">
+      <Filter>Testcases\TemplateTyped</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -23,6 +29,9 @@
     </ClInclude>
     <ClInclude Include="parser_test2.h">
       <Filter>Testcases\ConfigParser</Filter>
+    </ClInclude>
+    <ClInclude Include="template_test.h">
+      <Filter>Testcases\TemplateTyped</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
