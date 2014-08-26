@@ -246,21 +246,30 @@ void Viewport::resize( float width, float height )
     if (width < 0 || height < 0)
         return;
 
+    mWidth = width;
+    mHeight = height;
+
+    /*
+    From MSDN: http://msdn.microsoft.com/en-us/library/windows/desktop/bb174577%28v=vs.85%29.aspx
+        You can't resize a swap chain unless you release all outstanding references to its back buffers. 
+        You must release all of its direct and indirect references on the back buffers in order for ResizeBuffers to succeed.
+    */
     mBackBuffer->clear();
     mDepthStencilBuffer->clear();
+    d3d_check(mSwapChain->ResizeBuffers(1, (uint32)width, (uint32)height, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
 
     //
-    // Create RTV over back buffer 
+    // Re-Create RTV 
     //
     d3d_check(mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&mBackBuffer->mBuffer)));
     d3d_check(mRI->mDevice->CreateRenderTargetView(mBackBuffer->mBuffer, 0, &mBackBuffer->mRenderTargetView));
 
     //
-    // Create DSV over depth/stencil buffer
+    // Re-Create DSV and depth/stencil buffer
     //
     D3D11_TEXTURE2D_DESC depthStencilDesc;
-    depthStencilDesc.Width     = (uint32)mWidth;
-    depthStencilDesc.Height    = (uint32)mHeight;
+    depthStencilDesc.Width     = (uint32)width;
+    depthStencilDesc.Height    = (uint32)height;
     depthStencilDesc.MipLevels = 1;
     depthStencilDesc.ArraySize = 1;
     depthStencilDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;

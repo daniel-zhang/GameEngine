@@ -31,7 +31,7 @@ public:
     void setSwapChain(SwapChainRT* inSwapChain);
     */
 
-    Viewport* createViewport(RenderWindow* rw);
+    bool createViewport(RenderWindow* rw);
     void setViewport(Viewport* vp);
     void setViewportByIndex(uint32 index);
 
@@ -47,7 +47,8 @@ public:
     ID3D11DeviceContext*		mCtx;
 
     bool mInitialized;
-    std::vector<Viewport*> mViewports;
+    //std::vector<Viewport*> mViewports;
+    Viewport* mViewport;
 };
 
 #endif

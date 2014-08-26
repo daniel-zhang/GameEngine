@@ -6,14 +6,21 @@ RenderInterface::RenderInterface()
 {
     mDevice = NULL;
     mCtx = NULL;
+    mViewport = NULL;
     mInitialized = false;
 }
 
 RenderInterface::~RenderInterface()
 {
     if (mCtx) mCtx->ClearState(); 
+    if (mViewport)
+    {
+        delete mViewport;
+        mViewport = NULL;
+    }
     safe_release(&mCtx);
     safe_release(&mDevice);
+    /*
     for (uint32 i = 0; i < mViewports.size(); ++i)
     {
         if (mViewports[i])
@@ -22,6 +29,7 @@ RenderInterface::~RenderInterface()
         }
     }
     mViewports.clear();
+    */
 }
 
 bool RenderInterface::init()
@@ -75,14 +83,12 @@ RenderTarget* RenderInterface::getRenderTarget()
 
 void RenderInterface::clearBackground( XMFLOAT4& color )
 {
-    //mActiveRenderTarget->clear(color);
-    mViewports[0]->clear(color);
+    mViewport->clear(color);
 }
 
 void RenderInterface::presentBackBuffer()
 {
-    //mSwapChain->swap();
-    mViewports[0]->flip();
+    mViewport->flip();
 }
 
 /*
@@ -92,25 +98,37 @@ void RenderInterface::setSwapChain( SwapChainRT* inSwapChain )
 }
 */
 
-Viewport* RenderInterface::createViewport( RenderWindow* rw )
+bool RenderInterface::createViewport( RenderWindow* rw )
 {
-    Viewport* vp = new Viewport();
-    if (vp->init(this, rw))
+    if (mViewport)
     {
-        mViewports.push_back(vp);
+        delete mViewport;
+        mViewport = NULL;
     }
-    return vp;
+
+    mViewport = new Viewport();
+    if (mViewport && mViewport->init(this, rw))
+    {
+        mViewport->attach();
+        return true;
+    }
+
+    return false;
 }
 
 void RenderInterface::setViewport(Viewport* vp)
 {
+    /*
     vp->attach();
+    */
 }
 
 void RenderInterface::setViewportByIndex( uint32 index )
 {
+    /*
     if (index < mViewports.size() && index >= 0)
         mViewports[index]->attach();
+        */
 }
 
 

@@ -27,6 +27,19 @@ public:
     ID3D11Texture2D* mBuffer;
 };
 
+/*
+TODO: Re-factor RenderTarget/Viewport organization
+
+RenderTarget:
+    resize();
+    clearBackground(color);
+    addViewport(viewport, index);
+    setAllViewports();
+    resizeViewportByIndex(index);
+    flip();
+
+    vector<Viewport> mViewports;
+*/
 class Viewport
 {
 public:

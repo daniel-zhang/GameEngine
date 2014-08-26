@@ -1,4 +1,5 @@
 #include "RenderWindow.h"
+#include "Game.h"
 
 RenderWindow::RenderWindow()
 {
@@ -6,6 +7,7 @@ RenderWindow::RenderWindow()
     mHwnd = NULL;
     mX = mY = 0;
     mWidth = mHeight = 0;
+    mEHI = NULL;
 }
 
 RenderWindow::~RenderWindow()
@@ -13,7 +15,7 @@ RenderWindow::~RenderWindow()
 
 }
 
-bool RenderWindow::init( std::wstring title, int x, int y, int width, int height )
+bool RenderWindow::init( std::wstring title, int x, int y, int width, int height, EventHandlerInterface* ehi )
 {
     mTitle = title;
     mX = x;
@@ -43,8 +45,13 @@ bool RenderWindow::init( std::wstring title, int x, int y, int width, int height
     ShowWindow(mHwnd, SW_SHOWNORMAL);
     UpdateWindow(mHwnd);
 
-
-    return mHwnd ? true : false;
+    if (mHwnd && ehi)
+    {
+        mState = ws_normal;
+        mEHI = ehi;
+        return true;
+    }
+    return false;
 }
 
 HWND RenderWindow::getReference()
@@ -85,6 +92,66 @@ LRESULT CALLBACK RenderWindow::winProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             // WM_DESTROY is sent when the window is being destroyed.
         case WM_DESTROY:
             PostQuitMessage(0);//Post a WM_QUIT, which makes GetMessage() to return 0.
+            return 0;
+
+        //Sent to both the window being activated and the window being deactivated
+        case WM_ACTIVATE:
+            if( LOWORD(wParam) == WA_INACTIVE )
+            {
+                pThis->mState = ws_lostfocus;
+                pThis->mEHI->pause();
+            }
+            else
+            {
+                pThis->mState = ws_normal;
+                pThis->mEHI->restore();
+            }
+            return 0;
+
+        case WM_SIZE:
+            // Keep local width/height in sync with UI
+            pThis->mWidth = LOWORD(lParam);
+            pThis->mHeight = HIWORD(lParam);
+            // min button clicked
+            if(wParam == SIZE_MINIMIZED)
+            {
+                pThis->mState = ws_minimized;
+                pThis->mEHI->pause();
+            }
+            // max button clicked
+            else if (wParam == SIZE_MAXIMIZED)
+            {
+                pThis->mState = ws_maximized;
+                pThis->mEHI->resize(pThis->mWidth, pThis->mHeight);
+                pThis->mEHI->restore();
+            }
+            else if( wParam == SIZE_RESTORED )
+            {
+                // restore button or task bar clicked
+                if (pThis->mState == ws_minimized || pThis->mState == ws_maximized)
+                {
+                    pThis->mState = ws_normal;
+                    pThis->mEHI->resize(pThis->mWidth, pThis->mHeight);
+                    pThis->mEHI->restore();
+                }
+                else if(pThis->mState == ws_resizing)
+                {
+                    
+                }
+                else
+                    pThis->mEHI->resize(pThis->mWidth, pThis->mHeight);
+            }
+            return 0;
+            
+        case WM_ENTERSIZEMOVE:
+            pThis->mState = ws_resizing;
+            pThis->mEHI->pause();
+            return 0;
+
+        case WM_EXITSIZEMOVE:
+            pThis->mState = ws_normal;
+            pThis->mEHI->resize(pThis->mWidth, pThis->mHeight);
+            pThis->mEHI->restore();
             return 0;
 
         default:
