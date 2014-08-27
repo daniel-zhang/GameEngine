@@ -16,12 +16,6 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-    if (mCam != NULL)
-    {
-        delete mCam;
-        mCam = NULL;
-    }
-
 }
 
 

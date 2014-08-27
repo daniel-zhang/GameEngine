@@ -65,11 +65,6 @@ Game::Game()
 
 Game::~Game()
 {
-    if (mScene)
-    {
-        delete mScene;
-        mScene = NULL;
-    }
     if (mRenderCore)
     {
         delete mRenderCore;
