@@ -4,7 +4,7 @@
 #include <string>
 #include "reference.h"
 
-class EventHandlerInterface;
+class InputHandlerInterface;
 class RenderWindow
 {
 public:
@@ -12,8 +12,8 @@ public:
     ~RenderWindow();
 
     bool isInitialized(){return mInitialized;}
-    void hookEventHandler(EventHandlerInterface* evi);
-    void unhookEventHandler();
+    void hookHandler(InputHandlerInterface* evi);
+    void unhookHandler();
     bool init(std::wstring title, int x, int y, int width, int height);
     void setTitleBarText(std::wstring& input);
     HWND getReference();
@@ -34,7 +34,7 @@ public:
     EWindowState mState;
     bool mInitialized;
 
-    EventHandlerInterface* mCurrentHandler;
+    InputHandlerInterface* mCurrentHandler;
     std::wstring mTitle, mClassName;
     int mX, mY;
     int mWidth, mHeight;

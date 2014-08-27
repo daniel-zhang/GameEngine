@@ -72,3 +72,8 @@ bool RenderCore::isInitialized()
     return mInitialized;
 }
 
+RenderInterface* RenderCore::getRenderInterface()
+{
+    return mRI;
+}
+

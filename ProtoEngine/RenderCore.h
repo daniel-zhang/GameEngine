@@ -28,9 +28,7 @@ public:
     bool init(RenderWindow* rw);
     bool exit();
     int draw();
-
-    void pause();
-    void restore();
+    RenderInterface* getRenderInterface();
 
 protected:
     RenderInterface* mRI;

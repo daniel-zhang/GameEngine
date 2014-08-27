@@ -21,8 +21,10 @@ public:
     // State query
     bool isInitialized();
 
-    // Operations
+    // Event handlers
+    void resizeViewport(float width, float height);
 
+    // Operations
     void presentBackBuffer();
 
     /*

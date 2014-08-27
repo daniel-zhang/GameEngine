@@ -121,6 +121,15 @@
     <ClCompile Include="VertexFormat.cpp">
       <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtoMath.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderCore.h">
@@ -218,6 +227,9 @@
     </ClInclude>
     <ClInclude Include="ProtoMath.h">
       <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

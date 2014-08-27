@@ -41,9 +41,9 @@ void DefaultMaterial::apply( RenderInterface* ri, Entity* entity )
     //
     // update material attributes
     //
-    XMFLOAT3& translation = entity->mTranslation;
-    XMFLOAT3& rotation = entity->mRotation;
-    XMFLOAT3& scaling = entity->mScaling;
+    const XMFLOAT3& translation = entity->getTranslation();
+    const XMFLOAT3& rotation = entity->getRotation();
+    const XMFLOAT3& scaling = entity->getScaling();
 
     // TODO: replace with XMMatrixTransformation
     XMStoreFloat4x4( 

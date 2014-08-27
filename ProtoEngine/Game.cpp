@@ -2,97 +2,83 @@
 #include "Game.h"
 #include "Profiler.h"
 #include "ConfigMgr.h"
+#include "RenderInterface.h"
 #include "TestHook.h"
-
-TestHandler::TestHandler()
-{
-    bStarted = true;
-    mDebugInfo = L"Started";
-}
-
-void TestHandler::bindImple( Game* game )
-{
-
-}
-
-void TestHandler::pause()
-{
-    mDebugInfo = L"paused";
-}
-
-void TestHandler::restore()
-{
-    mDebugInfo = L"started";
-}
-
-void TestHandler::resize( int newWidth, int newHeight )
-{
-
-}
 
 /////////////////////////////////////////////////////////////////////////
 
 Win32EventHander::Win32EventHander()
 {
     mGame = NULL;
-    mRenderCore = NULL;
 }
 
 void Win32EventHander::bindImple( Game* game )
 {
     mGame = game;
-    mRenderCore = mGame->getRenderCore();
+}
+bool Win32EventHander::isValid()
+{
+    return (mGame != NULL );
 }
 
 void Win32EventHander::pause()
 {
-
+    mGame->onPause();
 }
 
 void Win32EventHander::restore()
 {
-
+    mGame->onRestore();
 }
 
 void Win32EventHander::resize( int newWidth, int newHeight )
 {
-
+    mGame->onResize((float)newWidth, (float)newHeight);
 }
+
 
 /////////////////////////////////////////////////////////////////////////
 Game::Game()
 {
     // Heap resource section: begin
     mRenderCore = NULL;
-    mMainWindow = NULL;
+    mGameWindow = NULL;
+    mScene      = NULL;
     // Heap resource section: end
 
-    mInitialized = false;
+    mInitialized      = false;
+    mGamePaused       = false;
+    mRenderCorePaused = false;
 
-    mGameTimer = NULL;
-    mRenderTimer = NULL;
-    mInitTimer = NULL; 
-    mEnableStat = true;
     mFrameDebugInfo.precision(4);
-    mFrameTimeSum = 0.f;
-    mGameTimeSum = 0.f;
-    mRenderTimeSum = 0.f; 
-    mStatInterval = 300.f; // Gives average stat every 300ms
-    mFrameCounter = 0;
+    mGameTimer           = NULL;
+    mRenderTimer         = NULL;
+    mInitTimer           = NULL; 
+    mEnableStat          = true;
+    mFrameTimeSum        = 0.f;
+    mGameTimeSum         = 0.f;
+    mRenderTimeSum       = 0.f; 
+    mStatInterval        = 300.f; // Gives average stat every 300ms
+    mFrameCounter        = 0;
     mRenderCoreDebugInfo = L"";
 }
 
 Game::~Game()
 {
+    if (mScene)
+    {
+        delete mScene;
+        mScene = NULL;
+    }
     if (mRenderCore)
     {
         delete mRenderCore;
         mRenderCore = NULL;
     }
-    if (mMainWindow)
+    if (mGameWindow)
     {
-        delete mMainWindow;
-        mMainWindow = NULL;
+        delete mGameWindow;
+        mGameWindow = NULL;
     }
 }
 
@@ -111,26 +97,38 @@ bool Game::init()
 
     Singleton<Profiler>::getInstance().startTimer(mInitTimer);
 
+    //
     // Extract config obj
+    //
     RenderConfig& rc = Singleton<ConfigMgr>::getInstance().root.render_config;
 
+    //
     // Init RenderWindow
-    mMainWindow = new RenderWindow();
-    if (NULL == mMainWindow) return false;
-    if (false == mMainWindow->init(L"Test Main Window", 0, 0, rc.screen_width, rc.screen_height) ) return false;
+    //
+    mGameWindow = new RenderWindow();
+    if (NULL == mGameWindow) return false;
+    if (false == mGameWindow->init(L"Test Main Window", 0, 0, rc.screen_width, rc.screen_height) ) return false;
 
+    //
     // Init RenderCore
+    //
     mRenderCore = new RenderCore();
     if (NULL == mRenderCore) return false;
-    if (false == mRenderCore->init(mMainWindow)) return false;
+    if (false == mRenderCore->init(mGameWindow)) return false;
 
     Singleton<Profiler>::getInstance().endTimer(mInitTimer);
     float time = mInitTimer->totalTime();
 
-    // Have to bind after RenderCore is initialized
+    //
+    // Init Scene
+    //
+    mScene = mSceneBuilder.create();
+
+    //
+    // After init: bind after RenderCore is initialized
+    //
     mEventHandler.bindImple(this);
-    //mMainWindow->hookEventHandler(&mEventHandler);
-    mMainWindow->hookEventHandler(&mTestHandler);
+    mGameWindow->hookHandler(&mEventHandler);
 
     mInitialized = true;
     return mInitialized;
@@ -138,7 +136,7 @@ bool Game::init()
 
 bool Game::exit()
 {
-    mMainWindow->unhookEventHandler();
+    mGameWindow->unhookHandler();
 
     if (mRenderCore && mRenderCore->isInitialized())
     {
@@ -148,6 +146,8 @@ bool Game::exit()
     }
 
     clearPhaseOneSingletons();
+
+    mInitialized = false;
     return true;
 }
 
@@ -190,11 +190,15 @@ int32 Game::runWin32()
 
 void Game::step(float delta)
 {
-    //
+    if (mGamePaused)
+        return;
 }
 
 void Game::driveRenderCore()
 {
+    if (mRenderCorePaused)
+        return;
+
     mRenderCore->draw();
 }
 
@@ -224,7 +228,7 @@ void Game::calcFrameTime()
             << L"ms | Render: " << avgRendering 
             << L"ms | Misc: " << avgMisc
             << L"ms | FPS: " << avgFPS;
-        mMainWindow->setTitleBarText(mFrameDebugInfo.str());
+        mGameWindow->setTitleBarText(mFrameDebugInfo.str());
         mFrameDebugInfo.str(L"");
     }
 }
@@ -232,5 +236,22 @@ void Game::calcFrameTime()
 RenderCore* Game::getRenderCore()
 {
     return mRenderCore;
+}
+
+void Game::onPause()
+{
+    mGamePaused = true;
+    mRenderCorePaused = true;
+}
+
+void Game::onRestore()
+{
+    mGamePaused = false;
+    mRenderCorePaused = false;
+}
+
+void Game::onResize( float width, float height )
+{
+    mRenderCore->getRenderInterface()->resizeViewport(width, height);
 }
 

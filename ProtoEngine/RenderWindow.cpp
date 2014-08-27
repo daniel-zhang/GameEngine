@@ -1,7 +1,7 @@
 #include "RenderWindow.h"
 #include "Game.h"
 
-EventHandlerInterface gNullHandler;
+InputHandlerInterface gNullHandler;
 RenderWindow::RenderWindow()
 {
     mClassName = L"RenderWindow";
@@ -182,12 +182,12 @@ uint32 RenderWindow::getHeight()
     return mHeight;
 }
 
-void RenderWindow::hookEventHandler( EventHandlerInterface* evi )
+void RenderWindow::hookHandler( InputHandlerInterface* evi )
 {
     mCurrentHandler = evi;
 }
 
-void RenderWindow::unhookEventHandler()
+void RenderWindow::unhookHandler()
 {
     mCurrentHandler = &gNullHandler;
 }

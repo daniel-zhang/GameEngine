@@ -10,45 +10,34 @@
 #include "RenderCore.h"
 #include "Ticker.h"
 #include "RenderWindow.h"
+#include "Scene.h"
 
 class Timer;
 class Win32EventHander;
 class Game;
-class EventHandlerInterface
+
+class InputHandlerInterface
 {
 public:
     virtual void bindImple(Game* game){} 
+    virtual bool isValid(){return true;}
     virtual void pause(){}
     virtual void restore(){}
     virtual void resize(int newWidth, int newHeight){} 
 };
 
-class TestHandler :  public EventHandlerInterface
-{
-public:
-    TestHandler();
-    virtual void bindImple(Game* game); 
-    virtual void pause();
-    virtual void restore();
-    virtual void resize(int newWidth, int newHeight);
-
-public:
-    std::wstring mDebugInfo;
-    bool bStarted;
-};
-
-class Win32EventHander : public EventHandlerInterface
+class Win32EventHander : public InputHandlerInterface
 {
 public:
     Win32EventHander();
     virtual void bindImple(Game* game);
+    virtual bool isValid();
     virtual void pause();
     virtual void restore(); 
     virtual void resize(int newWidth, int newHeight);
 
 protected:
     Game* mGame;
-    RenderCore* mRenderCore;
 };
 
 class Game
@@ -60,13 +49,14 @@ public:
     bool isInitialized(){return mInitialized;}
     bool init();
     bool exit();
-    // A windows msg pump
     int32 runWin32();
     RenderCore* getRenderCore();
 
 protected:
+    friend class Win32EventHander;
     void onPause();
     void onRestore();
+    void onResize(float width, float height);
 
 protected:
     void step(float delta);
@@ -74,15 +64,19 @@ protected:
     void calcFrameTime();
 
 protected:
+    // Game state
     bool mInitialized;
+    bool mGamePaused;
+    bool mRenderCorePaused;
+
     Ticker mTicker;
     Win32EventHander mEventHandler;
-    TestHandler mTestHandler;
-    RenderWindow* mMainWindow;
+    RenderWindow* mGameWindow;
     RenderCore* mRenderCore;
+    SceneBuilder mSceneBuilder;
+    Scene* mScene;
 
     // Stat variables
-protected:
     bool mEnableStat;
     Timer* mGameTimer;
     Timer* mRenderTimer;
