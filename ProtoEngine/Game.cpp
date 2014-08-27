@@ -187,6 +187,7 @@ void Game::step(float delta)
 {
     if (mGamePaused)
         return;
+
 }
 
 void Game::driveRenderCore()
