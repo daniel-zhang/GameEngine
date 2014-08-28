@@ -101,12 +101,14 @@ class ShaderEffect
 {
 public:
     ShaderEffect();
-    bool init(ID3DX11Effect* inFx, SmartEnum_ShaderVarTag* inTagDefintion);
+    bool init(RenderInterface* ri, ID3DX11Effect* inFx, SmartEnum_ShaderVarTag* inTagDefintion);
     void clear();
     bool trySetFrom(MaterialAttributeInterface* matAttr);
 
 public:
     ID3DX11Effect* mFx;
+    std::string mVertexFormatString;
+    ID3D11InputLayout* mInputLayout;
 
     SmartEnum_ShaderVarTag* mTagDefinition;
     typedef std::map<NativeEnum_ShaderVarTag, ShaderParameter> TParameterMap;

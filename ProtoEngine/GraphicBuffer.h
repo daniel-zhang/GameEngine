@@ -34,8 +34,8 @@ class IndexBuffer
 {
 public:
     typedef std::vector<uint32> TLocalCache;
-	IndexBuffer();
-	~IndexBuffer();
+    IndexBuffer();
+    ~IndexBuffer();
 
     void setLocalCache(TLocalCache& inIndices);
     bool createStaticGpuDataFromCache(RenderInterface* ri);
@@ -187,7 +187,7 @@ public:
         */
     }
     /*
-	bool createStatic(RenderInterface* ri, VERTEX_TYPE* pData, uint32 numVertices )
+    bool createStatic(RenderInterface* ri, VERTEX_TYPE* pData, uint32 numVertices )
     {
         if(numVertices == 0 || pData == NULL) return false;
         mNumGpuVert = numVertices;
@@ -207,7 +207,7 @@ public:
         d3d_check(ri->mDevice->CreateBuffer(&vbd, &vinitData, &mBuffer));
         return true;
     }
-	bool createDynamic(RenderInterface* ri, uint32 numVertices)
+    bool createDynamic(RenderInterface* ri, uint32 numVertices)
     {
         if (numVertices == 0) return false;
         mNumGpuVert = numVertices;
@@ -224,7 +224,7 @@ public:
         d3d_check(ri->mDevice->CreateBuffer(&vbd, 0, &mBuffer));
         return true;
     }
-	bool updateDynamic(RenderInterface* ri, VERTEX_TYPE* inputVertices, uint32 inputNum)
+    bool updateDynamic(RenderInterface* ri, VERTEX_TYPE* inputVertices, uint32 inputNum)
     {
         if(!mIsDynamic) return false;
         // Treat as failure when number of input vertices exceeds buffer size ?

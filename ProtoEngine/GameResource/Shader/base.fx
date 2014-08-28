@@ -9,7 +9,8 @@ struct Material
     float4 Reflect;
 };
 
-struct VertexIn
+// VS input
+struct PosNormalTex
 {
     float3 PosL    : POSITION;
     float3 NormalL : NORMAL;
@@ -62,7 +63,7 @@ SamplerState AnisotropicSamplerState <string tag="anisotropic_sampler";>
 //
 // Shaders
 //
-VertexOut VS(VertexIn vin)
+VertexOut VS(PosNormalTex vin)
 {
     VertexOut vout;
     
@@ -84,7 +85,7 @@ float4 PS(VertexOut pin) : SV_TARGET
 	return float4(0.3f, 0.3f, 0.3f, 1.f);
 }
 
-technique11 BaseTech<bool default_tech=true;>
+technique11 BaseTech<string VertexFormat="PosNormalTex";>
 {
 	pass p0
 	{

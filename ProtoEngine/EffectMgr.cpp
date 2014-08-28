@@ -96,7 +96,7 @@ bool EffectMgr::init( RenderInterface* ri )
         d3d_check( D3DX11CreateEffectFromMemory(rawMem.mData, rawMem.mSize, 0, ri->mDevice, &fx) );
 
         ShaderEffect* effect = new ShaderEffect;
-        if(effect->init(fx, &mTagDefinition))
+        if(effect->init(ri, fx, &mTagDefinition))
             mEffects.push_back(effect);
         else
             ; //throw error

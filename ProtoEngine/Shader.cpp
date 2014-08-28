@@ -1,6 +1,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "EffectMgr.h"
+#include "GraphicBuffer.h"
 /*
 #define DEF_SHADER_VAR_TAG(e) mDefinitions.push_back(ShaderVarTag(e, #e))
 
@@ -219,7 +220,7 @@ ShaderEffect::ShaderEffect()
     clear();
 }
 
-bool ShaderEffect::init( ID3DX11Effect* inFx, SmartEnum_ShaderVarTag* inTagDefintion )
+bool ShaderEffect::init( RenderInterface* ri, ID3DX11Effect* inFx, SmartEnum_ShaderVarTag* inTagDefintion )
 {
     if (!inFx->IsValid())
     {
@@ -260,6 +261,29 @@ bool ShaderEffect::init( ID3DX11Effect* inFx, SmartEnum_ShaderVarTag* inTagDefin
             {
                 // Tag is not defined
                 mTagsNotDefined.push_back(tagstr);
+            }
+        }
+    }
+    // Parse annotation of technique
+    ID3DX11EffectTechnique* tech = mFx->GetTechniqueByIndex(0);
+    if(tech->IsValid())
+    {
+        ID3DX11EffectVariable* vertFormat = tech->GetAnnotationByName("VertexFormat");
+        if (vertFormat->IsValid())
+        {
+            const char* lpcsVF;
+            vertFormat->AsString()->GetString(&lpcsVF);
+            mVertexFormatString = lpcsVF;
+            if (mVertexFormatString.compare("PosNormalTex") == 0)
+            {
+                D3DX11_PASS_DESC passDesc;
+                tech->GetPassByIndex(0)->GetDesc(&passDesc);
+                d3d_check(ri->mDevice->CreateInputLayout( 
+                    InputLayoutDesc<e_pos_normal_tex>::format_desc,
+                    InputLayoutDesc<e_pos_normal_tex>::desc_num,
+                    passDesc.pIAInputSignature, 
+                    passDesc.IAInputSignatureSize, 
+                    &mInputLayout));
             }
         }
     }
