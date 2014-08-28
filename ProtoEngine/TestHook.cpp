@@ -3,6 +3,7 @@
 #include "OSInterface.h"
 #include "ShaderEnum.h"
 #include "EffectMgr.h"
+#include "GraphicBuffer.h"
 
 #if defined DEBUG || defined _DEBUG
     #define  ENABLE_RUNTIME_TEST
@@ -26,6 +27,7 @@ void test_render_core_init()
 void test_phase_2_singletons()
 {
     effect_mgr_test();
+    graphic_buffer_test();
 }
 
 //

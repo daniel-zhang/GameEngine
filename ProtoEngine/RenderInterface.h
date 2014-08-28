@@ -2,9 +2,7 @@
 #define RENDER_INTERFACE_H
 
 #include "reference.h"
-
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
+#include "GraphicBuffer.h"
 
 class RenderWindow;
 class SwapChainRT;
@@ -41,8 +39,10 @@ public:
 
     void setShader();
 
+    /*
     void setIndexBuffer(IndexBuffer* pIB){}
-    void setVertexBuffer(VertexBuffer* pVB){}
+    void setVertexBuffer(VertexBuffer<VertexFactory<e_pos_normal_tan_tex>>* pVB){}
+    */
 
 public:
     ID3D11Device*				mDevice;

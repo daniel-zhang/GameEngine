@@ -76,7 +76,6 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConfigMgr.cpp" />
-    <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="EffectMgr.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="MaterialAttribute.cpp" />
@@ -86,7 +85,6 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameResourcePath.cpp" />
-    <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="OSInterface.cpp" />
@@ -99,8 +97,7 @@
     <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="TestHook.cpp" />
     <ClCompile Include="Ticker.cpp" />
-    <ClCompile Include="VertexBuffer.cpp" />
-    <ClCompile Include="VertexFormat.cpp" />
+    <ClCompile Include="GraphicBuffer.cpp" />
     <ClCompile Include="WinLauncher.h" />
   </ItemGroup>
   <ItemGroup>
@@ -139,7 +136,6 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigMgr.h" />
-    <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="EffectMgr.h" />
     <ClInclude Include="MaterialAttribute.h" />
     <ClInclude Include="ProtoMath.h" />
@@ -147,7 +143,6 @@
     <ClInclude Include="ForwardDecls.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameResourcePath.h" />
-    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Renderable.h" />
@@ -167,8 +162,7 @@
     <ClInclude Include="TestHook.h" />
     <ClInclude Include="Ticker.h" />
     <ClInclude Include="typedefs.h" />
-    <ClInclude Include="VertexBuffer.h" />
-    <ClInclude Include="VertexFormat.h" />
+    <ClInclude Include="GraphicBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,6 +20,7 @@ void MeshSection::drawSelf( RenderInterface* ri )
 
 void Mesh::drawSelf( RenderInterface* ri )
 {
+    /*
     ri->setIndexBuffer(&mIB);
     ri->setVertexBuffer(&mDynVB);
 
@@ -27,6 +28,7 @@ void Mesh::drawSelf( RenderInterface* ri )
     {
         sections[i].drawSelf(ri);
     }
+    */
 }
 
 void Mesh::setLinkage( Entity* entity )

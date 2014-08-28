@@ -67,15 +67,6 @@
     <ClCompile Include="Ticker.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="VertexBuffer.cpp">
-      <Filter>RenderCore\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="DepthBuffer.cpp">
-      <Filter>RenderCore\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="IndexBuffer.cpp">
-      <Filter>RenderCore\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="RenderTarget.cpp">
       <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
@@ -118,9 +109,6 @@
     <ClCompile Include="EffectMgr.cpp">
       <Filter>RenderCore\Material</Filter>
     </ClCompile>
-    <ClCompile Include="VertexFormat.cpp">
-      <Filter>RenderCore\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -129,6 +117,9 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicBuffer.cpp">
+      <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,15 +155,6 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexBuffer.h">
-      <Filter>RenderCore\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="DepthBuffer.h">
-      <Filter>RenderCore\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="IndexBuffer.h">
-      <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="RenderStateMgr.h">
       <Filter>RenderCore\xxxMgr</Filter>
@@ -222,14 +204,14 @@
     <ClInclude Include="EffectMgr.h">
       <Filter>RenderCore\Material</Filter>
     </ClInclude>
-    <ClInclude Include="VertexFormat.h">
-      <Filter>RenderCore\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="ProtoMath.h">
       <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicBuffer.h">
+      <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

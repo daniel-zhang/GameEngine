@@ -7,6 +7,7 @@
 #include "reference.h"
 #include "Singleton.h"
 #include "Shader.h"
+#include "GraphicBuffer.h"
 
 class RenderInterface;
 
@@ -43,6 +44,7 @@ public:
     bool destroy();
 
     ShaderEffect* getEffect(std::string& inEffectName);
+    
 
 protected:
     void buildEffectNameMap();

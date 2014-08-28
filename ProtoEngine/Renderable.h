@@ -3,26 +3,19 @@
 
 #include <vector>
 #include "reference.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
+#include "GraphicBuffer.h"
 
 class Entity;
 class RenderInterface;
 class Mesh;
 class MaterialInterface;
 
-class IRenderable
+class MeshSection 
 {
 public:
-    virtual void drawSelf(class RenderInterface* ri) = 0;
-};
+    void drawSelf(RenderInterface* ri);
 
-class MeshSection : public IRenderable
-{
-public:
-    virtual void drawSelf(RenderInterface* ri);
-
-public:
+protected:
     MaterialInterface* mMaterial;
 
     // Linkages
@@ -33,17 +26,19 @@ public:
     Entity* mEntity;
 };
 
-class Mesh : public IRenderable
+class Mesh 
 {
 public:
+    void drawSelf(RenderInterface* ri);
+    void setLinkage(Entity* entity);
+
+protected:
     std::vector<MeshSection> sections;
 
+    /*
     DynamicVertexBuffer mDynVB;
     IndexBuffer mIB;
-
-public:
-    virtual void drawSelf(RenderInterface* ri);
-    void setLinkage(Entity* entity);
+    */
 };
 
 #endif
