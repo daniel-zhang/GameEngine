@@ -180,5 +180,5 @@ void effect_mgr_test()
     ShaderEffect* effect = Singleton<EffectMgr>::getInstance().getEffect(effectName);
     ShaderInterface* shader = new ShaderInterface;
     shader->init(effectName, std::string("BaseTech"), 0);
-    shader->setMaterial(&baseMat);
+    //shader->setMaterial(&baseMat);
 }

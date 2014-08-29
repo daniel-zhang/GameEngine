@@ -77,6 +77,7 @@ template<> const D3D11_INPUT_ELEMENT_DESC* InputLayoutDesc<e_pos_normal_tex>::fo
 template<> const uint32 InputLayoutDesc<e_pos_normal_tan_tex>::desc_num = 4; 
 template<> const D3D11_INPUT_ELEMENT_DESC* InputLayoutDesc<e_pos_normal_tan_tex>::format_desc = DESC_POS_NORMAL_TANGENT_TEX; 
 
+#include "Material.h"
 void graphic_buffer_test()
 {
     StaticAssert<sizeof(VertexFactory<e_pos_normal_tex>) == sizeof(VertexBuffer<e_pos_normal_tex>::VERTEX_TYPE) >::validate();
@@ -86,10 +87,28 @@ void graphic_buffer_test()
 
     VertexBuffer<e_pos_normal_tex> testBuffer;
 
-    Bar<uint32, e_shader_var_0> bar;
-    if (bar.mSem == e_shader_var_0)
-    {
-        bar.mSem;
-    }
+    ////////////////////////////////////
+    SimParam target;
+
+    uint32 t0 = 100;
+    int t1 = 10;
+    bool t2 = true;
+
+    // Datatype, semantic, name
+    TVarRef<uint32, e_shader_var_0> var0;
+    TVarRef<int, e_shader_var_1> var1;
+    TVarRef<bool, e_shader_var_2> var2;
+
+    var0.bind(t0);
+    var1.bind(t1);
+    var2.bind(t2);
+
+    var0.sync_to(&target);
+    var1.sync_to(&target);
+    var2.sync_to(&target);
+
+    DefaultMaterial m(std::string(""));
+    m.mShaderData;
+
 }
 

@@ -9,10 +9,9 @@
 #include "d3dx11effect.h"
 #include "ShaderEnum.h"
 
-class MaterialAttributeInterface;
-class MaterialInterface;
+class ShaderDataReference;
+class AttrReferenceInterface;
 class RenderInterface;
-
 //
 // Define all variables in all shaders
 //
@@ -89,13 +88,11 @@ class ShaderParameter
 public:
     ShaderParameter(ID3DX11EffectVariable* var, NativeEnum_ShaderVarTag tag);
 
-    void setFrom(MaterialAttributeInterface* matAttr);
+    void assign_from(AttrReferenceInterface* attrRef);
 
     NativeEnum_ShaderVarTag mTag;
     ID3DX11EffectVariable* mVar;
 };
-
-class ShaderInterface;
 
 class ShaderEffect 
 {
@@ -103,7 +100,11 @@ public:
     ShaderEffect();
     bool init(RenderInterface* ri, ID3DX11Effect* inFx, SmartEnum_ShaderVarTag* inTagDefintion);
     void clear();
-    bool trySetFrom(MaterialAttributeInterface* matAttr);
+    void setShaderData(ShaderDataReference& shaderData);
+    void apply(){}
+
+protected:
+    bool try_assign_from(AttrReferenceInterface* attrRef);
 
 public:
     ID3DX11Effect* mFx;
@@ -120,6 +121,7 @@ public:
     std::vector<std::string> mTagsNotDefined;
 };
 
+/*
 class ShaderInterface
 {
 public:
@@ -130,7 +132,7 @@ public:
     bool isValid();
     void clear();
 
-    void setMaterial(MaterialInterface* material);
+    //void setMaterial(MaterialInterface* material);
     void apply(RenderInterface* ri);
 
     ShaderEffect* getOwningEffect();
@@ -144,8 +146,8 @@ protected:
     ShaderEffect* mEffect;
     ID3DX11EffectTechnique* mTech;
     ID3DX11EffectPass* mPass;
-
 };
+*/
 
 /*
 Use-case:

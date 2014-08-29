@@ -1,6 +1,5 @@
 #include "Entity.h"
-#include "Renderable.h"
-
+#include "Mesh.h"
 
 void IControllable::walk( float d )
 {

@@ -94,9 +94,6 @@
     <ClCompile Include="MaterialAttribute.cpp">
       <Filter>RenderCore\Material</Filter>
     </ClCompile>
-    <ClCompile Include="Renderable.cpp">
-      <Filter>RenderCore\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -119,6 +116,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="GraphicBuffer.cpp">
+      <Filter>RenderCore\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
       <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -195,9 +195,6 @@
     <ClInclude Include="ShaderEnum.h">
       <Filter>RenderCore\Material</Filter>
     </ClInclude>
-    <ClInclude Include="Renderable.h">
-      <Filter>RenderCore\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="TestHook.h">
       <Filter>TEST_HOOK</Filter>
     </ClInclude>
@@ -211,6 +208,15 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="GraphicBuffer.h">
+      <Filter>RenderCore\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributeReference.h">
+      <Filter>RenderCore\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderDataReference.h">
+      <Filter>RenderCore\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
       <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
   </ItemGroup>

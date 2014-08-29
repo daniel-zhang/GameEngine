@@ -1,9 +1,9 @@
-#include "Renderable.h"
+#include "Mesh.h"
 #include "Entity.h"
 #include "RenderInterface.h"
 #include "Material.h"
 
-void MeshSection::drawSelf( RenderInterface* ri )
+void SubMesh::drawSelf( RenderInterface* ri )
 {
     // set light
     // set cam

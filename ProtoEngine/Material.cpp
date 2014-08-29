@@ -5,77 +5,64 @@
 #include "Shader.h"
 #include "EffectMgr.h"
 
-MaterialInterface::MaterialInterface(std::string& inShaderName)
+////////////////////////////////////////////////////////
+DefaultMaterial::DefaultMaterial(std::string shaderName) : mDefaultShaderName(shaderName)
 {
-    mShader = new ShaderInterface();
-    // TODO
-    mShader->init(std::string(), std::string(), 0 );
+    mShader = NULL;
+    buildDefaultAttributes();
+    buildShaderDataReference();
+}
+DefaultMaterial::~DefaultMaterial()
+{
+    if (mShader != NULL) { delete mShader; mShader = NULL; }
 }
 
-MaterialInterface::~MaterialInterface()
-{
-    for (uint32 i = 0; i < mAttributes.size(); ++i)
-    {
-        if (mAttributes[i])
-        {
-            delete mAttributes[i];
-        }
-    }
-    mAttributes.clear();
-
-    if (mShader != NULL)
-    {
-        delete mShader;
-        mShader = NULL;
-    }
-}
-
-DefaultMaterial::DefaultMaterial( std::string& shaderName ) : MaterialInterface(shaderName)
-{
-    setDefault();
-}
-
-
-void DefaultMaterial::apply( RenderInterface* ri, Entity* entity )
-{
-    //
-    // update material attributes
-    //
+//void DefaultMaterial::apply( RenderInterface* ri, Entity* entity )
+//{
+    /*
+    TODO: replace with XMMatrixTransformation:
+        XMINLINE XMMATRIX XMMatrixTransformation
+        (
+        FXMVECTOR ScalingOrigin, 
+        FXMVECTOR ScalingOrientationQuaternion, 
+        FXMVECTOR Scaling, 
+        CXMVECTOR RotationOrigin, 
+        CXMVECTOR RotationQuaternion, 
+        CXMVECTOR Translation
+    ) */
+    /*
     const XMFLOAT3& translation = entity->getTranslation();
     const XMFLOAT3& rotation = entity->getRotation();
     const XMFLOAT3& scaling = entity->getScaling();
-
-    // TODO: replace with XMMatrixTransformation
-    XMStoreFloat4x4( 
-        mpLocalToWorld->pData, 
-        XMMatrixMultiply( XMMatrixTranslation(translation.x, translation.y, translation.z ), XMMatrixScaling(scaling.x, scaling.y, scaling.z ))
-        );
+    // Rotation is for now ignored
+    //XMStoreFloat4x4( &mLocalToWorld, XMMatrixMultiply( XMMatrixTranslation(translation.x, translation.y, translation.z ), XMMatrixScaling(scaling.x, scaling.y, scaling.z )) );
+    */
 
     // TODO: set a real map
-    mpDiffuseMap->pData = NULL;
+//    mDiffuseMap = NULL;
 
-    //
-    // Select shader(effect + tech) and sync
-    //
-    mShader->setMaterial(this);
+    //mShader->setMaterial(this);
+//}
 
-    //mShader->apply_default(ri);
+void DefaultMaterial::determinShaderToLink()
+{
+    mShader = Singleton<EffectMgr>::getInstance().getEffect(mDefaultShaderName);
 }
 
-void DefaultMaterial::setDefault()
+void DefaultMaterial::buildDefaultAttributes()
 {
-    // Per object material attribute
-    mpLocalToWorld = new MaterialAttr<XMFLOAT4X4>(e_local_to_world);
-    mpDiffuseMap = new MaterialAttr<ID3D11ShaderResourceView>(e_texture);
-    // TODO: mpDiffuseMap->pData = TextureMgr::someTexture()
-    mpObjMaterial = new MaterialAttr<MeshMaterial>(e_plain_material);
-    mpObjMaterial->pData->Ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-    mpObjMaterial->pData->Diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 2.0f);
-    mpObjMaterial->pData->Specular= XMFLOAT4(0.3f, 0.3f, 0.3f, 3.0f);
 
-    mAttributes.push_back(mpLocalToWorld);
-    mAttributes.push_back(mpDiffuseMap);
-    mAttributes.push_back(mpObjMaterial);
-
+    //ZeroMemory(&mLocalToWorld, sizeof(XMFLOAT4X4));
+    mDiffuseMap = NULL;
+    mMeshMaterial.ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+    mMeshMaterial.diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 2.0f);
+    mMeshMaterial.specular = XMFLOAT4(0.3f, 0.3f, 0.3f, 3.0f);
     // Standalone render states
 }
+
+void DefaultMaterial::buildShaderDataReference()
+{
+    mShaderData.add<e_texture>(mDiffuseMap);
+    mShaderData.add<e_plain_material>(mMeshMaterial);
+}
+

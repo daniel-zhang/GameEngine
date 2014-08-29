@@ -2,6 +2,7 @@
 #include "Material.h"
 #include "EffectMgr.h"
 #include "GraphicBuffer.h"
+#include "ShaderDataReference.h"
 /*
 #define DEF_SHADER_VAR_TAG(e) mDefinitions.push_back(ShaderVarTag(e, #e))
 
@@ -138,83 +139,6 @@ bool MetaEffect::trySet( MaterialAttributeInterface* matAttrInterface )
 //
 //
 
-ShaderInterface::ShaderInterface()
-{
-    clear();
-}
-
-ShaderInterface::ShaderInterface( std::string& inEffectName, std::string inTechName, uint32 inPassIndex )
-{
-    clear();
-    init(inEffectName, inTechName, inPassIndex );
-}
-
-void ShaderInterface::init( std::string& inEffectName, std::string inTechName, uint32 inPassIndex )
-{
-    mEffectName = inEffectName;
-    mTechName = inTechName;
-    mPassIndex = inPassIndex;
-
-    mEffect = Singleton<EffectMgr>::getInstance().getEffect(mEffectName);
-    if (!mEffect)
-    {
-        mIsValid = false;
-    }
-    else
-    {
-        mTech = mEffect->mFx->GetTechniqueByName(mTechName.c_str());
-        mPass = mTech->GetPassByIndex(mPassIndex);
-        if (mTech->IsValid() && mPass->IsValid())
-            mIsValid = true;
-        else
-            mIsValid = false;
-    }
-}
-
-
-bool ShaderInterface::isValid()
-{
-    return mIsValid;
-}
-
-void ShaderInterface::clear()
-{
-    mEffectName.clear(); 
-    mTechName.clear();
-    mPassIndex = 0;
-    mEffect = NULL;
-    mTech = NULL;
-    mPass = NULL;
-
-    mIsValid = false;
-}
-
-void ShaderInterface::setMaterial( MaterialInterface* inMaterial)
-{
-    for (uint32 i = 0; i < inMaterial->mAttributes.size(); ++i)
-    {
-        bool succ = mEffect->trySetFrom(inMaterial->mAttributes[i]);
-        if (succ)
-        {
-
-        }
-        else
-        {
-
-        }
-    }
-}
-
-void ShaderInterface::apply( RenderInterface* ri )
-{
-    // TODO
-}
-
-ShaderEffect* ShaderInterface::getOwningEffect()
-{
-    return mEffect;
-}
-
 ShaderEffect::ShaderEffect()
 {
     clear();
@@ -317,22 +241,109 @@ void ShaderEffect::clear()
     mTagsNotDefined.clear();
 }
 
-bool ShaderEffect::trySetFrom( MaterialAttributeInterface* matAttr )
+bool ShaderEffect::try_assign_from(AttrReferenceInterface* attrRef)
 {
     TParameterMap::iterator iter;
-    iter = mValidParams.find(matAttr->mTag);
+    iter = mValidParams.find(attrRef->tag_enum());
     if (iter != mValidParams.end())
     {
-        (iter->second).setFrom(matAttr);
+        attrRef->assign_to(&(iter->second));
+        //(iter->second).assign_from(attrRef);
         return true;
     }
     return false;
 }
 
+void ShaderEffect::setShaderData( ShaderDataReference& shaderData)
+{
+    uint32 targetSize = shaderData.mRefs.size();
+    for (uint32 i = 0;i < targetSize; ++i)
+    {
+        try_assign_from(shaderData.mRefs[i]);
+    }
+}
+
 ShaderParameter::ShaderParameter( ID3DX11EffectVariable* var, NativeEnum_ShaderVarTag tag ) 
     :mVar(var), mTag(tag) { }
 
-void ShaderParameter::setFrom( MaterialAttributeInterface* matAttr )
+void ShaderParameter::assign_from(AttrReferenceInterface* attrRef)
 {
-    matAttr->setTo(this);
+    attrRef->assign_to(this);
 }
+/*
+ShaderInterface::ShaderInterface()
+{
+    clear();
+}
+
+ShaderInterface::ShaderInterface( std::string& inEffectName, std::string inTechName, uint32 inPassIndex )
+{
+    clear();
+    init(inEffectName, inTechName, inPassIndex );
+}
+
+void ShaderInterface::init( std::string& inEffectName, std::string inTechName, uint32 inPassIndex )
+{
+    mEffectName = inEffectName;
+    mTechName = inTechName;
+    mPassIndex = inPassIndex;
+
+    mEffect = Singleton<EffectMgr>::getInstance().getEffect(mEffectName);
+    if (!mEffect)
+    {
+        mIsValid = false;
+    }
+    else
+    {
+        mTech = mEffect->mFx->GetTechniqueByName(mTechName.c_str());
+        mPass = mTech->GetPassByIndex(mPassIndex);
+        if (mTech->IsValid() && mPass->IsValid())
+            mIsValid = true;
+        else
+            mIsValid = false;
+    }
+}
+
+bool ShaderInterface::isValid()
+{
+    return mIsValid;
+}
+
+void ShaderInterface::clear()
+{
+    mEffectName.clear(); 
+    mTechName.clear();
+    mPassIndex = 0;
+    mEffect = NULL;
+    mTech = NULL;
+    mPass = NULL;
+
+    mIsValid = false;
+}
+void ShaderInterface::setMaterial( MaterialInterface* inMaterial)
+{
+    for (uint32 i = 0; i < inMaterial->mAttributes.size(); ++i)
+    {
+        bool succ = mEffect->trySetFrom(inMaterial->mAttributes[i]);
+        if (succ)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+}
+void ShaderInterface::apply( RenderInterface* ri )
+{
+    // TODO
+}
+ShaderEffect* ShaderInterface::getOwningEffect()
+{
+    return mEffect;
+}
+
+*/
+
+

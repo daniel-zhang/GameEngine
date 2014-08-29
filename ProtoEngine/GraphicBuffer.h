@@ -256,6 +256,9 @@ protected:
 
 void graphic_buffer_test();
 
+/////////////////////////////////////////////////////////////////////////////////////
+// THE FOLLOWING STUFF IS NOT ENGINE CODE, JUST TO TEST TEMPLATE SPECIALIZATION!
+/////////////////////////////////////////////////////////////////////////////////////
 // partial specialization
 enum ESemantic
 {
@@ -263,12 +266,101 @@ enum ESemantic
     e_shader_var_1, 
     e_shader_var_2,
 };
-template<typename DataType,  ESemantic sem>
-class Bar
+
+/*
+float
+xmfloat4
+xmfloat4x4             world_matrix
+ShaderResourceView     texture
+MeshMaterial           material
+*/
+class SimParam
 {
 public:
-    Bar():mSem(sem){}
-    DataType mData;
+    enum EMyType
+    {
+        e_raw = 0,
+        e_float,
+        e_int,
+        e_bool
+    };
+    void procRawMem(void* data, int offset, int count){mType = e_raw;}
+    void procFloat(float d){mType = e_float;}
+    void procInt(int d){mType = e_int;}
+    void procBool(bool d){mType = e_bool;}
+
+    EMyType mType;
+};
+
+class AutoAttrInterface
+{
+public:
+    virtual void sync_to(SimParam* target) = 0;
+    virtual ESemantic getSemantic() = 0;
+};
+
+#include <map>
+class SimParamCollection
+{
+public:
+    std::map<ESemantic, SimParam> mSemanticParamMap;
+    typedef std::map<ESemantic, SimParam>::iterator TMapIter ;
+
+    void set(AutoAttrInterface* aai)
+    {
+        TMapIter iter = mSemanticParamMap.find(aai->getSemantic());
+        if (iter != mSemanticParamMap.end())
+        {
+            aai->sync_to(&(iter->second));
+        }
+    }
+};
+
+template<typename DataType, ESemantic sem>
+class TVarRef : public AutoAttrInterface
+{
+public:
+    TVarRef():mSem(sem){}
+    void bind(DataType& data){mRef = &data;}
+    void sync_to(SimParam* target) { target->procRawMem(mRef, 0, sizeof(DataType)); }
+    ESemantic getSemantic(){return mSem;}
+
+    ESemantic mSem;
+    DataType* mRef;
+};
+template<typename DataType, ESemantic sem>
+class TVarRef<DataType*, sem> : public AutoAttrInterface
+{
+public:
+
+};
+
+template<ESemantic sem>
+class TVarRef<bool, sem> : public AutoAttrInterface
+{
+public:
+    TVarRef():mSem(sem)
+    {
+        mRef = NULL;
+    }
+    void bind(bool& data){mRef = &data;}
+    void sync_to(SimParam* target) { target->procBool(*mRef); }
+    ESemantic getSemantic(){return mSem;}
+    bool* mRef;
     const ESemantic mSem;
 };
+
+template<ESemantic sem>
+class TVarRef<int, sem> : public AutoAttrInterface
+{
+public:
+    TVarRef():mSem(sem){}
+    void bind(int& data){mRef = &data;}
+    void sync_to(SimParam* target) { target->procInt(*mRef); }
+    ESemantic getSemantic(){return mSem;}
+    int* mRef;
+    const ESemantic mSem;
+};
+
+
 #endif

@@ -1,5 +1,5 @@
-#ifndef I_RENDERABLE_H 
-#define I_RENDERABLE_H
+#ifndef MESH_H
+#define MESH_H
 
 #include <vector>
 #include "reference.h"
@@ -10,7 +10,7 @@ class RenderInterface;
 class Mesh;
 class MaterialInterface;
 
-class MeshSection 
+class SubMesh 
 {
 public:
     void drawSelf(RenderInterface* ri);
@@ -22,8 +22,8 @@ protected:
     uint32 index_start;
     uint32 index_offset;
 
-    Mesh* mMesh;
-    Entity* mEntity;
+    Mesh* mParentMesh;
+    Entity* mHostingEntity;
 };
 
 class Mesh 
@@ -33,12 +33,11 @@ public:
     void setLinkage(Entity* entity);
 
 protected:
-    std::vector<MeshSection> sections;
+    Entity* mHostingEntity;
+    std::vector<SubMesh*> mSubMeshes;
 
-    /*
-    DynamicVertexBuffer mDynVB;
-    IndexBuffer mIB;
-    */
+    IndexBuffer mIndexBuffer;
+    VertexBuffer<e_pos_normal_tex> mVertexBuffer;
 };
 
 #endif
