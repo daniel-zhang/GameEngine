@@ -256,4 +256,19 @@ protected:
 
 void graphic_buffer_test();
 
+// partial specialization
+enum ESemantic
+{
+    e_shader_var_0 = 0,
+    e_shader_var_1, 
+    e_shader_var_2,
+};
+template<typename DataType,  ESemantic sem>
+class Bar
+{
+public:
+    Bar():mSem(sem){}
+    DataType mData;
+    const ESemantic mSem;
+};
 #endif

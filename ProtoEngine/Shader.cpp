@@ -274,16 +274,31 @@ bool ShaderEffect::init( RenderInterface* ri, ID3DX11Effect* inFx, SmartEnum_Sha
             const char* lpcsVF;
             vertFormat->AsString()->GetString(&lpcsVF);
             mVertexFormatString = lpcsVF;
+
+            D3DX11_PASS_DESC passDesc;
+            tech->GetPassByIndex(0)->GetDesc(&passDesc);
+
             if (mVertexFormatString.compare("PosNormalTex") == 0)
             {
-                D3DX11_PASS_DESC passDesc;
-                tech->GetPassByIndex(0)->GetDesc(&passDesc);
                 d3d_check(ri->mDevice->CreateInputLayout( 
                     InputLayoutDesc<e_pos_normal_tex>::format_desc,
                     InputLayoutDesc<e_pos_normal_tex>::desc_num,
                     passDesc.pIAInputSignature, 
                     passDesc.IAInputSignatureSize, 
                     &mInputLayout));
+            }
+            else if (mVertexFormatString.compare("PosNormalTanTex") == 0)
+            {
+                d3d_check(ri->mDevice->CreateInputLayout( 
+                    InputLayoutDesc<e_pos_normal_tan_tex>::format_desc,
+                    InputLayoutDesc<e_pos_normal_tan_tex>::desc_num,
+                    passDesc.pIAInputSignature, 
+                    passDesc.IAInputSignatureSize, 
+                    &mInputLayout));
+            }
+            else
+            {
+                // invalid <string VertexFormat="...";>
             }
         }
     }

@@ -85,5 +85,11 @@ void graphic_buffer_test()
     StaticAssert<InputLayoutDesc<e_pos_normal_tan_tex>::desc_num == 4>::validate();
 
     VertexBuffer<e_pos_normal_tex> testBuffer;
+
+    Bar<uint32, e_shader_var_0> bar;
+    if (bar.mSem == e_shader_var_0)
+    {
+        bar.mSem;
+    }
 }
 
