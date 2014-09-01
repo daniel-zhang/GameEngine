@@ -63,4 +63,16 @@ protected:
     XMFLOAT4X4 mView;
 };
 
+class DirLight
+{
+public:
+    DirLight(){ZeroMemory(this, sizeof(this));}
+
+    XMFLOAT4 ambient;
+    XMFLOAT4 diffuse;
+    XMFLOAT4 specular;
+    XMFLOAT3 direction;
+    float Pad; // Pad the last float so we can set an array of lights if we wanted.
+};
+
 #endif
