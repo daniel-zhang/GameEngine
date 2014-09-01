@@ -4,6 +4,9 @@
 //#include "reference.h"
 #include "ProtoMath.h"
 #include "ShaderDataReference.h"
+#include "RenderInterface.h"
+
+class Scene;
 
 class IControllable
 {
@@ -27,6 +30,11 @@ public:
     const XMFLOAT3& getTranslation(){return mTranslation;}
     const XMFLOAT3& getScaling(){return mScaling;}
     const XMFLOAT3 getRotation(){return XMFLOAT3();}
+    /*
+    XMFLOAT3& getTranslation(){return mTranslation;}
+    XMFLOAT3& getScaling(){return mScaling;}
+    XMFLOAT3 getRotation(){return XMFLOAT3();}
+    */
 protected:
     bool mIsActive;
     XMFLOAT3 mTranslation;
@@ -43,41 +51,25 @@ class Mesh;
 class Entity : public IControllable
 {
 public:
-    void Entity()
-    {
-        XMStoreFloat4x4(
-            &mLocalToWorld, 
-            XMMatrixMultiply( XMMatrixTranslation(mTranslation.x, mTranslation.y, mTranslation.z), XMMatrixScaling(mScaling.x, mScaling.y, mScaling.z) )
-            );
-        buildShaderDataReference();
-        mMesh = NULL;
-    }
-    void attach(Mesh* mesh) { mMesh = mesh; }
-    void detach() { } 
+    Entity();
+    void attach(Mesh* mesh, RenderInterface* ri);
+    void detach() {} 
 
-    // Game loop call this one
-    void update(float delta)
-    {
-        XMStoreFloat4x4(
-            &mLocalToWorld, 
-            XMMatrixMultiply( XMMatrixTranslation(mTranslation.x, mTranslation.y, mTranslation.z), XMMatrixScaling(mScaling.x, mScaling.y, mScaling.z) )
-            );
-        // No rotation 
-        // TODO: replace with XMMatrixTransformation
-    }
+    void update(float delta);
+    void drawSelf(RenderInterface* ri); 
 
-    // Render loop call this one
-    void draw() { } 
+    void buildEntityShaderData();
+    ShaderDataReference& getEntityShaderData();
+    Scene* getSceneRef();
+    void setSceneRef(Scene* inScene);
 
-public:
-    ShaderDataReference mShaderData;
-    void buildShaderDataReference()
-    {
-        mShaderData.add<e_local_to_world>(mLocalToWorld);
-    }
-
+protected:
+    friend class scene;
+    ShaderDataReference mEntityShaderData;
     XMFLOAT4X4 mLocalToWorld;
-    Mesh* mMesh;
+    XMFLOAT4X4 mInvertTranpose_LocalToWorld;
+    Mesh* mMeshRef;
+    Scene* mSceneRef;
 };
 
 #endif

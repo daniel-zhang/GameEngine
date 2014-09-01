@@ -121,6 +121,9 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>RenderCore\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="DebugPrimitiveGenerator.cpp">
+      <Filter>RenderCore\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderCore.h">
@@ -219,6 +222,9 @@
     <ClInclude Include="Mesh.h">
       <Filter>RenderCore\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="DebugPrimitiveGenerator.h">
+      <Filter>RenderCore\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="dependency_manifest.txt">
@@ -229,6 +235,9 @@
     </None>
     <None Include="GameResource\Config\config.txt">
       <Filter>GameResource\Config</Filter>
+    </None>
+    <None Include="GameResource\Shader\LightHelper.fx">
+      <Filter>GameResource\Shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

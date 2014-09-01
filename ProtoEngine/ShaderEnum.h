@@ -8,6 +8,7 @@
 //
 //
 //
+/*
 enum EnumShaderVarTag
 {
     cam_pos = 0,
@@ -21,6 +22,7 @@ enum EnumShaderVarTag
     texture,
     anisotropic_sampler
 };
+*/
 
 
 template <typename NATIVE_ENUM_TYPE>
@@ -89,9 +91,10 @@ public:\
     decl(world_view_proj)\
     decl(tex_transform)\
     decl(world_inv_transpose)\
-    decl(plain_material)\
+    decl(mesh_material)\
     decl(texture)\
-    decl(anisotropic_sample)
+    decl(anisotropic_sample)\
+    decl(main_light)
 MAKE_SMART_ENUM(ShaderVarTag)
 #undef ShaderVarTag
 

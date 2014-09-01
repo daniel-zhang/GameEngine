@@ -52,6 +52,7 @@ bool RenderCore::init(RenderWindow* rw)
     return true;
 }
 
+/*
 int RenderCore::draw()
 {
     // place holder 
@@ -60,6 +61,7 @@ int RenderCore::draw()
 
     return 0;
 }
+*/
 
 bool RenderCore::exit()
 {

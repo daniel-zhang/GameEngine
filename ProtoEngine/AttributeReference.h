@@ -110,11 +110,13 @@ template<NativeEnum_ShaderVarTag TAG>
 class TAttrRef<ID3D11ShaderResourceView*, TAG> : public AttrReferenceInterface
 {
 public:
-    TAttrRef(ID3D11ShaderResourceView* input) : mTag(TAG) { mReference = &input; }
+    TAttrRef(ID3D11ShaderResourceView*& input) : mTag(TAG) { mReference = &input; }
     virtual NativeEnum_ShaderVarTag tag_enum() { return mTag; }
     virtual void assign_to(ShaderParameter* sp)
     {
-        if (mTag == sp->mTag) sp->mVar->AsShaderResource()->SetResource(*mReference);
+        if (mTag == sp->mTag) 
+            sp->mVar->AsShaderResource()->SetResource(*mReference);
+            //sp->mVar->AsShaderResource()->SetResource(NULL);
     }
 protected:
     ID3D11ShaderResourceView** mReference;

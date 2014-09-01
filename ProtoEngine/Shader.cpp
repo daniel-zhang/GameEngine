@@ -176,10 +176,10 @@ bool ShaderEffect::init( RenderInterface* ri, ID3DX11Effect* inFx, SmartEnum_Sha
                 ShaderParameter sp(var, eTag);
                 TParameterMap::const_iterator iter = mValidParams.find(eTag);
                 if (iter != mValidParams.end())
-                    mValidParams.insert(std::pair<NativeEnum_ShaderVarTag, ShaderParameter>(eTag, sp));
-                else
                     // Duplicated tags
                     mTagsDuplicated.push_back(sp);
+                else
+                    mValidParams.insert(std::pair<NativeEnum_ShaderVarTag, ShaderParameter>(eTag, sp));
             }
             else
             {
@@ -190,6 +190,7 @@ bool ShaderEffect::init( RenderInterface* ri, ID3DX11Effect* inFx, SmartEnum_Sha
     }
     // Parse annotation of technique
     ID3DX11EffectTechnique* tech = mFx->GetTechniqueByIndex(0);
+    mMainTech = tech;
     if(tech->IsValid())
     {
         ID3DX11EffectVariable* vertFormat = tech->GetAnnotationByName("VertexFormat");
@@ -232,6 +233,7 @@ bool ShaderEffect::init( RenderInterface* ri, ID3DX11Effect* inFx, SmartEnum_Sha
 void ShaderEffect::clear()
 {
     mFx = NULL;
+    mMainTech = NULL;
     mTagDefinition = NULL;
 
     mValidParams.clear();
@@ -243,12 +245,12 @@ void ShaderEffect::clear()
 
 bool ShaderEffect::try_assign_from(AttrReferenceInterface* attrRef)
 {
+    this;
     TParameterMap::iterator iter;
     iter = mValidParams.find(attrRef->tag_enum());
     if (iter != mValidParams.end())
     {
         attrRef->assign_to(&(iter->second));
-        //(iter->second).assign_from(attrRef);
         return true;
     }
     return false;
@@ -256,10 +258,55 @@ bool ShaderEffect::try_assign_from(AttrReferenceInterface* attrRef)
 
 void ShaderEffect::setShaderData( ShaderDataReference& shaderData)
 {
+    this;
     uint32 targetSize = shaderData.mRefs.size();
     for (uint32 i = 0;i < targetSize; ++i)
     {
         try_assign_from(shaderData.mRefs[i]);
+    }
+}
+
+void ShaderEffect::apply( RenderInterface* ri )
+{
+    mMainTech->GetPassByIndex(0)->Apply(0, ri->mCtx);
+}
+
+void ShaderEffect::test_verify()
+{
+    TParameterMap::iterator iter;
+    for (iter = mValidParams.begin(); iter != mValidParams.end(); ++iter)
+    {
+        ShaderParameter* sp = &(iter->second);
+        switch(sp->mTag)
+        {
+        case e_cam_pos:
+            {
+                XMFLOAT3 data0;
+                sp->mVar->GetRawValue(reinterpret_cast<void*>(&data0), 0, sizeof(XMFLOAT3));
+            }
+            break;
+
+        case e_local_to_world:
+            {
+                XMFLOAT4X4 data1;
+                sp->mVar->GetRawValue(reinterpret_cast<void*>(&data1), 0, sizeof(XMFLOAT4X4));
+            }
+            break;
+
+        case e_world_to_view:
+            {
+                XMFLOAT4X4 data2;
+                sp->mVar->GetRawValue(reinterpret_cast<void*>(&data2), 0, sizeof(XMFLOAT4X4));
+            }
+            break;
+
+        case e_view_to_proj:
+            {
+                XMFLOAT4X4 data3;
+                sp->mVar->GetRawValue(reinterpret_cast<void*>(&data3), 0, sizeof(XMFLOAT4X4));
+            }
+            break;
+        }
     }
 }
 

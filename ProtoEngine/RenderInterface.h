@@ -30,14 +30,14 @@ public:
     RenderTarget* getRenderTarget();
     void setSwapChain(SwapChainRT* inSwapChain);
     */
+    void drawIndexedPrimtive(uint32 indexCount, uint32 indexOffset);
 
     bool createViewport(RenderWindow* rw);
+    float getViewportAspect();
     void setViewport(Viewport* vp);
     void setViewportByIndex(uint32 index);
 
     void clearBackground(XMFLOAT4& color);
-
-    void setShader();
 
     /*
     void setIndexBuffer(IndexBuffer* pIB){}

@@ -6,15 +6,15 @@
 #include "EffectMgr.h"
 
 ////////////////////////////////////////////////////////
-DefaultMaterial::DefaultMaterial(std::string shaderName) : mDefaultShaderName(shaderName)
+DefaultMaterial::DefaultMaterial(std::string& shaderName) : mDefaultShaderName(shaderName)
 {
     mShader = NULL;
+    determinShaderToLink();
     buildDefaultAttributes();
-    buildShaderDataReference();
+    buildMaterialShaderDataReference();
 }
 DefaultMaterial::~DefaultMaterial()
 {
-    if (mShader != NULL) { delete mShader; mShader = NULL; }
 }
 
 //void DefaultMaterial::apply( RenderInterface* ri, Entity* entity )
@@ -51,18 +51,19 @@ void DefaultMaterial::determinShaderToLink()
 
 void DefaultMaterial::buildDefaultAttributes()
 {
-
     //ZeroMemory(&mLocalToWorld, sizeof(XMFLOAT4X4));
     mDiffuseMap = NULL;
-    mMeshMaterial.ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-    mMeshMaterial.diffuse  = XMFLOAT4(0.2f, 0.2f, 0.2f, 2.0f);
-    mMeshMaterial.specular = XMFLOAT4(0.3f, 0.3f, 0.3f, 3.0f);
+
+    mMeshMaterial.ambient  = XMFLOAT4(0.651f, 0.5f, 0.392f, 1.0f);
+    mMeshMaterial.diffuse  = XMFLOAT4(0.651f, 0.5f, 0.392f, 1.0f);
+    mMeshMaterial.specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
+
     // Standalone render states
 }
 
-void DefaultMaterial::buildShaderDataReference()
+void DefaultMaterial::buildMaterialShaderDataReference()
 {
-    mShaderData.add<e_texture>(mDiffuseMap);
-    mShaderData.add<e_plain_material>(mMeshMaterial);
+    mMaterialShaderData.add<e_texture>(mDiffuseMap);
+    mMaterialShaderData.add<e_mesh_material>(mMeshMaterial);
 }
 

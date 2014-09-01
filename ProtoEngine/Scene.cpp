@@ -1,9 +1,28 @@
 #include "Scene.h"
-#include "Camera.h"
 #include "Entity.h"
+#include "RenderInterface.h"
+#include "DebugPrimitiveGenerator.h"
 
 void buildDefaultScene( Scene* scene )
 {
+    DebugPrimitiveGenerator dpGen;
+
+    Mesh* pMesh = NULL;
+    Entity* pEntity = NULL;
+    
+    /*
+    pMesh = scene->createEmptyMesh();
+    dpGen.createGrid(20.f, 30.f, 60, 40, *pMesh);
+    pEntity = scene->createEmptyEntity();
+    pEntity->attach(pMesh, scene->getRenderInterface());
+    scene->addEntity(pEntity);
+    */
+
+    pMesh = scene->createEmptyMesh();
+    dpGen.createBox(1.f, 1.f, 1.f, *pMesh);
+    pEntity = scene->createEmptyEntity();
+    pEntity->attach(pMesh, scene->getRenderInterface());
+    scene->addEntity(pEntity);
 
 }
 
@@ -11,61 +30,87 @@ void buildDefaultScene( Scene* scene )
 Scene::Scene()
 {
     mpFunc = NULL;
-    mCam = NULL;
 }
 
 Scene::~Scene()
 {
 }
 
-
-void Scene::add( Entity* pNode )
+void Scene::drawSelf( RenderInterface* ri )
 {
+    ri->clearBackground(XMFLOAT4(0.69f, 0.77f, 0.87f, 1.0f));
 
-}
-
-/////////////////////////////////////////////////////////////
-
-SceneBuilder::SceneBuilder()
-{
-}
-
-SceneBuilder::~SceneBuilder()
-{
-    std::list<Scene*>::iterator it;
-    for (it = mScenes.begin(); it != mScenes.end(); ++it)
+    for (uint32 i  = 0; i < mEntities.size(); ++i)
     {
-        if ((*it) != NULL)
-        {
-            delete (*it);
-            (*it) = NULL;
-        }
+        mEntities[i]->drawSelf(ri);
     }
-    mScenes.clear();
+
+    ri->presentBackBuffer();
 }
 
-Scene* SceneBuilder::create()
+void Scene::initFromBuilder( T_BuildScene builder, RenderInterface* ri )
 {
-    Scene* scene = new Scene();
-    scene->setBuilder(&buildDefaultScene);
-    scene->buildOnce();
-    mScenes.push_back(scene);
-    return scene;
+    mRI = ri;
+    // Add entities/meshes
+    setBuilder(builder);
+    execBuilder();
+
+    // Init default cam: should be done by SceneBuilder
+    mCam.init(XMFLOAT3(0.f, 2.f, -15.f),ri->getViewportAspect(), 0.25f*ProtoMath::Pi, 1.f, 1000.f);
+
+    // Init default main light, should be done by SceneBuilder
+    mMainLight.ambient  = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+    mMainLight.diffuse  = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+    mMainLight.specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+    mMainLight.direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
+
+    // Build shader data reference 
+    buildSceneShaderData();
 }
 
-bool SceneBuilder::remove( Scene* scene )
+Entity* Scene::createEmptyEntity()
 {
-    std::list<Scene*>::iterator it;
-    for (it = mScenes.begin(); it != mScenes.end(); ++it)
+    return mEntityRepo.create();
+}
+
+Mesh* Scene::createEmptyMesh()
+{
+    return mMeshRepo.create();
+}
+
+void Scene::addEntity( Entity* entity )
+{
+    entity->setSceneRef(this);
+    mEntities.push_back(entity);
+}
+
+ShaderDataReference& Scene::getSceneShaderData()
+{
+    return mSceneShaderData;
+}
+
+void Scene::buildSceneShaderData()
+{
+    // Cam
+    mSceneShaderData.add<e_cam_pos>(mCam.getTranslation());
+    mSceneShaderData.add<e_world_to_view>(mCam.getView());
+    mSceneShaderData.add<e_view_to_proj>(mCam.getProj());
+
+    // Lights
+    mSceneShaderData.add<e_main_light>(mMainLight);
+}
+
+void Scene::update( float delta )
+{
+    // Update cam
+    mCam.updateView();
+
+    // Update entities
+    for (uint32 i = 0; i < mEntities.size(); ++i)
     {
-        if (scene && (*it) == scene)
-        {
-            delete (*it);
-            (*it) = NULL;
-            mScenes.erase(it);
-            return true;
-        }
+        mEntities[i]->update(delta);
     }
-    return false;
 }
+
+
 

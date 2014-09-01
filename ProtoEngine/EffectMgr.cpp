@@ -174,11 +174,11 @@ void effect_mgr_test()
     //assert(0);
     //DebugBreak();
     //d3d_check(D3D11_ERROR_FILE_NOT_FOUND);
-    DefaultMaterial baseMat(std::string("base"));
+    //DefaultMaterial baseMat(std::string("base"));
 
     std::string effectName("base");
-    ShaderEffect* effect = Singleton<EffectMgr>::getInstance().getEffect(effectName);
-    ShaderInterface* shader = new ShaderInterface;
-    shader->init(effectName, std::string("BaseTech"), 0);
+    //ShaderEffect* effect = Singleton<EffectMgr>::getInstance().getEffect(effectName);
+    //ShaderInterface* shader = new ShaderInterface;
+    //shader->init(effectName, std::string("BaseTech"), 0);
     //shader->setMaterial(&baseMat);
 }

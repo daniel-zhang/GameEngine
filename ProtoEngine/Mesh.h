@@ -4,40 +4,46 @@
 #include <vector>
 #include "reference.h"
 #include "GraphicBuffer.h"
+#include "ShaderDataReference.h"
 
 class Entity;
 class RenderInterface;
-class Mesh;
 class MaterialInterface;
+class DefaultMaterial;
+class Mesh;
 
 class SubMesh 
 {
 public:
+    SubMesh();
+    ~SubMesh();
+        
+    void init(std::string& shaderName, Mesh* inMesh, uint32 indexCount, uint32 indexOffset);
     void drawSelf(RenderInterface* ri);
+    uint32 getFaceNum(){return mIndexCount/3;}
 
-protected:
-    MaterialInterface* mMaterial;
+public:
+    DefaultMaterial* mDefaultMat;
 
-    // Linkages
-    uint32 index_start;
-    uint32 index_offset;
+    friend class Mesh;
+    Mesh* mMeshRef;
 
-    Mesh* mParentMesh;
-    Entity* mHostingEntity;
+    uint32 mIndexCount;
+    uint32 mIndexOffset;
 };
 
 class Mesh 
 {
 public:
-    void drawSelf(RenderInterface* ri);
-    void setLinkage(Entity* entity);
-
-protected:
-    Entity* mHostingEntity;
-    std::vector<SubMesh*> mSubMeshes;
-
+    ~Mesh();
+    void drawSelf(RenderInterface* ri, Entity* entity);
+    bool onAttachedToEntity(RenderInterface* ri);
+    uint32 getFaceNum();
+    void addSubMesh(std::string& defaultShaderName, uint32 indexCount, uint32 indexOffset);
+public:
     IndexBuffer mIndexBuffer;
-    VertexBuffer<e_pos_normal_tex> mVertexBuffer;
+    VertexBuffer<e_pos_normal_tan_tex> mVertexBuffer;
+    std::vector<SubMesh*> mSubMeshes;
 };
 
 #endif

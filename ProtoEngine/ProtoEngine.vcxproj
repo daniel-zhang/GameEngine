@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConfigMgr.cpp" />
+    <ClCompile Include="DebugPrimitiveGenerator.cpp" />
     <ClCompile Include="EffectMgr.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="MaterialAttribute.cpp" />
@@ -131,12 +132,14 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc debug for %(FullPath)</Message>
     </CustomBuild>
+    <None Include="GameResource\Shader\LightHelper.fx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttributeReference.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="ConfigMgr.h" />
+    <ClInclude Include="DebugPrimitiveGenerator.h" />
     <ClInclude Include="EffectMgr.h" />
     <ClInclude Include="MaterialAttribute.h" />
     <ClInclude Include="ProtoMath.h" />

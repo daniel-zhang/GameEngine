@@ -51,8 +51,10 @@ public:
 
     void attach();
     void resize(float width, float height);
+    void resizeWithoutSettingRT(float width, float height);
     void clear(XMFLOAT4& color);
     void flip();
+    float getAspect(){return mWidth/mHeight;}
 
     /*
     Surface* getBackBuffer();

@@ -76,6 +76,13 @@ template <EVertexFormat N> class VertexFactory {};
 template <> class VertexFactory<e_pos_normal_tex>
 {
 public:
+    VertexFactory<e_pos_normal_tex>(){ZeroMemory(this, sizeof(VertexFactory<e_pos_normal_tex>));}
+    VertexFactory<e_pos_normal_tex>(
+        float px, float py, float pz, 
+        float nx, float ny, float nz,
+        float u, float v) 
+        :
+        position(px,py,pz), normal(nx,ny,nz), texcoord(u,v){}
     XMFLOAT3 position;
     XMFLOAT3 normal;
     XMFLOAT2 texcoord;
@@ -83,6 +90,15 @@ public:
 template <> class VertexFactory<e_pos_normal_tan_tex>
 {
 public:
+    VertexFactory<e_pos_normal_tan_tex>(){ZeroMemory(this, sizeof(VertexFactory<e_pos_normal_tex>));}
+    VertexFactory<e_pos_normal_tan_tex>(
+        float px, float py, float pz, 
+        float nx, float ny, float nz,
+        float tx, float ty, float tz,
+        float u, float v) 
+        : 
+        position(px,py,pz), normal(nx,ny,nz), tangent(tx, ty, tz), texcoord(u,v){}
+
     XMFLOAT3 position;
     XMFLOAT3 normal;
     XMFLOAT3 tangent;
@@ -121,7 +137,7 @@ public:
     }
     void setLocalCache(TLocalCache& inVertices)
     {
-        mLocalCache.reserve(inVertices.size());
+        mLocalCache.resize(inVertices.size());
         std::copy(inVertices.begin(), inVertices.end(), mLocalCache.begin());
     }
     TLocalCache& getLocalCache()

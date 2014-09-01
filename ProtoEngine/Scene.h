@@ -4,13 +4,38 @@
 #include <vector>
 #include <list>
 #include "ProtoMath.h"
-//#include "reference.h"
+#include "Mesh.h"
+#include "Camera.h"
+#include "ShaderDataReference.h"
 
-class Camera;
 class Entity;
 class Scene;
+class RenderInterface;
 
 void buildDefaultScene(Scene* scene);
+
+// Act as a scoped collection structure
+// T is required to have a default ctor
+template <typename T>
+class Collection 
+{
+public:
+    ~Collection()
+    {
+        for (uint32 i = 0; i < mStorage.size(); ++i)
+        {
+            delete mStorage[i];
+            mStorage[i] = NULL;
+        }
+    }
+    T* create()
+    {
+        T* p = new T();
+        mStorage.push_back(p);
+        return p;
+    }
+    std::vector<T*> mStorage;
+};
 
 /*
 a flattened scene structure
@@ -23,34 +48,40 @@ public:
 	Scene();
 	~Scene();
 
+    void initFromFile(const char* filename){}
+    void initFromBuilder(T_BuildScene builder, RenderInterface* ri);
+
     void setBuilder(T_BuildScene pFunc) { mpFunc = pFunc; }
-    void buildOnce() { if (mpFunc) (*mpFunc)(this); }
-	void add(Entity* pNode);
+    void execBuilder() { if (mpFunc) (*mpFunc)(this); }
+    Entity* createEmptyEntity();
+    Mesh* createEmptyMesh();
+
+    // Scene shader data reference
+    void buildSceneShaderData();
+    ShaderDataReference& getSceneShaderData();
+
+	void addEntity(Entity* entity);
 	//void remove(Entity* pNode);
-
     void update(float delta);
-    Camera* getCam(){return mCam;}
+    void drawSelf(RenderInterface* ri);
 
-public:
+    RenderInterface* getRenderInterface(){return mRI;}
+
+    Camera& getActiveCam(){return mCam;}
+
+protected:
+    RenderInterface* mRI;
     bool mIntialized;
     T_BuildScene mpFunc;
+    ShaderDataReference mSceneShaderData;
+    Camera mCam;
+    DirLight mMainLight;
 
-    Camera* mCam;
-	std::vector<Entity*> mNodes;
+    friend class Entity;
+	std::vector<Entity*> mEntities;
+
+    Collection<Mesh> mMeshRepo;
+    Collection<Entity> mEntityRepo;
 };
-
-class SceneBuilder
-{
-public:
-    SceneBuilder();
-    ~SceneBuilder();
-
-    Scene* create();
-    bool remove(Scene* scene);
-
-public:
-    std::list<Scene*> mScenes;
-};
-
 
 #endif

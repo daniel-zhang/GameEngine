@@ -73,7 +73,6 @@ protected:
     Win32EventHander mEventHandler;
     RenderWindow* mGameWindow;
     RenderCore* mRenderCore;
-    SceneBuilder mSceneBuilder;
     Scene* mScene;
 
     // Stat variables

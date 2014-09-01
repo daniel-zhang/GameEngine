@@ -65,16 +65,9 @@ Game::Game()
 
 Game::~Game()
 {
-    if (mRenderCore)
-    {
-        delete mRenderCore;
-        mRenderCore = NULL;
-    }
-    if (mGameWindow)
-    {
-        delete mGameWindow;
-        mGameWindow = NULL;
-    }
+    release_raw_ptr(&mScene);
+    release_raw_ptr(&mRenderCore);
+    release_raw_ptr(&mGameWindow);
 }
 
 bool Game::init()
@@ -101,29 +94,28 @@ bool Game::init()
     // Init RenderWindow
     //
     mGameWindow = new RenderWindow();
-    if (NULL == mGameWindow) return false;
     if (false == mGameWindow->init(L"Test Main Window", 0, 0, rc.screen_width, rc.screen_height) ) return false;
 
     //
     // Init RenderCore
     //
     mRenderCore = new RenderCore();
-    if (NULL == mRenderCore) return false;
     if (false == mRenderCore->init(mGameWindow)) return false;
-
-    Singleton<Profiler>::getInstance().endTimer(mInitTimer);
-    float time = mInitTimer->totalTime();
 
     //
     // Init Scene
     //
-    mScene = mSceneBuilder.create();
+    mScene = new Scene();
+    mScene->initFromBuilder(&buildDefaultScene, mRenderCore->getRenderInterface());
 
     //
     // After init: bind after RenderCore is initialized
     //
     mEventHandler.bindImple(this);
     mGameWindow->hookHandler(&mEventHandler);
+
+    Singleton<Profiler>::getInstance().endTimer(mInitTimer);
+    float time = mInitTimer->totalTime();
 
     mInitialized = true;
     return mInitialized;
@@ -185,17 +177,17 @@ int32 Game::runWin32()
 
 void Game::step(float delta)
 {
-    if (mGamePaused)
-        return;
-
+    //if (mGamePaused) return;
+    
+    mScene->update(delta);
 }
 
 void Game::driveRenderCore()
 {
-    if (mRenderCorePaused)
-        return;
+    //if (mRenderCorePaused) return;
 
-    mRenderCore->draw();
+    mScene->drawSelf(mRenderCore->getRenderInterface());
+    //mRenderCore->draw();
 }
 
 void Game::calcFrameTime()
@@ -248,6 +240,8 @@ void Game::onRestore()
 
 void Game::onResize( float width, float height )
 {
-    mRenderCore->getRenderInterface()->resizeViewport(width, height);
+    RenderInterface* ri = mRenderCore->getRenderInterface();
+    ri->resizeViewport(width, height);
+    mScene->getActiveCam().updateAspect(ri->getViewportAspect());
 }
 

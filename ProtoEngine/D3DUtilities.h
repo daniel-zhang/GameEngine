@@ -14,6 +14,16 @@ void safe_release(T** ppT)
     }
 }
 
+template <typename T>
+void release_raw_ptr(T** ppT)
+{
+    if (*ppT)
+    {
+        delete (*ppT);
+        *ppT = NULL;
+    }
+}
+
 // A debug macro for any Direct3D function that returns an HRESULT value.
 #if defined(DEBUG) || defined(_DEBUG)
     #ifndef d3d_check 

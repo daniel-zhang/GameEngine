@@ -14,7 +14,7 @@ IndexBuffer::~IndexBuffer()
 void IndexBuffer::setLocalCache( TLocalCache& inIndices )
 {
     uint32 numIndices = inIndices.size();
-    mLocalCache.reserve(numIndices);
+    mLocalCache.resize(numIndices);
     std::copy(inIndices.begin(), inIndices.end(), mLocalCache.begin());
 }
 
@@ -107,8 +107,7 @@ void graphic_buffer_test()
     var1.sync_to(&target);
     var2.sync_to(&target);
 
-    DefaultMaterial m(std::string(""));
-    m.mShaderData;
+    //DefaultMaterial m(std::string(""));
 
 }
 

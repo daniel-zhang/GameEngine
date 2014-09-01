@@ -66,6 +66,7 @@ void Camera::init( XMFLOAT3& t, float aspect, float fov, float n, float f )
 {
     resetTranslation(t);
     updateLens(aspect, fov, n, f);
+    updateView();
 }
 
 void Camera::resetTranslation( XMFLOAT3& t )

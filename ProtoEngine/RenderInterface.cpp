@@ -137,4 +137,15 @@ void RenderInterface::resizeViewport( float width, float height )
         mViewport->resize(width, height);
 }
 
+void RenderInterface::drawIndexedPrimtive( uint32 indexCount, uint32 indexOffset )
+{
+    // TODO: add a draw call counter here
+    mCtx->DrawIndexed(indexCount, indexOffset, 0);
+}
+
+float RenderInterface::getViewportAspect()
+{
+    return mViewport->getAspect();
+}
+
 

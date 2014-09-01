@@ -50,28 +50,40 @@ public:
 class DefaultMaterial 
 {
 public:
-    DefaultMaterial(std::string shaderName = "base");
+    DefaultMaterial(std::string& shaderName);
     ~DefaultMaterial();
 
     //void apply(RenderInterface* ri, Entity* entity);
-    void apply()
+    void apply(RenderInterface* ri, ShaderDataReference& inSceneShaderData, ShaderDataReference& inMeshShaderData)
     {
-        mShader->setShaderData(mShaderData);
-        mShader->apply();
+        mShader->setShaderData(inSceneShaderData);
+        mShader->setShaderData(inMeshShaderData);
+        mShader->setShaderData(mMaterialShaderData);
+        mShader->apply(ri);
     } 
+
+    ShaderDataReference& getMaterialShaderData()
+    {
+        return mMaterialShaderData;
+    }
+
+    ID3D11InputLayout* getInputLayout(){return mShader->mInputLayout;}
 protected:
     void determinShaderToLink();
     void buildDefaultAttributes();
-    void buildShaderDataReference();
+    void buildMaterialShaderDataReference();
 
-public:
+protected:
     std::string mDefaultShaderName;
     ShaderEffect* mShader;
-    ShaderDataReference mShaderData;
+    ShaderDataReference mMaterialShaderData;
 
-    //XMFLOAT4X4 mLocalToWorld;
+    ShaderDataReference mSceneShaderData;
+
+    // Shader Data - Begin
     ID3D11ShaderResourceView* mDiffuseMap;
     MeshMaterial mMeshMaterial;
+    // Shader Data - End
 };
 
 #endif

@@ -27,7 +27,7 @@ public:
     bool isInitialized();
     bool init(RenderWindow* rw);
     bool exit();
-    int draw();
+    //int draw();
     void beginRender();
     void endRender();
     RenderInterface* getRenderInterface();

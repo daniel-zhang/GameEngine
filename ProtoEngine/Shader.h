@@ -101,13 +101,15 @@ public:
     bool init(RenderInterface* ri, ID3DX11Effect* inFx, SmartEnum_ShaderVarTag* inTagDefintion);
     void clear();
     void setShaderData(ShaderDataReference& shaderData);
-    void apply(){}
+    void apply(RenderInterface* ri);
+    void test_verify();
 
 protected:
     bool try_assign_from(AttrReferenceInterface* attrRef);
 
 public:
     ID3DX11Effect* mFx;
+    ID3DX11EffectTechnique* mMainTech;
     std::string mVertexFormatString;
     ID3D11InputLayout* mInputLayout;
 
