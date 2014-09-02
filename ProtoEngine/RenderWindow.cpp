@@ -1,5 +1,6 @@
 #include "RenderWindow.h"
 #include "Game.h"
+#include <WindowsX.h>	// To enable GET_X_LPARAM and GET_Y_LPARAM macros
 
 InputHandlerInterface gNullHandler;
 RenderWindow::RenderWindow()
@@ -35,7 +36,8 @@ bool RenderWindow::init( std::wstring title, int x, int y, int width, int height
     wc.cbWndExtra    = 0;
     wc.lpszClassName = mClassName.c_str();
     wc.hIcon         = LoadIcon(0, IDI_APPLICATION);
-    wc.hCursor       = LoadCursor(0, IDC_ARROW);
+    //wc.hCursor       = LoadCursor(0, IDC_ARROW);
+    wc.hCursor       = LoadCursor(0, IDC_CROSS);
     wc.lpszMenuName  = 0;
     wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);// Set default background as white.
 
@@ -155,6 +157,46 @@ LRESULT CALLBACK RenderWindow::winProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             pThis->mState = ws_normal;
             pThis->mCurrentHandler->resize(pThis->mWidth, pThis->mHeight);
             pThis->mCurrentHandler->restore();
+            return 0;
+
+        // The WM_MENUCHAR message is sent when a menu is active and the user presses 
+        // a key that does not correspond to any mnemonic or accelerator key. 
+        case WM_MENUCHAR:
+            // Don't beep when we alt-enter.
+            return MAKELRESULT(0, MNC_CLOSE);
+
+        // Catch this message so to prevent the window from becoming too small.
+        case WM_GETMINMAXINFO:
+            ((MINMAXINFO*)lParam)->ptMinTrackSize.x = 200;
+            ((MINMAXINFO*)lParam)->ptMinTrackSize.y = 200; 
+            return 0;
+
+        case WM_LBUTTONDOWN:
+            if (wParam & MK_LBUTTON)
+            {
+                pThis->mCurrentHandler->onLButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+            }
+            return 0;
+
+        case WM_LBUTTONUP:
+            if (wParam & MK_LBUTTON)
+            {
+                pThis->mCurrentHandler->onLButtonUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+            }
+            return 0;
+
+        case WM_RBUTTONDOWN:
+            if (wParam & MK_RBUTTON)
+            {
+                pThis->mCurrentHandler->onRButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+            }
+            return 0;
+
+        case WM_RBUTTONUP:
+            if (wParam & MK_RBUTTON)
+            {
+                pThis->mCurrentHandler->onRButtonUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+            }
             return 0;
 
         default:

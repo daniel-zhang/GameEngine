@@ -235,19 +235,13 @@ bool Viewport::init( RenderInterface* ri, RenderWindow* rw )
     mBackBuffer = new Surface();
     mDepthStencilBuffer = new Surface();
     createSwapChain();
-    resizeWithoutSettingRT(mWidth, mHeight);
+    resize(mWidth, mHeight);
 
     mIsValid = true;
     return true;
 }
 
 void Viewport::resize( float width, float height )
-{
-    resizeWithoutSettingRT(width, height);
-    // Now set RTV and DSV 
-    mRI->mCtx->OMSetRenderTargets(1, &mBackBuffer->mRenderTargetView, mDepthStencilBuffer->mDepthStencilView);
-}
-void Viewport::resizeWithoutSettingRT( float width, float height )
 {
     if (width < 0 || height < 0)
         return;

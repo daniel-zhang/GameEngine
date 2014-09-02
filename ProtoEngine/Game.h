@@ -24,6 +24,11 @@ public:
     virtual void pause(){}
     virtual void restore(){}
     virtual void resize(int newWidth, int newHeight){} 
+    virtual void onLButtonDown(int x, int y){}
+    virtual void onLButtonUp(int x, int y){}
+    virtual void onRButtonDown(int x, int y){}
+    virtual void onRButtonUp(int x, int y){}
+    virtual void onMouseMove(int x, int y){}
 };
 
 class Win32EventHander : public InputHandlerInterface
@@ -36,8 +41,18 @@ public:
     virtual void restore(); 
     virtual void resize(int newWidth, int newHeight);
 
+    virtual void onLButtonDown(int x, int y);
+    virtual void onLButtonUp(int x, int y);
+    virtual void onRButtonDown(int x, int y);
+    virtual void onRButtonUp(int x, int y);
+    virtual void onMouseMove(int x, int y);
+
 protected:
     Game* mGame;
+    int mLastMouseX;
+    int mLastMouseY;
+    bool mIsLButtonDown;
+    bool mIsRButtonDown;
 };
 
 class Game

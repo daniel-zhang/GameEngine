@@ -36,6 +36,33 @@ void Win32EventHander::resize( int newWidth, int newHeight )
     mGame->onResize((float)newWidth, (float)newHeight);
 }
 
+void Win32EventHander::onLButtonDown( int x, int y )
+{
+
+}
+
+void Win32EventHander::onLButtonUp( int x, int y )
+{
+
+}
+
+void Win32EventHander::onRButtonDown( int x, int y )
+{
+
+}
+
+void Win32EventHander::onRButtonUp( int x, int y )
+{
+
+}
+
+void Win32EventHander::onMouseMove( int x, int y )
+{
+    mLastMouseX = x;
+    mLastMouseY = y;
+
+}
+
 
 /////////////////////////////////////////////////////////////////////////
 Game::Game()
@@ -177,8 +204,8 @@ int32 Game::runWin32()
 
 void Game::step(float delta)
 {
-    //if (mGamePaused) return;
-    
+    if (mGamePaused) return;
+
     mScene->update(delta);
 }
 

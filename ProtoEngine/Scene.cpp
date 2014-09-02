@@ -103,6 +103,10 @@ void Scene::buildSceneShaderData()
 void Scene::update( float delta )
 {
     // Update cam
+    if( GetAsyncKeyState('W') & 0x8000 ) mCam.walk(20.0f*delta);
+    if( GetAsyncKeyState('S') & 0x8000 ) mCam.walk(-20.0f*delta);
+    if( GetAsyncKeyState('A') & 0x8000 ) mCam.strafe(-20.0f*delta);
+    if( GetAsyncKeyState('D') & 0x8000 ) mCam.strafe(20.0f*delta);
     mCam.updateView();
 
     // Update entities

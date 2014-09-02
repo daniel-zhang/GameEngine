@@ -133,8 +133,11 @@ void RenderInterface::setViewportByIndex( uint32 index )
 
 void RenderInterface::resizeViewport( float width, float height )
 {
-    if (mViewport && mViewport->isValid())
+    if (mViewport && mViewport->isValid()) 
+    {
         mViewport->resize(width, height);
+        mViewport->attach();
+    }
 }
 
 void RenderInterface::drawIndexedPrimtive( uint32 indexCount, uint32 indexOffset )
