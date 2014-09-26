@@ -53,11 +53,11 @@ public:
 
     void setBuilder(T_BuildScene pFunc) { mpFunc = pFunc; }
     void execBuilder() { if (mpFunc) (*mpFunc)(this); }
-    Entity* createEmptyEntity();
-    Mesh* createEmptyMesh();
+
+    Entity* allocateEntity();
+    Mesh* allocateMesh();
 
     // Scene shader data reference
-    void buildSceneShaderData();
     ShaderDataReference& getSceneShaderData();
 
 	void addEntity(Entity* entity);
@@ -68,6 +68,9 @@ public:
     RenderInterface* getRenderInterface(){return mRI;}
 
     Camera& getActiveCam(){return mCam;}
+
+protected:
+    void buildSceneShaderData();
 
 protected:
     RenderInterface* mRI;

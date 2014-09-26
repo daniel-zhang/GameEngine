@@ -179,10 +179,7 @@ LRESULT CALLBACK RenderWindow::winProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             return 0;
 
         case WM_LBUTTONUP:
-            if (wParam & MK_LBUTTON)
-            {
-                pThis->mCurrentHandler->onLButtonUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-            }
+            pThis->mCurrentHandler->onLButtonUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
             return 0;
 
         case WM_RBUTTONDOWN:
@@ -193,10 +190,11 @@ LRESULT CALLBACK RenderWindow::winProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             return 0;
 
         case WM_RBUTTONUP:
-            if (wParam & MK_RBUTTON)
-            {
-                pThis->mCurrentHandler->onRButtonUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-            }
+            pThis->mCurrentHandler->onRButtonUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+            return 0;
+
+        case WM_MOUSEMOVE:
+            pThis->mCurrentHandler->onMouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
             return 0;
 
         default:

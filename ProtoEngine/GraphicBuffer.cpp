@@ -8,46 +8,56 @@ IndexBuffer::IndexBuffer()
 
 IndexBuffer::~IndexBuffer()
 {
-    clear();
+    clearIndArray();
 }
 
-void IndexBuffer::setLocalCache( TLocalCache& inIndices )
+void IndexBuffer::setIndArray( TIndexArray& inIndices )
 {
     uint32 numIndices = inIndices.size();
-    mLocalCache.resize(numIndices);
-    std::copy(inIndices.begin(), inIndices.end(), mLocalCache.begin());
+    mIndices.resize(numIndices);
+    std::copy(inIndices.begin(), inIndices.end(), mIndices.begin());
 }
 
-bool IndexBuffer::createStaticGpuDataFromCache( RenderInterface* ri )
+bool IndexBuffer::createStaticGpuBuffer( RenderInterface* ri )
 {
-    if (mLocalCache.empty()) return false;
+    if (mIndices.empty()) return false;
 
     D3D11_BUFFER_DESC ibd;
     ibd.Usage = D3D11_USAGE_IMMUTABLE;
-    ibd.ByteWidth = sizeof(UINT) * getNumIndex();
+    ibd.ByteWidth = sizeof(UINT) * numVertIndices();
     ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     ibd.CPUAccessFlags = 0;
     ibd.MiscFlags = 0;
     ibd.StructureByteStride = 0;
 
     D3D11_SUBRESOURCE_DATA iinitData;
-    iinitData.pSysMem = &mLocalCache[0];
+    iinitData.pSysMem = &mIndices[0];
 
     d3d_check(ri->mDevice->CreateBuffer(&ibd, &iinitData, &mBuffer));
     return true;
 }
 
-void IndexBuffer::bind( RenderInterface* ri )
+void IndexBuffer::bindGpuBuffer( RenderInterface* ri )
 {
     ri->mCtx->IASetIndexBuffer(mBuffer, DXGI_FORMAT_R32_UINT, 0);
 }
 
-void IndexBuffer::clear()
+void IndexBuffer::clearIndArray()
 {
-    mLocalCache.clear();
+    mIndices.clear();
     safe_release(&mBuffer);
     mIsDynamic = false;
 
+}
+
+void IndexBuffer::setIndArrayCapacity( uint32 capacity )
+{
+    mIndices.resize(capacity, 0);
+}
+
+void IndexBuffer::setIndexAt( uint32 ind, uint32 at )
+{
+    mIndices[at] = ind;
 }
 
 
@@ -80,8 +90,8 @@ template<> const D3D11_INPUT_ELEMENT_DESC* InputLayoutDesc<e_pos_normal_tan_tex>
 #include "Material.h"
 void graphic_buffer_test()
 {
-    StaticAssert<sizeof(VertexFactory<e_pos_normal_tex>) == sizeof(VertexBuffer<e_pos_normal_tex>::VERTEX_TYPE) >::validate();
-    StaticAssert<sizeof(VertexFactory<e_pos_normal_tan_tex>) == sizeof(VertexBuffer<e_pos_normal_tan_tex>::VERTEX_TYPE) >::validate();
+    StaticAssert<sizeof(VertexFactory<e_pos_normal_tex>) == sizeof(VertexBuffer<e_pos_normal_tex>::TVertexType) >::validate();
+    StaticAssert<sizeof(VertexFactory<e_pos_normal_tan_tex>) == sizeof(VertexBuffer<e_pos_normal_tan_tex>::TVertexType) >::validate();
     StaticAssert<InputLayoutDesc<e_pos_normal_tex>::desc_num == 3>::validate();
     StaticAssert<InputLayoutDesc<e_pos_normal_tan_tex>::desc_num == 4>::validate();
 

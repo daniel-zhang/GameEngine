@@ -10,6 +10,8 @@
 Win32EventHander::Win32EventHander()
 {
     mGame = NULL;
+    mIsRButtonDown = false;
+    mIsLButtonDown = false;
 }
 
 void Win32EventHander::bindImple( Game* game )
@@ -38,29 +40,37 @@ void Win32EventHander::resize( int newWidth, int newHeight )
 
 void Win32EventHander::onLButtonDown( int x, int y )
 {
-
+    mIsLButtonDown = true;
 }
 
 void Win32EventHander::onLButtonUp( int x, int y )
 {
-
+    mIsLButtonDown = false;
 }
 
 void Win32EventHander::onRButtonDown( int x, int y )
 {
-
+    mIsRButtonDown = true;
 }
 
 void Win32EventHander::onRButtonUp( int x, int y )
 {
-
+    mIsRButtonDown = false;
 }
 
 void Win32EventHander::onMouseMove( int x, int y )
 {
+    if (mIsRButtonDown)
+    {
+        float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMouseX));
+        float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMouseY));
+
+        Camera& cam = mGame->getScene()->getActiveCam();
+        cam.pitch(dy);
+        cam.yaw(dx);
+    }
     mLastMouseX = x;
     mLastMouseY = y;
-
 }
 
 

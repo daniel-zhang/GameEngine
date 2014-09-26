@@ -141,7 +141,8 @@ void Rotator::pitch( float angle )
 
 void Rotator::yaw( float angle )
 {
-    XMMATRIX R = XMMatrixRotationAxis(XMLoadFloat3(&mUp), angle);
+    XMMATRIX R = XMMatrixRotationY(angle);
+    //XMMATRIX R = XMMatrixRotationAxis(XMLoadFloat3(&mUp), angle);
 
     XMStoreFloat3(&mRight,   XMVector3TransformNormal(XMLoadFloat3(&mRight), R));
     XMStoreFloat3(&mFront, XMVector3TransformNormal(XMLoadFloat3(&mFront), R));

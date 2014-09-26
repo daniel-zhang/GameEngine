@@ -67,6 +67,11 @@ public:
     int32 runWin32();
     RenderCore* getRenderCore();
 
+    Scene* getScene()
+    {
+        return mScene;
+    }
+
 protected:
     friend class Win32EventHander;
     void onPause();

@@ -16,6 +16,7 @@ template <> struct StaticAssert<true>
 
 class RenderInterface;
 
+// Deprecated
 class GraphicBuffer
 {
 public:
@@ -30,50 +31,76 @@ public:
     virtual void releaseGpuData();
 };
 
+/*
+IndexBuffer and VertexBuffer share the same design:
+Both of them manage render pipeline buffers and hold a system memory copy of their data
+VertexBuffer is a class template, as IndexBuffer always holds an array of uint32, while vertex buffer content has to be specialized on EVertexFormat
+*/
 class IndexBuffer 
 {
 public:
-    typedef std::vector<uint32> TLocalCache;
+    typedef std::vector<uint32> TIndexArray;
     IndexBuffer();
     ~IndexBuffer();
 
-    void setLocalCache(TLocalCache& inIndices);
-    bool createStaticGpuDataFromCache(RenderInterface* ri);
-    void bind(RenderInterface* ri);
-    // Not allow dynamic index buffer update for now
-    bool createDynmGpuDataFromCache(RenderInterface* ri) { return false; }
-    bool updateDynmGpuDataFromCache(RenderInterface* ri){return false;}
-    void clear();
+    // Style one: set index one by one
+    void setIndArrayCapacity(uint32 capacity);
+    void setIndexAt(uint32 ind, uint32 at);
 
-    TLocalCache& getLoalCache(){ return mLocalCache; }
-    uint32 getNumIndex(){return mLocalCache.size();}
-    uint32 getNumFace(){return mLocalCache.size()/3;}
+    // Style two: set the whole array
+    void setIndArray(TIndexArray& inIndices);
+    TIndexArray& getIndArray(){ return mIndices; }
+    void clearIndArray();
+
+    bool createStaticGpuBuffer(RenderInterface* ri);
+    // Not allow for dynamic index buffer at the moment
+    bool createDynamicGpuBuffer(RenderInterface* ri) { return false; }
+    bool updateGpuBuffer(RenderInterface* ri){return false;}
+    void bindGpuBuffer(RenderInterface* ri);
+
+    uint32 numVertIndices(){return mIndices.size();}
+    uint32 numTriangles(){return mIndices.size()/3;}
 
 protected:
-    TLocalCache mLocalCache;
+    TIndexArray mIndices;
     ID3D11Buffer* mBuffer;
     bool mIsDynamic;
 };
 
-// Vertex format enum
+/* Vertex format enumerations
+The enumerations are then used by a subsequent bunch of template classes as template argument.
+This approach to support multiple vertex formats is borrowed from UE2.5
+
+Another implementation is to define separated attribute collections(locations, normals, UVs, tangents, etc)
+and provide a set of methods to set and combine them during mesh construction.
+
+The approach used here is less flexible compared to the mentioned one.
+*/
 enum EVertexFormat
 {
     e_pos_normal_tex = 0,
     e_pos_normal_tan_tex,
-    //e_vf_skinned,
 };
 
-// InputLayout description, specialized for each vertex format enum
-template <EVertexFormat N> class InputLayoutDesc
+/* InputLayout description, specialized for each vertex format enum
+An InputLayout template class is always corresponded to a specific VertexFactory template class
+Notice that the template specialization is implemented in the .cpp file, via static variable assignment.
+*/
+template <EVertexFormat N> 
+class InputLayoutDesc
 {
 public:
     static const uint32 desc_num;
     static const D3D11_INPUT_ELEMENT_DESC* format_desc;
 };
 
-// VertexFactory that defines vertex data structure, specialized for each vertex format enum
-template <EVertexFormat N> class VertexFactory {};
-template <> class VertexFactory<e_pos_normal_tex>
+// An empty template that is to be specialized to define each vertex data structure
+template <EVertexFormat N> 
+class VertexFactory {};
+
+// VertexFactory specialized for: e_pos_normal_tex
+template <> 
+class VertexFactory<e_pos_normal_tex>
 {
 public:
     VertexFactory<e_pos_normal_tex>(){ZeroMemory(this, sizeof(VertexFactory<e_pos_normal_tex>));}
@@ -87,7 +114,10 @@ public:
     XMFLOAT3 normal;
     XMFLOAT2 texcoord;
 };
-template <> class VertexFactory<e_pos_normal_tan_tex>
+
+// VertexFactory specialized for: e_pos_normal_tan_tex
+template <> 
+class VertexFactory<e_pos_normal_tan_tex>
 {
 public:
     VertexFactory<e_pos_normal_tan_tex>(){ZeroMemory(this, sizeof(VertexFactory<e_pos_normal_tex>));}
@@ -112,12 +142,11 @@ template<EVertexFormat N>
 class VertexBuffer
 {
 public:
-    typedef VertexFactory<N> VERTEX_TYPE;
-    typedef std::vector<VERTEX_TYPE> TLocalCache;
+    typedef VertexFactory<N> TVertexType;
+    typedef std::vector<TVertexType> TVertexArray;
 
-    VertexBuffer():mVertexSize(sizeof(VERTEX_TYPE))
+    VertexBuffer()
     {
-        mNumGpuVert = 0;
         mVertexOffset = 0;
         mIsDynamic = false;
         mBuffer = NULL;
@@ -131,141 +160,96 @@ public:
     {
         mVertexOffset = 0;
         mIsDynamic = false;
-        mLocalCache.clear();
+        mVertArray.clear();
         safe_release(&mBuffer);
-        mNumGpuVert = 0;
     }
-    void setLocalCache(TLocalCache& inVertices)
+    bool isDynamic() { return mIsDynamic; }
+    uint32 stride() { return sizeof(TVertexType); }
+    uint32 numVerts() { return mVertArray.size(); }
+
+    // Style one: set vert at the specific location
+    void setVertArrayCapacity(uint32 capacity)
     {
-        mLocalCache.resize(inVertices.size());
-        std::copy(inVertices.begin(), inVertices.end(), mLocalCache.begin());
+        mVertArray.resize(capacity);
     }
-    TLocalCache& getLocalCache()
+    void setVertAt(TVertexType& vert, uint32 at)
     {
-        return mLocalCache;
+        mVertArray[at] = vert;
     }
-    bool createStaticGpuDataFromCache(RenderInterface* ri)
+
+    // Style two: set the whole vert array 
+    void setVertArray(TVertexArray& inVertices)
     {
-        if(mLocalCache.empty()) return false;
+        mVertArray.resize(inVertices.size());
+        std::copy(inVertices.begin(), inVertices.end(), mVertArray.begin());
+    }
+    TVertexArray& getVertArray() 
+    { 
+        return mVertArray; 
+    }
+
+    bool createStaticGpuBuffer(RenderInterface* ri)
+    {
+        if(mVertArray.empty()) return false;
         mIsDynamic = false;
 
         D3D11_BUFFER_DESC vbd;
         vbd.Usage = D3D11_USAGE_IMMUTABLE;
-        vbd.ByteWidth = mVertexSize * mLocalCache.size();
+        vbd.ByteWidth = stride() * numVerts();
         vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
         vbd.CPUAccessFlags = 0;
         vbd.MiscFlags = 0;
         vbd.StructureByteStride = 0;
 
         D3D11_SUBRESOURCE_DATA vinitData;
-        vinitData.pSysMem = &mLocalCache[0];
+        vinitData.pSysMem = &mVertArray[0];
 
         d3d_check(ri->mDevice->CreateBuffer(&vbd, &vinitData, &mBuffer));
         return true;
     }
-    bool createDynmGpuDataFromCache(RenderInterface* ri)
+    bool createDynamicGpuBuffer(RenderInterface* ri)
     {
-        if (mLocalCache.empty()) return false;
+        if (mVertArray.empty()) return false;
         mIsDynamic = true;
 
         D3D11_BUFFER_DESC vbd;
         vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        vbd.ByteWidth = mVertexSize * mLocalCache.size();
+        vbd.ByteWidth = stride() * numVerts();
         vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
         vbd.MiscFlags = 0;
         vbd.StructureByteStride = 0;
         vbd.Usage = D3D11_USAGE_DYNAMIC; 
 
         d3d_check(ri->mDevice->CreateBuffer(&vbd, 0, &mBuffer));
-        return updateDynmGpuDataFromCache(ri);
+        return true; 
     }
-    bool updateDynmGpuDataFromCache(RenderInterface* ri)
+    void updateGpuBuffer(RenderInterface* ri)
     {
-        if (mLocalCache.empty() || mIsDynamic == false) return false;
-
         D3D11_MAPPED_SUBRESOURCE mappedData;
         ri->mCtx->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
 
-        VERTEX_TYPE* vStart = reinterpret_cast<VERTEX_TYPE*>(mappedData.pData);
-        uint32 safeSize = mLocalCache.size() < mNumGpuVert ? mLocalCache.size() : mNumGpuVert;
+        TVertexType* vStart = reinterpret_cast<TVertexType*>(mappedData.pData);
+        //uint32 safeSize = mVertArray.size() < mNumGpuVert ? mVertArray.size() : mNumGpuVert;
         //std::copy(mLocalCache.begin(), mLocalCache.end(), &vStart[0]);
-        memcpy(&vStart[0], &mLocalCache[0], sizeof(VERTEX_TYPE) * safeSize);
+        memcpy(&vStart[0], &mVertArray[0], sizeof(TVertexType) * mVertArray.size());
 
         ri->mCtx->Unmap(mBuffer, 0);
-        return true;
     }
-    void bind(RenderInterface* ri)
+    void bindGpuBuffer(RenderInterface* ri)
     {
-        ri->mCtx->IASetVertexBuffers(0, 1, &mBuffer, &mVertexSize, &mVertexOffset);
+        uint32 bufferStride = stride();
+        ri->mCtx->IASetVertexBuffers(0, 1, &mBuffer, &bufferStride, &mVertexOffset);
         /*
         ri->mCtx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
         ri->mCtx->IASetInputLayout(mInputLayout);
         */
     }
-    /*
-    bool createStatic(RenderInterface* ri, VERTEX_TYPE* pData, uint32 numVertices )
-    {
-        if(numVertices == 0 || pData == NULL) return false;
-        mNumGpuVert = numVertices;
-        mIsDynamic = false;
-
-        D3D11_BUFFER_DESC vbd;
-        vbd.Usage = D3D11_USAGE_IMMUTABLE;
-        vbd.ByteWidth = mVertexSize * numVertices;
-        vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        vbd.CPUAccessFlags = 0;
-        vbd.MiscFlags = 0;
-        vbd.StructureByteStride = 0;
-
-        D3D11_SUBRESOURCE_DATA vinitData;
-        vinitData.pSysMem = pData;
-
-        d3d_check(ri->mDevice->CreateBuffer(&vbd, &vinitData, &mBuffer));
-        return true;
-    }
-    bool createDynamic(RenderInterface* ri, uint32 numVertices)
-    {
-        if (numVertices == 0) return false;
-        mNumGpuVert = numVertices;
-        mIsDynamic = true;
-
-        D3D11_BUFFER_DESC vbd;
-        vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        vbd.ByteWidth = mVertexSize * numVertices;
-        vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        vbd.MiscFlags = 0;
-        vbd.StructureByteStride = 0;
-        vbd.Usage = D3D11_USAGE_DYNAMIC; 
-
-        d3d_check(ri->mDevice->CreateBuffer(&vbd, 0, &mBuffer));
-        return true;
-    }
-    bool updateDynamic(RenderInterface* ri, VERTEX_TYPE* inputVertices, uint32 inputNum)
-    {
-        if(!mIsDynamic) return false;
-        // Treat as failure when number of input vertices exceeds buffer size ?
-        // if(inputNum > mNumVertices) return false;
-
-        D3D11_MAPPED_SUBRESOURCE mappedData;
-        ri->mCtx->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-        VERTEX_TYPE* vStart = reinterpret_cast<VERTEX_TYPE*>(mappedData.pData);
-        for (UINT i = 0; i < inputNum; ++i)
-        {
-            vStart[i] = inputVertices[i];
-        }
-        ri->mCtx->Unmap(mBuffer, 0);
-
-        return true;
-    }
-    */
-
+ 
 protected:
-    const uint32 mVertexSize;
-    uint32 mNumGpuVert;
     uint32 mVertexOffset;
 
     ID3D11Buffer* mBuffer;
-    TLocalCache mLocalCache;
+    TVertexArray mVertArray;
 
     bool mIsDynamic;
 };

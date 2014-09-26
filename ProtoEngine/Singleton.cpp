@@ -1,13 +1,14 @@
 #include "Singleton.h"
 
-// Phase 1 Singletons -- begin
+/* Phase 1 Singletons -- begin*/
 #include "ConfigMgr.h"
 #include "Profiler.h"
-// Phase 1 Singletons -- end
+/* Phase 1 Singletons -- end*/
 
-// Phase 2 Singletons -- begin 
+/* Phase 2 Singletons -- begin */
 #include "EffectMgr.h"
-// Phase 2 Singletons -- end 
+#include "TextureMgr.h"
+/* Phase 2 Singletons -- end  */
 
 #include "RenderInterface.h"
 
@@ -39,29 +40,36 @@ void clearPhaseTwoSingletons(RenderInterface* ri)
 
 void initOrClearPhaseOneSingletons( bool isInit)
 {
-    guard(ConfigMgr)	
-        if (isInit)
-            Singleton<ConfigMgr>::getInstance().init();
-        else
-            Singleton<ConfigMgr>::getInstance().destroy();
-    unguard
-     
-    guard(Profiler) 
-        if (isInit)
-            Singleton<Profiler>::getInstance().init();
-        else
-            Singleton<Profiler>::getInstance().destroy();
-    unguard 
+guard(ConfigMgr)	
+    if (isInit)
+        Singleton<ConfigMgr>::getInstance().init();
+    else
+        Singleton<ConfigMgr>::getInstance().destroy();
+unguard
+ 
+guard(Profiler) 
+    if (isInit)
+        Singleton<Profiler>::getInstance().init();
+    else
+        Singleton<Profiler>::getInstance().destroy();
+unguard 
 }
 
 void initOrClearPhaseTwoSingletons( bool isInit, RenderInterface* ri)
 {
-    guard(EffectMgr)
-        if (isInit)
-            Singleton<EffectMgr>::getInstance().init(ri);
-        else
-            Singleton<EffectMgr>::getInstance().destroy();
-    unguard
+guard(EffectMgr)
+    if (isInit)
+        Singleton<EffectMgr>::getInstance().init(ri);
+    else
+        Singleton<EffectMgr>::getInstance().destroy();
+unguard
+
+guard(TextureMgr)
+    if (isInit)
+        Singleton<TextureMgr>::getInstance().init(ri);
+    else
+        Singleton<TextureMgr>::getInstance().destroy();
+unguard
 }
 
 

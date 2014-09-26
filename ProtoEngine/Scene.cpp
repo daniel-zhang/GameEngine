@@ -10,20 +10,21 @@ void buildDefaultScene( Scene* scene )
     Mesh* pMesh = NULL;
     Entity* pEntity = NULL;
     
-    /*
-    pMesh = scene->createEmptyMesh();
+    // Grid
+    pMesh = scene->allocateMesh();
     dpGen.createGrid(20.f, 30.f, 60, 40, *pMesh);
-    pEntity = scene->createEmptyEntity();
-    pEntity->attach(pMesh, scene->getRenderInterface());
-    scene->addEntity(pEntity);
-    */
-
-    pMesh = scene->createEmptyMesh();
-    dpGen.createBox(1.f, 1.f, 1.f, *pMesh);
-    pEntity = scene->createEmptyEntity();
+    pEntity = scene->allocateEntity();
+    pMesh->enableWireframe(true);
+    pMesh->enableBackfaceCulling(true);
     pEntity->attach(pMesh, scene->getRenderInterface());
     scene->addEntity(pEntity);
 
+    // Box
+    pMesh = scene->allocateMesh();
+    dpGen.createBox(4.f, 4.f, 4.f, *pMesh);
+    pEntity = scene->allocateEntity();
+    pEntity->attach(pMesh, scene->getRenderInterface());
+    scene->addEntity(pEntity);
 }
 
 /////////////////////////////////////////////////////////////
@@ -68,12 +69,12 @@ void Scene::initFromBuilder( T_BuildScene builder, RenderInterface* ri )
     buildSceneShaderData();
 }
 
-Entity* Scene::createEmptyEntity()
+Entity* Scene::allocateEntity()
 {
     return mEntityRepo.create();
 }
 
-Mesh* Scene::createEmptyMesh()
+Mesh* Scene::allocateMesh()
 {
     return mMeshRepo.create();
 }

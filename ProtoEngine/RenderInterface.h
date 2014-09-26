@@ -44,6 +44,11 @@ public:
     void setVertexBuffer(VertexBuffer<VertexFactory<e_pos_normal_tan_tex>>* pVB){}
     */
 
+    void resetRenderState(){mCtx->RSSetState(0);}
+    void enableWireFrame(){mCtx->RSSetState(mWireframe);}
+    void enableBackfaceRendering(){mCtx->RSSetState(mNoBackfaceCulling);}
+    void enableWireFrameAndNoBackfaceRendering(){mCtx->RSSetState(mNoBackfaceCulling);}
+
 public:
     ID3D11Device*				mDevice;
     ID3D11DeviceContext*		mCtx;
@@ -51,6 +56,12 @@ public:
     bool mInitialized;
     //std::vector<Viewport*> mViewports;
     Viewport* mViewport;
+
+protected:
+    // Render states
+    ID3D11RasterizerState* mWireframe;
+    ID3D11RasterizerState* mNoBackfaceCulling;
+    ID3D11RasterizerState* mWireframe_NoBackfaceCulling;
 };
 
 #endif

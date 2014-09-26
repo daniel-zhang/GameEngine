@@ -30,33 +30,49 @@ void SubMesh::init( std::string& shaderName, Mesh* inMesh, uint32 indexCount, ui
     mIndexOffset = indexOffset;
 }
 
-void Mesh::drawSelf( RenderInterface* ri, Entity* entity )
+void Mesh::drawSelf( Entity* entity )
 {
     // TODO: input layout... and primitive topology ?
-    mVertexBuffer.bind(ri);
-    mIndexBuffer.bind(ri);
+    mVertexBuffer.bindGpuBuffer(mRI);
+    mIndexBuffer.bindGpuBuffer(mRI);
 
-    ri->mCtx->IASetInputLayout(mSubMeshes[0]->mDefaultMat->getInputLayout());
-    ri->mCtx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    mRI->mCtx->IASetInputLayout(mSubMeshes[0]->mDefaultMat->getInputLayout());
+    mRI->mCtx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     ShaderDataReference& sceneShaderData = entity->getSceneRef()->getSceneShaderData();
     ShaderDataReference& entityShaderData = entity->getEntityShaderData();
+
+    if (mEnableWireframe) mRI->enableWireFrame();
+    if (mEnableBackfaceCulling) mRI->enableBackfaceRendering();
 
     SubMesh* subMesh = NULL; 
     for (uint32 i = 0; i < mSubMeshes.size(); ++i)
     {
         subMesh = mSubMeshes[i];
-        subMesh->mDefaultMat->apply(ri, sceneShaderData, entityShaderData);
-        ri->drawIndexedPrimtive(subMesh->mIndexCount, subMesh->mIndexOffset);
+        subMesh->mDefaultMat->apply(mRI, sceneShaderData, entityShaderData);
+        mRI->drawIndexedPrimtive(subMesh->mIndexCount, subMesh->mIndexOffset);
     }
+
+    mRI->resetRenderState();
 }
 
-bool Mesh::onAttachedToEntity( RenderInterface* ri )
+bool Mesh::createGpuBuffer( RenderInterface* ri )
 {
+    mRI = ri;
+
     bool ret0, ret1;
-    ret0 = mIndexBuffer.createStaticGpuDataFromCache(ri);
-    ret1 = mVertexBuffer.createStaticGpuDataFromCache(ri);
+    ret0 = mIndexBuffer.createStaticGpuBuffer(mRI);
+    //ret1 = mVertexBuffer.createStaticGpuBuffer(ri);
+    ret1 = mVertexBuffer.createDynamicGpuBuffer(mRI);
+    mVertexBuffer.updateGpuBuffer(mRI);
+
     return (ret0 && ret1);
+}
+
+Mesh::Mesh()
+{
+    mEnableWireframe = false;
+    mEnableBackfaceCulling = false;
 }
 
 Mesh::~Mesh()
@@ -67,14 +83,9 @@ Mesh::~Mesh()
     }
 }
 
-uint32 Mesh::getFaceNum()
+uint32 Mesh::numTriangles()
 {
-    uint32 faceNum = 0;
-    for (uint32 i  = 0; i < mSubMeshes.size(); ++i)
-    {
-        faceNum += mSubMeshes[i]->getFaceNum();
-    }
-    return faceNum;
+    return mIndexBuffer.numTriangles();
 }
 
 void Mesh::addSubMesh( std::string& defaultShaderName, uint32 indexCount, uint32 indexOffset )
@@ -83,3 +94,24 @@ void Mesh::addSubMesh( std::string& defaultShaderName, uint32 indexCount, uint32
     subMesh->init(defaultShaderName, this, indexCount, indexOffset);
     mSubMeshes.push_back(subMesh);
 }
+
+uint32 Mesh::numVertIndices()
+{
+    return mIndexBuffer.numVertIndices();
+}
+
+uint32 Mesh::numVertices()
+{
+    return mVertexBuffer.numVerts();
+}
+
+void Mesh::enableWireframe( bool enabled )
+{
+    mEnableWireframe = enabled;
+}
+
+void Mesh::enableBackfaceCulling( bool enabled )
+{
+    mEnableBackfaceCulling = enabled;
+}
+

@@ -48,7 +48,7 @@ void DebugPrimitiveGenerator::createBox( float width, float height, float depth,
     verts[23] = Vertex(+w2, -h2, +d2, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 
     //inMesh.mVertexBuffer.getLocalCache().assign(&v[0], &v[24]);
-    inMesh.mVertexBuffer.setLocalCache(verts);
+    inMesh.mVertexBuffer.setVertArray(verts);
 
     std::vector<uint32> indices;
     indices.resize(36);
@@ -77,7 +77,7 @@ void DebugPrimitiveGenerator::createBox( float width, float height, float depth,
     indices[30] = 20; indices[31] = 21; indices[32] = 22;
     indices[33] = 20; indices[34] = 22; indices[35] = 23;
 
-    inMesh.mIndexBuffer.setLocalCache(indices);
+    inMesh.mIndexBuffer.setIndArray(indices);
     //void addSubMesh(std::string& defaultShaderName, uint32 indexCount, uint32 indexOffset)
 
     inMesh.addSubMesh(std::string("base"), 36, 0);
@@ -119,7 +119,7 @@ void DebugPrimitiveGenerator::createGrid( float width, float depth, uint32 rows,
         }
     }
 
-    inMesh.mVertexBuffer.setLocalCache(verts);
+    inMesh.mVertexBuffer.setVertArray(verts);
 
     // Create the indices.
     std::vector<uint32> indices;
@@ -142,7 +142,7 @@ void DebugPrimitiveGenerator::createGrid( float width, float depth, uint32 rows,
             k += 6; // next quad
         }
     }
-    inMesh.mIndexBuffer.setLocalCache(indices);
+    inMesh.mIndexBuffer.setIndArray(indices);
 
     inMesh.addSubMesh(std::string("base"), faceCount*3, 0);
 }

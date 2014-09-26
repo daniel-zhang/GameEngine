@@ -138,88 +138,95 @@ fxgroup
                 dcl_output o1.xyz
                 dcl_output o2.xyz
                 dcl_output o3.xy
-                dcl_temps 9
+                dcl_temps 10
                 
-                #line 64 "D:\workspace\github\GameEngine\ProtoEngine\GameResource\Shader\base.fx"
-                mov r0.xyz, v0.xyzx
-                mov r0.w, l(1.000000)
-                dp4 r1.x, r0.xyzw, cb0[0].xyzw  // vout<4:NaN:Inf>
-                dp4 r1.y, r0.xyzw, cb0[1].xyzw  // vout<5:NaN:Inf>
-                dp4 r1.z, r0.xyzw, cb0[2].xyzw  // vout<6:NaN:Inf>
-                dp3 r2.x, v1.xyzx, cb0[16].xyzx  // vout<7:NaN:Inf>
-                dp3 r2.y, v1.xyzx, cb0[17].xyzx  // vout<8:NaN:Inf>
-                dp3 r2.z, v1.xyzx, cb0[18].xyzx  // vout<9:NaN:Inf>
+                #line 66 "D:\workspace\github\GameEngine\ProtoEngine\GameResource\Shader\base.fx"
+                mul r0.xyz, v0.xxxx, cb0[0].xyzx
+                mul r1.xyz, v0.yyyy, cb0[1].xyzx
+                add r0.xyz, r0.xyzx, r1.xyzx
+                mul r1.xyz, v0.zzzz, cb0[2].xyzx
+                add r0.xyz, r0.xyzx, r1.xyzx
+                mul r1.xyz, cb0[3].xyzx, l(1.000000, 1.000000, 1.000000, 0.000000)
+                add r0.xyz, r0.xyzx, r1.xyzx  // vout<4:NaN:Inf,5:NaN:Inf,6:NaN:Inf>
+                mul r1.xyz, v1.xxxx, cb0[16].xyzx
+                mul r2.xyz, v1.yyyy, cb0[17].xyzx
+                add r1.xyz, r1.xyzx, r2.xyzx
+                mul r2.xyz, v1.zzzz, cb0[18].xyzx
+                add r1.xyz, r1.xyzx, r2.xyzx  // vout<7:NaN:Inf,8:NaN:Inf,9:NaN:Inf>
                 
-                #line 68
-                mul r3.xyzw, cb0[0].xxxx, cb0[4].xyzw
-                mul r4.xyzw, cb0[0].yyyy, cb0[5].xyzw
+                #line 71
+                mul r2.xyzw, cb0[4].xxxx, cb0[8].xyzw
+                mul r3.xyzw, cb0[4].yyyy, cb0[9].xyzw
+                add r2.xyzw, r2.xyzw, r3.xyzw
+                mul r3.xyzw, cb0[4].zzzz, cb0[10].xyzw
+                add r2.xyzw, r2.xyzw, r3.xyzw
+                mul r3.xyzw, cb0[4].wwww, cb0[11].xyzw
+                add r2.xyzw, r2.xyzw, r3.xyzw
+                mul r3.xyzw, cb0[5].xxxx, cb0[8].xyzw
+                mul r4.xyzw, cb0[5].yyyy, cb0[9].xyzw
                 add r3.xyzw, r3.xyzw, r4.xyzw
-                mul r4.xyzw, cb0[0].zzzz, cb0[6].xyzw
+                mul r4.xyzw, cb0[5].zzzz, cb0[10].xyzw
                 add r3.xyzw, r3.xyzw, r4.xyzw
-                mul r4.xyzw, cb0[0].wwww, cb0[7].xyzw
+                mul r4.xyzw, cb0[5].wwww, cb0[11].xyzw
                 add r3.xyzw, r3.xyzw, r4.xyzw
-                mul r4.xyzw, cb0[1].xxxx, cb0[4].xyzw
-                mul r5.xyzw, cb0[1].yyyy, cb0[5].xyzw
+                mul r4.xyzw, cb0[6].xxxx, cb0[8].xyzw
+                mul r5.xyzw, cb0[6].yyyy, cb0[9].xyzw
                 add r4.xyzw, r4.xyzw, r5.xyzw
-                mul r5.xyzw, cb0[1].zzzz, cb0[6].xyzw
+                mul r5.xyzw, cb0[6].zzzz, cb0[10].xyzw
                 add r4.xyzw, r4.xyzw, r5.xyzw
-                mul r5.xyzw, cb0[1].wwww, cb0[7].xyzw
+                mul r5.xyzw, cb0[6].wwww, cb0[11].xyzw
                 add r4.xyzw, r4.xyzw, r5.xyzw
-                mul r5.xyzw, cb0[2].xxxx, cb0[4].xyzw
-                mul r6.xyzw, cb0[2].yyyy, cb0[5].xyzw
+                mul r5.xyzw, cb0[7].xxxx, cb0[8].xyzw
+                mul r6.xyzw, cb0[7].yyyy, cb0[9].xyzw
                 add r5.xyzw, r5.xyzw, r6.xyzw
-                mul r6.xyzw, cb0[2].zzzz, cb0[6].xyzw
+                mul r6.xyzw, cb0[7].zzzz, cb0[10].xyzw
                 add r5.xyzw, r5.xyzw, r6.xyzw
-                mul r6.xyzw, cb0[2].wwww, cb0[7].xyzw
+                mul r6.xyzw, cb0[7].wwww, cb0[11].xyzw
                 add r5.xyzw, r5.xyzw, r6.xyzw
-                mul r6.xyzw, cb0[3].xxxx, cb0[4].xyzw
-                mul r7.xyzw, cb0[3].yyyy, cb0[5].xyzw
+                mul r6.xyzw, r2.xyzw, cb0[0].xxxx
+                mul r7.xyzw, r3.xyzw, cb0[0].yyyy
                 add r6.xyzw, r6.xyzw, r7.xyzw
-                mul r7.xyzw, cb0[3].zzzz, cb0[6].xyzw
+                mul r7.xyzw, r4.xyzw, cb0[0].zzzz
                 add r6.xyzw, r6.xyzw, r7.xyzw
-                mul r7.xyzw, cb0[3].wwww, cb0[7].xyzw
-                add r6.xyzw, r6.xyzw, r7.xyzw
-                mul r7.xyzw, r3.xxxx, cb0[8].xyzw
-                mul r8.xyzw, r3.yyyy, cb0[9].xyzw
+                mul r7.xyzw, r5.xyzw, cb0[0].wwww
+                add r6.xyzw, r6.xyzw, r7.xyzw  // wvp<0:NaN:Inf,4:NaN:Inf,8:NaN:Inf,12:NaN:Inf>
+                mul r7.xyzw, r2.xyzw, cb0[1].xxxx
+                mul r8.xyzw, r3.xyzw, cb0[1].yyyy
                 add r7.xyzw, r7.xyzw, r8.xyzw
-                mul r8.xyzw, r3.zzzz, cb0[10].xyzw
+                mul r8.xyzw, r4.xyzw, cb0[1].zzzz
                 add r7.xyzw, r7.xyzw, r8.xyzw
-                mul r3.xyzw, r3.wwww, cb0[11].xyzw
-                add r3.xyzw, r3.xyzw, r7.xyzw  // wvp<0:NaN:Inf,4:NaN:Inf,8:NaN:Inf,12:NaN:Inf>
-                mul r7.xyzw, r4.xxxx, cb0[8].xyzw
-                mul r8.xyzw, r4.yyyy, cb0[9].xyzw
-                add r7.xyzw, r7.xyzw, r8.xyzw
-                mul r8.xyzw, r4.zzzz, cb0[10].xyzw
-                add r7.xyzw, r7.xyzw, r8.xyzw
-                mul r4.xyzw, r4.wwww, cb0[11].xyzw
-                add r4.xyzw, r4.xyzw, r7.xyzw  // wvp<1:NaN:Inf,5:NaN:Inf,9:NaN:Inf,13:NaN:Inf>
-                mul r7.xyzw, r5.xxxx, cb0[8].xyzw
-                mul r8.xyzw, r5.yyyy, cb0[9].xyzw
-                add r7.xyzw, r7.xyzw, r8.xyzw
-                mul r8.xyzw, r5.zzzz, cb0[10].xyzw
-                add r7.xyzw, r7.xyzw, r8.xyzw
-                mul r5.xyzw, r5.wwww, cb0[11].xyzw
-                add r5.xyzw, r5.xyzw, r7.xyzw  // wvp<2:NaN:Inf,6:NaN:Inf,10:NaN:Inf,14:NaN:Inf>
-                mul r7.xyzw, r6.xxxx, cb0[8].xyzw
-                mul r8.xyzw, r6.yyyy, cb0[9].xyzw
-                add r7.xyzw, r7.xyzw, r8.xyzw
-                mul r8.xyzw, r6.zzzz, cb0[10].xyzw
-                add r7.xyzw, r7.xyzw, r8.xyzw
-                mul r6.xyzw, r6.wwww, cb0[11].xyzw
-                add r6.xyzw, r6.xyzw, r7.xyzw  // wvp<3:NaN:Inf,7:NaN:Inf,11:NaN:Inf,15:NaN:Inf>
-                dp4 r3.x, r0.xyzw, r3.xyzw  // vout<0:NaN:Inf>
-                dp4 r3.y, r0.xyzw, r4.xyzw  // vout<1:NaN:Inf>
-                dp4 r3.z, r0.xyzw, r5.xyzw  // vout<2:NaN:Inf>
-                dp4 r3.w, r0.xyzw, r6.xyzw  // vout<3:NaN:Inf>
+                mul r8.xyzw, r5.xyzw, cb0[1].wwww
+                add r7.xyzw, r7.xyzw, r8.xyzw  // wvp<1:NaN:Inf,5:NaN:Inf,9:NaN:Inf,13:NaN:Inf>
+                mul r8.xyzw, r2.xyzw, cb0[2].xxxx
+                mul r9.xyzw, r3.xyzw, cb0[2].yyyy
+                add r8.xyzw, r8.xyzw, r9.xyzw
+                mul r9.xyzw, r4.xyzw, cb0[2].zzzz
+                add r8.xyzw, r8.xyzw, r9.xyzw
+                mul r9.xyzw, r5.xyzw, cb0[2].wwww
+                add r8.xyzw, r8.xyzw, r9.xyzw  // wvp<2:NaN:Inf,6:NaN:Inf,10:NaN:Inf,14:NaN:Inf>
+                mul r2.xyzw, r2.xyzw, cb0[3].xxxx
+                mul r3.xyzw, r3.xyzw, cb0[3].yyyy
+                add r2.xyzw, r2.xyzw, r3.xyzw
+                mul r3.xyzw, r4.xyzw, cb0[3].zzzz
+                add r2.xyzw, r2.xyzw, r3.xyzw
+                mul r3.xyzw, r5.xyzw, cb0[3].wwww
+                add r2.xyzw, r2.xyzw, r3.xyzw  // wvp<3:NaN:Inf,7:NaN:Inf,11:NaN:Inf,15:NaN:Inf>
+                mul r3.xyzw, r6.xyzw, v0.xxxx
+                mul r4.xyzw, r7.xyzw, v0.yyyy
+                add r3.xyzw, r3.xyzw, r4.xyzw
+                mul r4.xyzw, r8.xyzw, v0.zzzz
+                add r3.xyzw, r3.xyzw, r4.xyzw
+                mul r2.xyzw, r2.xyzw, l(1.000000, 1.000000, 1.000000, 1.000000)
+                add r2.xyzw, r2.xyzw, r3.xyzw  // vout<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf,3:NaN:Inf>
                 
-                #line 74
-                mov r0.xy, v3.xyxx  // vout<10,11>
-                mov o0.xyzw, r3.xyzw  // VS<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf,3:NaN:Inf>
-                mov o1.xyz, r1.xyzx  // VS<4:NaN:Inf,5:NaN:Inf,6:NaN:Inf>
-                mov o2.xyz, r2.xyzx  // VS<7:NaN:Inf,8:NaN:Inf,9:NaN:Inf>
-                mov o3.xy, r0.xyxx  // VS<10,11>
+                #line 78
+                mov r3.xy, v3.xyxx  // vout<10,11>
+                mov o0.xyzw, r2.xyzw  // VS<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf,3:NaN:Inf>
+                mov o1.xyz, r0.xyzx  // VS<4:NaN:Inf,5:NaN:Inf,6:NaN:Inf>
+                mov o2.xyz, r1.xyzx  // VS<7:NaN:Inf,8:NaN:Inf,9:NaN:Inf>
+                mov o3.xy, r3.xyxx  // VS<10,11>
                 ret 
-                // Approximately 74 instruction slots used
+                // Approximately 81 instruction slots used
                             
             };
             GeometryShader = NULL;
@@ -304,7 +311,7 @@ fxgroup
                 dcl_output o0.xyzw
                 dcl_temps 9
                 
-                #line 81 "D:\workspace\github\GameEngine\ProtoEngine\GameResource\Shader\base.fx"
+                #line 85 "D:\workspace\github\GameEngine\ProtoEngine\GameResource\Shader\base.fx"
                 dp3 r0.x, v2.xyzx, v2.xyzx
                 rsq r0.x, r0.x
                 mul r0.xyz, r0.xxxx, v2.xyzx  // pin<7:NaN:Inf,8:NaN:Inf,9:NaN:Inf>
@@ -314,7 +321,7 @@ fxgroup
                 sqrt r0.w, r0.w  // distToEye<0:NaN:Inf>
                 div r1.xyz, r1.xyzx, r0.wwww  // toEye<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf>
                 
-                #line 94
+                #line 98
                 nop 
                 mov r2.xyz, cb1[20].xyzx  // mat<0,1,2>
                 mov r3.xyz, cb1[21].xyzx  // mat<4,5,6>
@@ -357,7 +364,7 @@ fxgroup
                 movc r0.xyz, r1.wwww, r0.yzwy, l(0,0,0,0)  // diffuse<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf>
                 movc r1.xyz, r1.wwww, r1.xyzx, l(0,0,0,0)  // spec<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf>
                 
-                #line 94 "D:\workspace\github\GameEngine\ProtoEngine\GameResource\Shader\base.fx"
+                #line 98 "D:\workspace\github\GameEngine\ProtoEngine\GameResource\Shader\base.fx"
                 mov r2.xyz, r2.xyzx  // A<0:Inf,1:Inf,2:Inf>
                 mov r0.xyz, r0.xyzx  // D<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf>
                 mov r1.xyz, r1.xyzx  // S<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf>
@@ -365,12 +372,12 @@ fxgroup
                 add r0.xyz, r0.xyzx, l(0.000000, 0.000000, 0.000000, 0.000000)  // diffuse<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf>
                 add r1.xyz, r1.xyzx, l(0.000000, 0.000000, 0.000000, 0.000000)  // spec<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf>
                 
-                #line 100
+                #line 104
                 add r0.xyz, r0.xyzx, r2.xyzx
                 mul r0.xyz, r0.xyzx, l(1.000000, 1.000000, 1.000000, 0.000000)
                 add r0.xyz, r1.xyzx, r0.xyzx  // litColor<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf>
                 
-                #line 103
+                #line 107
                 mul r0.w, cb1[21].w, l(1.000000)  // litColor<3>
                 mov o0.xyz, r0.xyzx  // PS<0:NaN:Inf,1:NaN:Inf,2:NaN:Inf>
                 mov o0.w, r0.w  // PS<3>

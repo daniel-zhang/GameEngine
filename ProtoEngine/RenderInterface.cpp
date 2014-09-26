@@ -8,6 +8,11 @@ RenderInterface::RenderInterface()
     mCtx = NULL;
     mViewport = NULL;
     mInitialized = false;
+    
+    mWireframe = NULL;
+    mNoBackfaceCulling = NULL;
+    mWireframe_NoBackfaceCulling = NULL;
+
 }
 
 RenderInterface::~RenderInterface()
@@ -20,6 +25,10 @@ RenderInterface::~RenderInterface()
     }
     safe_release(&mCtx);
     safe_release(&mDevice);
+
+    safe_release(&mWireframe);
+    safe_release(&mNoBackfaceCulling);
+    safe_release(&mWireframe_NoBackfaceCulling);
     /*
     for (uint32 i = 0; i < mViewports.size(); ++i)
     {
@@ -54,6 +63,33 @@ bool RenderInterface::init()
         &mDevice,
         &featureLevel,
         &mCtx));
+
+    // Create wireframe render state
+    D3D11_RASTERIZER_DESC wireframeDesc;
+    ZeroMemory(&wireframeDesc, sizeof(D3D11_RASTERIZER_DESC));
+    wireframeDesc.FillMode = D3D11_FILL_WIREFRAME;
+    wireframeDesc.CullMode = D3D11_CULL_BACK;
+    wireframeDesc.FrontCounterClockwise = false;
+    wireframeDesc.DepthClipEnable = true;
+    d3d_check(mDevice->CreateRasterizerState(&wireframeDesc, &mWireframe));
+
+    // Create no-backface-culling render state
+    D3D11_RASTERIZER_DESC noCullDesc;
+    ZeroMemory(&noCullDesc, sizeof(D3D11_RASTERIZER_DESC));
+    noCullDesc.FillMode = D3D11_FILL_SOLID;
+    noCullDesc.CullMode = D3D11_CULL_NONE;
+    noCullDesc.FrontCounterClockwise = false;
+    noCullDesc.DepthClipEnable = true;
+    d3d_check(mDevice->CreateRasterizerState(&noCullDesc, &mNoBackfaceCulling));
+
+    // Create no-backface-culling + wireframe render state
+    D3D11_RASTERIZER_DESC noCullDesc;
+    ZeroMemory(&noCullDesc, sizeof(D3D11_RASTERIZER_DESC));
+    noCullDesc.FillMode = D3D11_FILL_WIREFRAME;
+    noCullDesc.CullMode = D3D11_CULL_NONE;
+    noCullDesc.FrontCounterClockwise = false;
+    noCullDesc.DepthClipEnable = true;
+    d3d_check(mDevice->CreateRasterizerState(&noCullDesc, &mNoBackfaceCulling));
 
     mInitialized = true;
     return mInitialized;

@@ -25,7 +25,6 @@ public:
 public:
     DefaultMaterial* mDefaultMat;
 
-    friend class Mesh;
     Mesh* mMeshRef;
 
     uint32 mIndexCount;
@@ -35,15 +34,31 @@ public:
 class Mesh 
 {
 public:
+    Mesh();
     ~Mesh();
-    void drawSelf(RenderInterface* ri, Entity* entity);
-    bool onAttachedToEntity(RenderInterface* ri);
-    uint32 getFaceNum();
+    uint32 numTriangles();
+    uint32 numVertIndices();
+    uint32 numVertices();
+
     void addSubMesh(std::string& defaultShaderName, uint32 indexCount, uint32 indexOffset);
+    bool createGpuBuffer(RenderInterface* ri);
+    void drawSelf(Entity* entity);
+
+    void enableWireframe(bool enabled);
+    void enableBackfaceCulling(bool enabled);
+
 public:
     IndexBuffer mIndexBuffer;
     VertexBuffer<e_pos_normal_tan_tex> mVertexBuffer;
+
     std::vector<SubMesh*> mSubMeshes;
+
+protected:
+    bool mEnableWireframe;
+    bool mEnableBackfaceCulling;
+
+    RenderInterface* mRI;
 };
+
 
 #endif

@@ -101,6 +101,11 @@ void Camera::updateView()
     XMVECTOR front       = XMLoadFloat3(f);
     XMVECTOR translation = XMLoadFloat3(&mTranslation);
 
+    // Re-normalize
+    front = XMVector3Normalize(front);
+    up = XMVector3Normalize(XMVector3Cross(front, right));
+    right = XMVector3Cross(up, front);
+
     float x = -XMVectorGetX(XMVector3Dot(translation, right));
     float y = -XMVectorGetX(XMVector3Dot(translation, up));
     float z = -XMVectorGetX(XMVector3Dot(translation, front));
@@ -124,4 +129,26 @@ void Camera::updateView()
     mView(1,3) = 0.0f;
     mView(2,3) = 0.0f;
     mView(3,3) = 1.0f;
+
+    /*
+    mView(0, 0) = r->x;
+    mView(0, 1) = r->y; 
+    mView(0, 2) = r->z; 
+    mView(0, 3) = x;   
+
+    mView(1,0) = u->x;
+    mView(1,1) = u->y;
+    mView(1,2) = u->z;
+    mView(1,3) = y;  
+
+    mView(2,0) = f->x; 
+    mView(2,1) = f->y; 
+    mView(2,2) = f->z; 
+    mView(2,3) = z;   
+
+    mView(3,0) = 0.0f;
+    mView(3,1) = 0.0f;
+    mView(3,2) = 0.0f;
+    mView(3,3) = 1.0f;
+    */
 }

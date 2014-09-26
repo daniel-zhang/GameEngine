@@ -22,7 +22,7 @@ struct VertexOut
 //
 cbuffer PerFrame
 {
-	float3 gEyePosW <string tag="cam_pos";>; 
+    float3 gEyePosW <string tag="cam_pos";>; 
     DirectionalLight gMainLight <string tag="main_light";>;
 };
 
@@ -36,7 +36,7 @@ cbuffer PerObj
     float4x4 gTexTransform          <string tag="tex_transform";>;
     float4x4 gWorldInvTranspose     <string tag="world_inv_transpose";>;
 
-	Material gMaterial              <string tag="mesh_material";>;
+    Material gMaterial              <string tag="mesh_material";>;
 };
 
 //
@@ -61,13 +61,17 @@ VertexOut VS(PosNormalTanTex vin)
     VertexOut vout;
     
     // Transform to world space space.
-    vout.PosW    = mul(float4(vin.PosL, 1.0f), gLocalToWorld).xyz;
-    vout.NormalW = mul(vin.NormalL, (float3x3)gWorldInvTranspose);
+    //vout.PosW    = mul(float4(vin.PosL, 1.0f), gLocalToWorld).xyz;
+    //vout.NormalW = mul(vin.NormalL, (float3x3)gWorldInvTranspose);
+    vout.PosW    = mul(gLocalToWorld, float4(vin.PosL, 1.0f)).xyz;
+    vout.NormalW = mul((float3x3)gWorldInvTranspose, vin.NormalL);
         
     // Transform to homogeneous clip space.
-    float4x4 wvp = mul(gViewToProj, mul(gWorldToView, gLocalToWorld));
-    //vout.PosH = mul(float4(vin.PosL, 1.0f), gWorldViewProj);
-    vout.PosH = mul(float4(vin.PosL, 1.0f), wvp);
+    //float4x4 wvp = mul(gViewToProj, mul(gWorldToView, gLocalToWorld));
+    float4x4 wvp = mul(mul(gViewToProj, gWorldToView), gLocalToWorld);
+
+    vout.PosH = mul(wvp, float4(vin.PosL, 1.0f));
+    //vout.PosH = mul(float4(vin.PosL, 1.0f), wvp);
 
     // Output vertex attributes for interpolation across triangle.
     //vout.Tex = mul(float4(vin.Tex, 0.0f, 1.0f), gTexTransform).xy;
@@ -101,17 +105,17 @@ float4 PS(VertexOut pin) : SV_TARGET
 
     // Common to take alpha from diffuse material and texture.
     litColor.a = gMaterial.Diffuse.a * texColor.a;
-	return litColor;
+    return litColor;
 }
 
 technique11 MainTech<string VertexFormat="PosNormalTanTex";>
 {
-	pass p0
-	{
+    pass p0
+    {
         SetVertexShader( CompileShader( vs_5_0, VS() ) );
         SetGeometryShader( NULL );
         SetPixelShader( CompileShader( ps_5_0, PS() ) );
-	}
+    }
 }
 
  

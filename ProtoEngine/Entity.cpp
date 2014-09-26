@@ -60,7 +60,7 @@ void Entity::drawSelf( RenderInterface* ri )
     // Before draw mesh
 
     // Draw mesh
-    mMeshRef->drawSelf(ri, this);
+    mMeshRef->drawSelf(this);
 
     // After draw mesh
 }
@@ -89,6 +89,6 @@ Scene* Entity::getSceneRef()
 void Entity::attach( Mesh* mesh, RenderInterface* ri )
 {
     mMeshRef = mesh; 
-    mMeshRef->onAttachedToEntity(ri);
+    mMeshRef->createGpuBuffer(ri);
 }
 

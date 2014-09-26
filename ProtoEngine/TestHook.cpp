@@ -4,6 +4,7 @@
 #include "ShaderEnum.h"
 #include "EffectMgr.h"
 #include "GraphicBuffer.h"
+#include "TextureMgr.h"
 
 #if defined DEBUG || defined _DEBUG
     #define  ENABLE_RUNTIME_TEST
@@ -28,6 +29,7 @@ void test_phase_2_singletons()
 {
     effect_mgr_test();
     graphic_buffer_test();
+    texture_mgr_test();
 }
 
 //
