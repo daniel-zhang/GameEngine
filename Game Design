@@ -1,0 +1,155 @@
+Game Design
+
+# Character Story
+Selene is somehow infected with alien namibots. Due to unknow reasons, the namibots built some sort of a bio-interface in her brain, via which she can mind-control the biological processes of her body. 
+
+- She can boost her metabolizing rate and cell spliting process to move and heal much faster than normal human beings.
+    > at the cost of consuming more energy and suffering from metabolization side-effects(crave for food and sex)
+    > she survives the most serious wounds, but she is not invincible
+    > she has the potential ability of gathering engergy from all possible sources(flesh, blood, and sunlight), but she hates the idea of becoming a vampire or a green plant
+
+- She can change her body and apperance
+
+- She can control the aging process
+
+- She has no addtional control over biological desires than normal human beings. For unknown reasons, the namibots deny these kinds of attempts.
+
+# Damage Machanism
+There is no hp/mp stuff, damages are physically dealt and received. The effect of a certain damage is determined by its type and the impacted body areas.
+
+Damage Types
+    piercing: gunshot, arrow, spear, etc.
+    blunt: any non-piercing damage sources(punch, kick, choke, projectiles)
+
+Damage Effects By Impact Areas
+    Head
+        - piercing > lethal
+        - blunt > dizzy, knocked out, or lethal
+    Neck
+        - piercing > lethal
+        - blunt > disabled for a while(unable to breath)
+    Torso(TODO - further divided areas: chest, breasts, stomach, back, waist, butts, genital)
+        - piercing  
+            > disabled for a long time 
+            > need a safe place to fully recover
+        - blunt
+            > disabled for a while(overtaken by pain)
+            > recoverable on the scene
+    Shoulders/arms/hands
+        - piercing or blunt
+            > one shoulder/arm/hand: unable to use two-handed weapons(bow) 
+            > both: unable to use any hand-manipulted weapon
+            > lowered climbing speed, possible to fall from climbing
+    Legs/feet
+        - piercing or blunt
+            > crippled
+
+Lethal / Death Scene 
+    - piercing in the head
+    - blunt
+        hang, choke
+        smashed 
+    - slashed
+        beheaded
+        waist slash
+        etc
+
+Note
+    All slash damages are considered to be lethal. It would be unpleasant to watch Selene fighting with missing arms or legs.So slashing does not count as a valid damage type, as it is only invovled in a death secene.
+
+Feasibility
+    Blending character animations and physics simulation results is complicated, but doable. And it is possibly easier to do in this game, as the suffering and cruelty of a fight is emphasized here, so the damage simulation results can always override the current character animations, instead of having to blend a "shoulder taking shot" simulation into walking/firing weapons animations.
+
+    The challanges lies in that instead of destructable scene objects, it requires destructable characters.
+
+# Combat
+    Assasination
+        - stealth into an ambush position, slay an enemy when he passes by, and remain un-noticed
+    Ranged 
+        - attack with guns, bows
+        - slow-mo aiming
+    Melee
+        - improvised attack movements
+
+    Dodge, block & counter strike
+        - active dodge/block
+            > a time window to commmand active dodge/block
+            > a successful active dodge/block triggers a counter strike
+        - desperado 
+            > upon injured(piercing), attack before enemy's weapon is withdrawn
+
+    Enemy Tendencies
+        - alert/reflective: block sudden strike
+        - brutal: strikes heavely and continueously
+        - eagle eye: specialized in ranged attack
+        - verteran: counter strike expert
+
+    Retreat
+        Selene can retreat to safe place as long as she is not restrained or followed by the enemies. Cleared enemies will not respawn when she comes back. 
+
+# Weapons
+Selene can carry a primary and a secondary weapon. Ammunitions are limited. Reloading will discard any bullets left in the abandoned magzine. However arrows are reusable if retrieved.
+    - Primary, waist or back slot
+        sword
+        bow
+        rifle
+    - Secondary, thigh slot
+        dagger
+        pistal
+
+# Physical UI
+    - Game items are not just icons in the backpack. They are all visiable entities in the game world. 
+    - The backpack itself is a user configurable 3D container and occupies the back slot when equiped.
+    - To move items around, use suitcases and vehicles 
+
+# Status
+    - Hunger/Engergy
+        > a linear resource bar
+        > normally drops slowly, so Selene is not very stressed with food problem
+        > drops a lot when healing or recovering from fatige
+        > rised by eating food
+        > builds up fatige level when hunger runs dry(see below about fatige level)
+    - Stamina
+        > a resource bar that recovers faster when stamina level is high, and slowlier when low
+        > consumed by battle movements
+        > when stamina runs dry, it enters the fatige state
+        > in fatige state, stamina recovers at the lowest rate, and the upper limit of stamina is decreased when fatige level increases(they share the same bar, grows from different ends towards the center)
+        > in fatige state, if the current stamina points are not enough, performing battle movements will build up fatige levels
+            . for example
+            . a blink strike cosumes 10 sp, and there are only 5 sp left
+            . the remaining 5 sp will be consumed, and additionally, the fatige level will rise by 5 units
+        > fatige level drops with time, at the cost of hunger/energy
+        > fatige level drops faster when Selene is at rest
+        > as fatige level accumulates, Selene's behavior changes accrodingly
+            . starts to panting
+            . if in battle, attack movements have prolonged ending 
+            . if walking around, seeking for aid(like nearby walls etc), less responsive to player commands
+            . if idle, collapsed down to have a rest
+            . collapsed at breaking point
+        > Selene dies of "self digest" when hunger is 0 and fatige is full, as the desire for energy becomes so strong that she choose to consume herself. This death is not pretty: after she consumes almost all her fat and muscles, her brain is still alive, craving more. But in the end, when her brain is consumed by itself, her body is still not dead. Without her mind to control them, the namibots which are programmed to keep their host alive will act on their own, transforming her bony remains into a green plant. 
+        > when both hunger and stamina levels are low, Selene will vampirize, attacking and feedig on any living things she could find.
+
+    - Sex Crave
+        > decreased by orgasm 
+        > increased naturally
+        > increased faster when metabolization is boosted(healing or recovering from fatige)
+        > increased when fetish conditions are met
+        > being horny primarily affect non-combat behaviors, see below
+
+# Noncombat Behaviors
+While in safe places, the player can freely switch between controlled mode and free mode. In controlled mode, the game is like any TPS games in which the player controlls the avatar to achieve some goals. Whereas in free mode, Selene acts on her free will, and it would be fun to watch her interacting with items/npcs collected from the world.
+
+    - sit, squeeze thighs 
+    - walk, squeeze thighs
+    - drive, squeeze thighs
+    - ride a motorbike, hump seat
+    - squeeze thighs
+    - hump pillows/hands/sofa-back/desk-corner
+    - jill off
+    - jerk off(futanary)
+
+combination
+
+# Clothing
+    - put on / take off cloths
+
